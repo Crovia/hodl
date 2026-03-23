@@ -1,0 +1,20 @@
+{
+  "name": "diamondhands-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "snapshot": "tsx src/snapshot.ts",
+    "start": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0",
+    "fastify": "^4.28.0",
+    "@fastify/cors": "^9.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
+  }
+}
