@@ -95,25 +95,7 @@ export default function Hero() {
         <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gold-400/8 rounded-full blur-[150px]" />
       </div>
 
-      {/* Flying cry images behind the diamond */}
-      {cryImages.map((cry, i) => (
-        <img
-          key={i}
-          src={cry.src}
-          alt=""
-          className="absolute z-0 opacity-40 pointer-events-none"
-          style={{
-            width: cry.size,
-            height: cry.size,
-            objectFit: 'contain',
-            top: cry.top,
-            left: cry.left,
-            right: cry.right,
-            bottom: cry.bottom,
-            animation: `cryFloat ${cry.duration} ease-in-out ${cry.delay} infinite`,
-          }}
-        />
-      ))}
+      {/* Cry images removed — handled by FloatingCryImages globally */}
 
       <div className="relative text-center px-6 max-w-4xl">
         {/* Diamond center piece */}

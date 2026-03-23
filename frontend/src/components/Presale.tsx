@@ -147,38 +147,6 @@ const floatingMemes = [
 export default function Presale() {
   return (
     <div className="relative py-24 px-6">
-      {/* Floating meme images - only on presale page */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden xl:block">
-        {floatingMemes.map((src, i) => {
-          // Seeded pseudo-random for consistent but scattered placement
-          const seed = (i * 7 + 3) % 11;
-          const top = ((i * 17 + seed * 5) % 85) + 5; // 5-90%
-          const horizontal = ((seed * 13 + i * 23) % 20); // 0-20%
-          const side = i % 2 === 0 ? 'left' : 'right';
-          const pos = { top: `${top}%`, [side]: `${horizontal}%` };
-          const size = 70 + ((seed * 3) % 5) * 15; // 70-130px
-          const duration = 5 + (seed % 6); // 5-10s
-          const delay = (i * 0.7) % 4; // staggered
-          const rotation = ((seed * 17) % 30) - 15; // -15 to 15 deg
-          return (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              className="absolute opacity-15 pointer-events-none"
-              style={{
-                width: size,
-                height: size,
-                objectFit: 'contain',
-                transform: `rotate(${rotation}deg)`,
-                animation: `cryFloat ${duration}s ease-in-out ${delay}s infinite`,
-                ...pos,
-              }}
-            />
-          );
-        })}
-      </div>
-
       <div className="relative max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
