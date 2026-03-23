@@ -3,6 +3,10 @@
 import DiamondIcon from './DiamondIcon';
 
 export default function Footer() {
+  const toggleImages = () => {
+    window.dispatchEvent(new CustomEvent('toggleFloatingImages'));
+  };
+
   return (
     <footer className="relative z-20 py-16 px-6 border-t border-white/5 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
@@ -19,7 +23,13 @@ export default function Footer() {
             <a href="#" className="hover:text-gold-400 transition-colors">Telegram</a>
             <a href="#" className="hover:text-gold-400 transition-colors">DEXScreener</a>
           </div>
-          <div className="mt-8 text-xs text-gray-700">
+          <button
+            onClick={toggleImages}
+            className="mt-6 px-4 py-2 rounded-lg text-xs text-gray-600 hover:text-gray-400 border border-white/5 hover:border-white/10 transition-colors"
+          >
+            Toggle Meme Images
+          </button>
+          <div className="mt-4 text-xs text-gray-700">
             &copy; 2026 DiamondHands. Not financial advice. DYOR.
           </div>
         </div>

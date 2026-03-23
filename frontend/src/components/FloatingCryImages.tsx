@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { milestoneMessages, getRandomFiller } from '@/lib/clickMessages';
 
 const allCryImages = [
@@ -62,9 +62,16 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [won, setWon] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const nextId = useRef(count);
   const clickCount = useRef(0);
   const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const handler = () => setHidden(h => !h);
+    window.addEventListener('toggleFloatingImages', handler);
+    return () => window.removeEventListener('toggleFloatingImages', handler);
+  }, []);
 
   const showToast = useCallback((msg: string) => {
     if (toastTimeout.current) clearTimeout(toastTimeout.current);
@@ -108,6 +115,8 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
       return [...filtered, ...newImages];
     });
   }, [won, showToast]);
+
+  if (hidden) return null;
 
   if (won) {
     return (
