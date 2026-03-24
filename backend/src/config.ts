@@ -36,8 +36,8 @@ export const CONFIG = {
 
   // Tier thresholds (percentage of total supply)
   TIERS: {
-    DIAMOND: 2,   // 2%+ of supply
-    GOLD: 1.5,    // 1.5%+ of supply
+    DIAMOND: 2.12,   // 2.12%+ of supply
+    GOLD: 1,         // 1%+ of supply
     SILVER: 0.5,  // 0.5%+ of supply
   },
 
