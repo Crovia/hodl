@@ -24,8 +24,13 @@ export const CONFIG = {
     },
   },
 
-  // RPC
+  // RPC — primary with fallback
   RPC_URL: process.env.RPC_URL || 'https://evm.cronos.org',
+  RPC_PRIMARY: process.env.RPC_PRIMARY || process.env.RPC_URL || 'https://evm.cronos.org',
+  RPC_FALLBACK: process.env.RPC_FALLBACK || 'https://evm.cronos.org',
+
+  // Deploy block — set to contract creation block to avoid missing early transfers
+  DEPLOY_BLOCK: Number(process.env.DEPLOY_BLOCK) || 0,
 
   // Airdrop cycle in days
   AIRDROP_CYCLE_DAYS: 10,

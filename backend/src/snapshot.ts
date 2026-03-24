@@ -88,9 +88,20 @@ function getEpoch(): number {
   return files.length + 1;
 }
 
+async function getProviderWithFallback(): Promise<ethers.JsonRpcProvider> {
+  const primary = new ethers.JsonRpcProvider(CONFIG.RPC_PRIMARY);
+  try {
+    await primary.getBlockNumber(); // test connectivity
+    return primary;
+  } catch (err) {
+    console.warn(`Primary RPC failed (${CONFIG.RPC_PRIMARY}), falling back to ${CONFIG.RPC_FALLBACK}`);
+    return new ethers.JsonRpcProvider(CONFIG.RPC_FALLBACK);
+  }
+}
+
 export async function takeSnapshot() {
   console.log('Taking snapshot...');
-  const provider = new ethers.JsonRpcProvider(CONFIG.RPC_URL);
+  const provider = await getProviderWithFallback();
   const token = new ethers.Contract(CONFIG.TOKEN_ADDRESS, ERC20_ABI, provider);
 
   const blockNumber = await provider.getBlockNumber();
@@ -141,7 +152,8 @@ export async function takeSnapshot() {
 
   // Scan in chunks of 2000 blocks (Cronos limit)
   const CHUNK_SIZE = 2000;
-  const START_BLOCK = blockNumber - 172800 * 60; // ~60 days of blocks at 0.5s
+  const lookbackBlock = blockNumber - 172800 * 60; // ~60 days of blocks at 0.5s
+  const START_BLOCK = Math.max(CONFIG.DEPLOY_BLOCK, lookbackBlock);
 
   for (let from = Math.max(0, START_BLOCK); from <= blockNumber; from += CHUNK_SIZE) {
     const to = Math.min(from + CHUNK_SIZE - 1, blockNumber);

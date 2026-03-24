@@ -43,7 +43,7 @@ app.get('/api/config', async () => {
 
 // GET /api/wallets — live balances of the 3 buyback wallets
 app.get('/api/wallets', async () => {
-  const provider = new ethers.JsonRpcProvider(CONFIG.RPC_URL);
+  const provider = await getProviderWithFallback();
   const wallets = [];
 
   for (const [key, wallet] of Object.entries(CONFIG.BUYBACK_WALLETS)) {
@@ -229,7 +229,28 @@ app.get('/api/pool', async () => {
   };
 });
 
+/** Create a provider with fallback: tries RPC_PRIMARY first, then RPC_FALLBACK */
+function createProvider(): ethers.JsonRpcProvider {
+  return new ethers.JsonRpcProvider(CONFIG.RPC_PRIMARY);
+}
+
+async function getProviderWithFallback(): Promise<ethers.JsonRpcProvider> {
+  const primary = new ethers.JsonRpcProvider(CONFIG.RPC_PRIMARY);
+  try {
+    await primary.getBlockNumber(); // test connectivity
+    return primary;
+  } catch (err) {
+    console.warn(`Primary RPC failed (${CONFIG.RPC_PRIMARY}), falling back to ${CONFIG.RPC_FALLBACK}`);
+    return new ethers.JsonRpcProvider(CONFIG.RPC_FALLBACK);
+  }
+}
+
 async function start() {
+  // Startup validation
+  if (CONFIG.TOKEN_ADDRESS === '0x0000000000000000000000000000000000000000') {
+    console.warn('WARNING: TOKEN_ADDRESS not set - holder tracking disabled');
+  }
+
   try {
     await app.listen({ port: CONFIG.PORT, host: '0.0.0.0' });
     console.log(`DiamondHands API running on port ${CONFIG.PORT}`);

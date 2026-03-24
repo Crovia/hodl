@@ -45,7 +45,7 @@ export default function AirdropPool({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3025/api/wallets')
+    fetch('/api/holders')
       .then(res => res.json())
       .then(setWalletData)
       .catch(err => console.error('Failed to fetch wallets:', err))

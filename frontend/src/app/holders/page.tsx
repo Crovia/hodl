@@ -68,7 +68,7 @@ export default function HoldersPage() {
   const [totalCro, setTotalCro] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:3025/api/wallets')
+    fetch('/api/holders')
       .then(res => res.json())
       .then(data => {
         const total = Number(data.totals?.totalCro || 0);

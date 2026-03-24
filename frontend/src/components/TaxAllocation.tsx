@@ -68,7 +68,7 @@ export default function TaxAllocation() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3025/api/wallets')
+    fetch('/api/holders')
       .then(res => res.json())
       .then(setData)
       .catch(err => console.error('Failed to fetch wallets:', err))
