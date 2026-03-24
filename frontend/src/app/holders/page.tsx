@@ -33,11 +33,11 @@ const presaleParticipants = [
   { address: '0x212246c1bB44C4d70ecC1F6fE64C1Fe68638624F', allocation: 1000 },
   { address: '0xDFB2E6486507A90c820a634F59483470e621Ac4B', allocation: 1000 },
   { address: '0x08C2ceEcA0E01066B4e46081AcC621a34E8e21F1', allocation: 1000 },
-  { address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 500 },
+  { address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 1000 },
 ];
 
 const OG_ADDRESSES = presaleParticipants.map(p => p.address);
-const TOTAL_PRESALE_CRO = 37000;
+const TOTAL_PRESALE_CRO = 37500;
 const PRESALE_SUPPLY_PCT = 60;
 
 function buildPresaleHolders(): Holder[] {

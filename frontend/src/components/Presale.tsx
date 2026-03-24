@@ -39,7 +39,7 @@ const participants: Participant[] = [
   { name: 'Gmbino', address: '0x212246c1bB44C4d70ecC1F6fE64C1Fe68638624F', allocation: 1000 },
   { name: 'CryptoCharlesManson', address: '0xDFB2E6486507A90c820a634F59483470e621Ac4B', allocation: 1000 },
   { name: 'Memeseason', address: '0x08C2ceEcA0E01066B4e46081AcC621a34E8e21F1', allocation: 1000 },
-  { name: 'Dougie', address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 500 },
+  { name: 'Dougie', address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 1000 },
 ];
 
 type Tier = 'diamond' | 'gold' | 'silver';
@@ -93,7 +93,7 @@ function TierIcon({ tier, className }: { tier: Tier; className?: string }) {
 }
 
 const totalAllocation = participants.reduce((sum, p) => sum + p.allocation, 0);
-const TOTAL_CRO_RAISED = 37000; // actual total raised
+const TOTAL_CRO_RAISED = 37500; // actual total raised
 
 // From bonding curve calculator: 37,000 CRO = 60% of supply (~601.6M tokens)
 const TOTAL_PRESALE_SUPPLY_PCT = 60;
