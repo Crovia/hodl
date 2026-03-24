@@ -83,7 +83,41 @@ function LaunchCountdown() {
   );
 }
 
+interface WalletBalance {
+  id: string;
+  token: string;
+  address: string;
+  allocation: number;
+  croBalance: string;
+  tokenBalance: string;
+}
+
+const WALLET_DEFAULTS = [
+  { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400' },
+  { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400' },
+  { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400' },
+];
+
+function formatBalance(val: string): string {
+  const n = parseFloat(val);
+  if (isNaN(n) || n === 0) return '0';
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return n.toFixed(2);
+}
+
 export default function Hero() {
+  const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
+
+  useEffect(() => {
+    fetch('/api/wallets')
+      .then(res => res.json())
+      .then(data => {
+        if (data.wallets) setWalletBalances(data.wallets);
+        else if (Array.isArray(data)) setWalletBalances(data);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
       {/* Intense radial glows */}
@@ -181,27 +215,46 @@ export default function Hero() {
           <div className="mt-6">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-bold">Tax Collection Wallets</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
-              {[
-                { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400' },
-                { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400' },
-                { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400' },
-              ].map((w) => (
-                <a
-                  key={w.label}
-                  href={`https://cronoscan.com/address/${w.address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-card rounded-lg p-3 text-center hover:bg-white/5 transition-colors pointer-events-auto"
-                >
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className={`text-xs font-bold ${w.color}`}>{w.label}</span>
-                    <span className="text-xs text-gray-500">({w.pct})</span>
+              {WALLET_DEFAULTS.map((w) => {
+                const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
+                return (
+                  <div key={w.label} className="glass-card rounded-lg p-3 text-center pointer-events-auto">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <span className={`text-xs font-bold ${w.color}`}>{w.label}</span>
+                      <span className="text-xs text-gray-500">({w.pct})</span>
+                    </div>
+                    {live && (parseFloat(live.croBalance) > 0 || parseFloat(live.tokenBalance) > 0) && (
+                      <div className="flex items-center justify-center gap-3 mb-1.5">
+                        {parseFloat(live.croBalance) > 0 && (
+                          <span className="text-xs font-bold text-white">{formatBalance(live.croBalance)} CRO</span>
+                        )}
+                        {parseFloat(live.tokenBalance) > 0 && (
+                          <span className={`text-xs font-bold ${w.color}`}>{formatBalance(live.tokenBalance)} tokens</span>
+                        )}
+                      </div>
+                    )}
+                    <div className="flex items-center justify-center gap-1">
+                      <a
+                        href={`https://cronoscan.com/address/${w.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+                      >
+                        {w.address.slice(0, 6)}...{w.address.slice(-4)}
+                      </a>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(w.address)}
+                        className="text-gray-600 hover:text-gold-400 transition-colors"
+                        title="Copy address"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <div className="font-mono text-[10px] text-gray-500 hover:text-gray-300 transition-colors">
-                    {w.address.slice(0, 6)}...{w.address.slice(-4)}
-                  </div>
-                </a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
