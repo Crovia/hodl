@@ -78,6 +78,8 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
   const [toast, setToast] = useState<string | null>(null);
   const [won, setWon] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [nukePrompt, setNukePrompt] = useState(false);
+  const [nuking, setNuking] = useState(false);
   const nextId = useRef(effectiveCount);
   const clickCount = useRef(0);
   const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -112,6 +114,12 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
     clickCount.current++;
     const clicks = clickCount.current;
 
+    // Mobile nuke prompt at 10 clicks
+    if (mobileRef.current && clicks === 10) {
+      setNukePrompt(true);
+      return;
+    }
+
     if (milestoneMessages[clicks]) {
       showToast(milestoneMessages[clicks]);
     } else if (clicks % 10 === 0) {
@@ -133,7 +141,98 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
     });
   }, [won, showToast]);
 
+  const handleNuke = useCallback(() => {
+    setNukePrompt(false);
+    setNuking(true);
+    // Create explosions for all current images
+    const nukeExplosions: Explosion[] = images.map(img => ({
+      id: Date.now() + Math.random() + img.id,
+      x: (parseFloat(img.left) / 100) * (typeof window !== 'undefined' ? window.innerWidth : 400),
+      y: (parseFloat(img.top) / 100) * (typeof window !== 'undefined' ? window.innerHeight : 800),
+      src: img.src,
+    }));
+    setExplosions(prev => [...prev, ...nukeExplosions]);
+    setTimeout(() => {
+      setImages([]);
+      setExplosions([]);
+      setNuking(false);
+      setWon(true);
+    }, 1200);
+  }, [images]);
+
   if (hidden) return null;
+
+  if (nukePrompt) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto">
+        <div className="mx-6 p-8 rounded-2xl bg-[#0a0a0a] border-2 border-red-500/40 shadow-[0_0_80px_rgba(239,68,68,0.3)] text-center max-w-sm">
+          <div className="text-5xl mb-4">💣</div>
+          <h3 className="text-2xl font-black text-red-400 mb-2">NUKE THEM ALL?</h3>
+          <p className="text-gray-400 text-sm mb-6">Destroy every last wojak on this page?</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={handleNuke}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold text-sm hover:from-red-400 hover:to-red-500 transition-all hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:scale-105"
+            >
+              NUKE 💥
+            </button>
+            <button
+              onClick={() => setNukePrompt(false)}
+              className="px-6 py-3 rounded-xl border border-gray-700 text-gray-400 font-bold text-sm hover:border-gray-500 hover:text-gray-300 transition-all"
+            >
+              Nah, keep clicking
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (nuking) {
+    return (
+      <>
+        {/* Flash overlay */}
+        <div className="fixed inset-0 z-[9998] bg-white pointer-events-none" style={{ animation: 'nukeFlash 1.2s ease-out forwards' }} />
+        {/* Explosions */}
+        {explosions.map((ex) => (
+          <div
+            key={ex.id}
+            className="fixed z-[9999] pointer-events-none"
+            style={{ left: ex.x, top: ex.y, transform: 'translate(-50%, -50%)' }}
+          >
+            <div
+              className="absolute rounded-full bg-red-500/80"
+              style={{ width: 40, height: 40, left: -20, top: -20, animation: 'explosionFlash 0.8s ease-out forwards' }}
+            />
+            {Array.from({ length: 6 }).map((_, i) => {
+              const angle = (i / 6) * 360;
+              const dist = 60 + Math.random() * 80;
+              return (
+                <img
+                  key={i}
+                  src={ex.src}
+                  alt=""
+                  className="absolute"
+                  style={{
+                    width: 15 + Math.random() * 15,
+                    height: 15 + Math.random() * 15,
+                    objectFit: 'contain',
+                    left: 0, top: 0,
+                    opacity: 0.8,
+                    transform: `rotate(${Math.random() * 360}deg)`,
+                    animation: 'explosionShard 0.8s ease-out forwards',
+                    '--shard-x': `${Math.cos(angle * Math.PI / 180) * dist}px`,
+                    '--shard-y': `${Math.sin(angle * Math.PI / 180) * dist}px`,
+                    '--shard-rot': `${Math.random() * 720 - 360}deg`,
+                  } as React.CSSProperties}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </>
+    );
+  }
 
   if (won) {
     return (

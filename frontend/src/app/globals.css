@@ -177,6 +177,14 @@ body {
   100% { transform: scale(18); opacity: 0; }
 }
 
+@keyframes nukeFlash {
+  0% { opacity: 0; }
+  10% { opacity: 0.9; }
+  30% { opacity: 0.6; }
+  50% { opacity: 0.3; background: #ff4444; }
+  100% { opacity: 0; }
+}
+
 @keyframes explosionShard {
   0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.9; }
   100% { transform: translate(var(--shard-x), var(--shard-y)) rotate(var(--shard-rot)) scale(0.3); opacity: 0; }
