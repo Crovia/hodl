@@ -38,9 +38,8 @@ const sizeMultipliers = [1, 1, 1, 1, 2, 2, 3];
 
 function spawnImage(id: number, mobile = false): FloatingImage {
   const baseSize = mobile ? 25 + Math.floor(Math.random() * 15) : 70 + Math.floor(Math.random() * 50);
-  const mobileMultipliers = [1, 1, 1, 1, 1, 1.5];
   const multiplier = mobile
-    ? mobileMultipliers[Math.floor(Math.random() * mobileMultipliers.length)]
+    ? 1
     : sizeMultipliers[Math.floor(Math.random() * sizeMultipliers.length)];
   return {
     id,
