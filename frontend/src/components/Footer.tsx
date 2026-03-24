@@ -25,7 +25,7 @@ export default function Footer() {
           </div>
           <button
             onClick={toggleImages}
-            className="mt-6 px-4 py-2 rounded-lg text-xs text-gray-600 hover:text-gray-400 border border-white/5 hover:border-white/10 transition-colors"
+            className="mt-6 px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gold-400 border border-gray-700 hover:border-gold-400/30 bg-white/5 hover:bg-gold-400/5 transition-all"
           >
             Toggle Meme Images
           </button>

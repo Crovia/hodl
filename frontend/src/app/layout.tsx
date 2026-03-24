@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="relative z-10 min-h-screen flex flex-col">
           <Header />
           <main className="relative flex-1 bg-luxury-black">
-            <FloatingCryImages count={8} />
+            <FloatingCryImages count={5} />
             {children}
           </main>
           <Footer />
