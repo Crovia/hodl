@@ -1,31 +1,30 @@
-import { NextResponse } from 'next/server';
-import http from 'http';
-
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
-function fetchHttp(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const req = http.get(url, (res) => {
-      let data = '';
-      res.on('data', (chunk) => { data += chunk; });
-      res.on('end', () => resolve(data));
-    });
-    req.on('error', reject);
-    req.setTimeout(10000, () => { req.destroy(); reject(new Error('timeout')); });
-  });
-}
+import { NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://62.171.160.71:3025';
 
 export async function GET() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
   try {
-    const data = await fetchHttp(`${BACKEND_URL}/api/holders`);
-    return new NextResponse(data, {
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch(`${BACKEND_URL}/api/holders`, {
+      signal: controller.signal,
+      cache: 'no-store',
     });
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Backend request failed' }, { status: res.status });
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch (err) {
-    console.error('Failed to proxy /api/holders:', err);
+    clearTimeout(timeout);
+    console.error('Proxy /api/holders failed:', String(err));
     return NextResponse.json({ error: 'Backend unavailable' }, { status: 502 });
   }
 }
