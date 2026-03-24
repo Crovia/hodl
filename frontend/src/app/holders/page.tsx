@@ -73,44 +73,16 @@ export default function HoldersPage() {
     fetch('/api/holders')
       .then(res => res.json())
       .then(data => {
-        const total = Number(data.totals?.totalCro || 0);
-        setTotalCro(total);
-
-        if (total > 0 && data.holders?.length > 0) {
-          const airdropPool = total * 0.20;
-          const diamondPool = airdropPool * 0.55;
-          const goldPool = airdropPool * 0.30;
-          const silverPool = airdropPool * 0.15;
-
-          const eligible = data.holders.filter((h: Holder) => !h.hasSold && h.tier !== 'jeeter');
-          const diamondHolders = eligible.filter((h: Holder) => h.tier === 'diamond');
-          const goldHolders = eligible.filter((h: Holder) => h.tier === 'gold');
-          const silverHolders = eligible.filter((h: Holder) => h.tier === 'silver');
-
-          const diamondTotal = diamondHolders.reduce((s: number, h: Holder) => s + h.percentage, 0);
-          const goldTotal = goldHolders.reduce((s: number, h: Holder) => s + h.percentage, 0);
-          const silverTotal = silverHolders.reduce((s: number, h: Holder) => s + h.percentage, 0);
-
-          const updated = data.holders.map((h: Holder) => {
-            if (h.hasSold || h.tier === 'jeeter') return h;
-
-            let airdrop = 0;
-            if (h.tier === 'diamond' && diamondTotal > 0) {
-              airdrop = (h.percentage / diamondTotal) * diamondPool;
-            } else if (h.tier === 'gold' && goldTotal > 0) {
-              airdrop = (h.percentage / goldTotal) * goldPool;
-            } else if (h.tier === 'silver' && silverTotal > 0) {
-              airdrop = (h.percentage / silverTotal) * silverPool;
-            }
-
-            return {
-              ...h,
-              airdropAmount: Math.round(airdrop * 100) / 100,
-              totalWithBoost: Math.round(airdrop * (1 + h.boostPercentage / 100) * 100) / 100,
-            };
-          });
-
-          setHolders(updated);
+        if (data.holders?.length > 0) {
+          // Use live data from backend (already has airdrop amounts calculated)
+          const liveHolders: Holder[] = data.holders.map((h: Holder) => ({
+            ...h,
+            eligible: !h.hasSold && h.tier !== 'jeeter',
+          }));
+          setHolders(liveHolders);
+        }
+        if (data.totals?.totalCro) {
+          setTotalCro(Number(data.totals.totalCro));
         }
       })
       .catch(() => {

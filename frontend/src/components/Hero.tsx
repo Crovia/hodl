@@ -230,6 +230,11 @@ export default function Hero() {
               0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D
             </a>
           </div>
+          <div className="flex items-center justify-center gap-4 text-sm pt-2">
+            <a href="https://dexscreener.com/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-bold transition-colors pointer-events-auto">DexScreener</a>
+            <span className="text-gray-600">|</span>
+            <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold transition-colors pointer-events-auto">Buy on Obsidian</a>
+          </div>
 
           {/* Tax Treasury */}
           <div className="mt-12">

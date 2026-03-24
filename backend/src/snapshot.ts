@@ -145,10 +145,15 @@ export async function takeSnapshot() {
   const holders = new Map<string, { balance: bigint; firstSeen: number }>();
   const sellers = loadSellers();
 
-  // Exclude buyback wallet addresses from seller tracking
+  // Exclude buyback wallet addresses and DEX pair from seller tracking
   const buybackAddresses = new Set(
     Object.values(CONFIG.BUYBACK_WALLETS).map(w => w.address.toLowerCase())
   );
+  const excludeFromSellers = new Set([
+    ...buybackAddresses,
+    CONFIG.DEX_PAIR.toLowerCase(),
+    CONFIG.TOKEN_ADDRESS.toLowerCase(), // token contract itself
+  ]);
 
   // Scan in chunks of 2000 blocks (Cronos limit)
   const CHUNK_SIZE = 2000;
@@ -165,11 +170,11 @@ export async function takeSnapshot() {
         const fromLower = fromAddr.toLowerCase();
         const toLower = toAddr.toLowerCase();
 
-        // Track sellers — exclude zero address, tax wallet, and buyback wallets
+        // Track sellers — exclude zero address, tax wallet, buyback wallets, DEX pair, token contract
         if (
           fromAddr !== ethers.ZeroAddress &&
           fromLower !== CONFIG.TAX_WALLET.toLowerCase() &&
-          !buybackAddresses.has(fromLower)
+          !excludeFromSellers.has(fromLower)
         ) {
           sellers.add(fromLower);
         }

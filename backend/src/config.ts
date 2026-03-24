@@ -5,6 +5,9 @@ export const CONFIG = {
   // Tax wallet address — collects all taxes initially
   TAX_WALLET: process.env.TAX_WALLET || '0x0000000000000000000000000000000000000000',
 
+  // DEX pair address — excluded from seller tracking (it's the liquidity pool, not a person)
+  DEX_PAIR: '0xb4c50913f70b870f68e6143126163ba0e9186ad7',
+
   // 3 Buyback wallets — taxes are split into these for manual buybacks
   BUYBACK_WALLETS: {
     DHAND: {
