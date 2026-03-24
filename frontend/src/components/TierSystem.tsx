@@ -171,6 +171,9 @@ export default function TierSystem() {
 
         {/* Hall of Shame — live from blockchain */}
         <div className="mt-16">
+          <div className="flex justify-center mb-4">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyb3Z5OHgydDRrbTB0anl4YXFuNXVvdXQxc2sxZHJ4MjFiYnUzMnFvdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vX9WcCiWwUF7G/source.gif" alt="Crying" className="w-32 h-32 rounded-full object-cover" />
+          </div>
           <h3 className="text-2xl font-bold text-center mb-3">
             <span className="text-red-400">Hall of Shame</span>
           </h3>
