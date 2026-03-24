@@ -212,33 +212,45 @@ export default function Hero() {
           </div>
 
           {/* Tax collection wallets */}
-          <div className="mt-6">
-            <div className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-bold">Tax Collection Wallets</div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+          <div className="mt-10">
+            <h3 className="text-2xl font-black diamond-text mb-2">Tax Treasury</h3>
+            <p className="text-sm text-gray-500 mb-6">100% of taxes collected are used for buybacks and airdrops to holders.</p>
+
+            {/* Total collected */}
+            {walletBalances.length > 0 && (
+              <div className="glass-card rounded-xl p-5 mb-5 border border-gold-400/20 max-w-3xl mx-auto">
+                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Tax Collected</div>
+                <div className="text-3xl md:text-4xl font-black diamond-text">
+                  {formatBalance(walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0).toString())} CRO
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
               {WALLET_DEFAULTS.map((w) => {
                 const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
                 return (
-                  <div key={w.label} className="glass-card rounded-lg p-3 text-center pointer-events-auto">
-                    <div className="flex items-center justify-center gap-2 mb-1">
-                      <span className={`text-xs font-bold ${w.color}`}>{w.label}</span>
-                      <span className="text-xs text-gray-500">({w.pct})</span>
+                  <div key={w.label} className="glass-card rounded-xl p-5 text-center pointer-events-auto border border-white/5 hover:border-white/10 transition-all">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className={`text-sm font-bold ${w.color}`}>{w.label}</span>
+                      <span className="text-sm text-gray-500">({w.pct})</span>
                     </div>
-                    {live && (parseFloat(live.croBalance) > 0 || parseFloat(live.tokenBalance) > 0) && (
-                      <div className="flex items-center justify-center gap-3 mb-1.5">
-                        {parseFloat(live.croBalance) > 0 && (
-                          <span className="text-xs font-bold text-white">{formatBalance(live.croBalance)} CRO</span>
-                        )}
+                    {live ? (
+                      <div className="mb-3 space-y-1">
+                        <div className="text-2xl font-black text-white">{formatBalance(live.croBalance)} <span className="text-sm text-gray-400">CRO</span></div>
                         {parseFloat(live.tokenBalance) > 0 && (
-                          <span className={`text-xs font-bold ${w.color}`}>{formatBalance(live.tokenBalance)} tokens</span>
+                          <div className={`text-lg font-bold ${w.color}`}>{formatBalance(live.tokenBalance)} <span className="text-xs text-gray-500">tokens</span></div>
                         )}
                       </div>
+                    ) : (
+                      <div className="text-2xl font-black text-gray-600 mb-3">—</div>
                     )}
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-1.5">
                       <a
                         href={`https://cronoscan.com/address/${w.address}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+                        className="font-mono text-xs text-gray-500 hover:text-gold-400 transition-colors"
                       >
                         {w.address.slice(0, 6)}...{w.address.slice(-4)}
                       </a>
@@ -247,7 +259,7 @@ export default function Hero() {
                         className="text-gray-600 hover:text-gold-400 transition-colors"
                         title="Copy address"
                       >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                       </button>
