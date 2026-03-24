@@ -50,7 +50,7 @@ function LaunchCountdown() {
   if (launched) {
     return (
       <div className="flex justify-center mb-12">
-        <a href="https://vvs.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
+        <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
           Buy $HODL
           <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
