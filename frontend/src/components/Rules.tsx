@@ -26,7 +26,7 @@ export default function Rules() {
     {
       icon: '4',
       title: 'Earn Boosts',
-      description: 'After 30 days: +10% boost. After 60 days: +20%. Up to 100%. The longer you hold, the more you earn.',
+      description: '+3% boost every 10 days you hold. 10d = +3%, 20d = +6%, 30d = +9%. The longer you hold, the more you earn.',
       color: 'from-purple-400 to-purple-600',
       image: '/rule-boost.png',
     },

@@ -10,6 +10,7 @@ interface Participant {
 }
 
 const participants: Participant[] = [
+  { name: 'Cronos Legends Participation', address: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D', allocation: 1500 },
   { name: 'Liberty', address: '0x32dF940EdbF734971aF4707fE35f3ADe91660358', allocation: 1500 },
   { name: 'Boula', address: '0xC3F1087176485Ec5518cbC88169205fF26f75702', allocation: 1500 },
   { name: 'Zerokrypto', address: '0x36D21fD7EAfa01abC35578Ea940c545DCe8AC10C', allocation: 1500 },
@@ -39,7 +40,6 @@ const participants: Participant[] = [
   { name: 'CryptoCharlesManson', address: '0xDFB2E6486507A90c820a634F59483470e621Ac4B', allocation: 1000 },
   { name: 'Memeseason', address: '0x08C2ceEcA0E01066B4e46081AcC621a34E8e21F1', allocation: 1000 },
   { name: 'Dougie', address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 500 },
-  { name: 'Cronos Legends Participation', address: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D', allocation: 1500 },
 ];
 
 type Tier = 'diamond' | 'gold' | 'silver';

@@ -157,6 +157,25 @@ export default function Hero() {
             </div>
           ))}
         </div>
+
+        {/* Contract info */}
+        <div className="mt-8 space-y-2">
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <span className="text-gray-500">Ticker:</span>
+            <span className="text-gold-400 font-bold">$HODL</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <span className="text-gray-500">Creator:</span>
+            <a
+              href="https://cronoscan.com/address/0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-gray-400 hover:text-gold-400 transition-colors pointer-events-auto break-all"
+            >
+              0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
