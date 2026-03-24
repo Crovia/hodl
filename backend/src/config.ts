@@ -1,6 +1,6 @@
 export const CONFIG = {
   // Token contract address — set after deployment
-  TOKEN_ADDRESS: process.env.TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000',
+  TOKEN_ADDRESS: process.env.TOKEN_ADDRESS || '0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A',
 
   // Tax wallet address — collects all taxes initially
   TAX_WALLET: process.env.TAX_WALLET || '0x0000000000000000000000000000000000000000',
@@ -29,8 +29,8 @@ export const CONFIG = {
   RPC_PRIMARY: process.env.RPC_PRIMARY || process.env.RPC_URL || 'https://evm.cronos.org',
   RPC_FALLBACK: process.env.RPC_FALLBACK || 'https://evm.cronos.org',
 
-  // Deploy block — set to contract creation block to avoid missing early transfers
-  DEPLOY_BLOCK: Number(process.env.DEPLOY_BLOCK) || 0,
+  // Deploy block — contract creation block on Cronos
+  DEPLOY_BLOCK: Number(process.env.DEPLOY_BLOCK) || 61499500,
 
   // Airdrop cycle in days
   AIRDROP_CYCLE_DAYS: 10,

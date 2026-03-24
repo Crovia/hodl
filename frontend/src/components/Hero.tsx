@@ -50,10 +50,10 @@ function LaunchCountdown() {
   if (launched) {
     return (
       <div className="flex justify-center mb-12">
-        <button className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
+        <a href="https://vvs.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
           Buy $HODL
           <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-        </button>
+        </a>
       </div>
     );
   }
@@ -194,10 +194,30 @@ export default function Hero() {
         </div>
 
         {/* Contract info */}
-        <div className="mt-8 space-y-2">
+        <div className="mt-8 space-y-3">
           <div className="flex items-center justify-center gap-2 text-sm">
             <span className="text-gray-500">Ticker:</span>
-            <span className="text-gold-400 font-bold">$HODL</span>
+            <span className="text-gold-400 font-bold text-lg">$HODL</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <span className="text-gray-500">Contract:</span>
+            <a
+              href="https://cronoscan.com/address/0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-gold-400 hover:text-gold-300 transition-colors pointer-events-auto break-all"
+            >
+              0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A
+            </a>
+            <button
+              onClick={() => navigator.clipboard.writeText('0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A')}
+              className="text-gray-600 hover:text-gold-400 transition-colors pointer-events-auto"
+              title="Copy CA"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </a>
           </div>
           <div className="flex items-center justify-center gap-2 text-sm">
             <span className="text-gray-500">Creator:</span>
@@ -268,7 +288,7 @@ export default function Hero() {
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                           </svg>
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>
