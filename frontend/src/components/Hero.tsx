@@ -90,6 +90,7 @@ interface WalletBalance {
   allocation: number;
   croBalance: string;
   tokenBalance: string;
+  clgBalance?: string;
 }
 
 const WALLET_DEFAULTS = [
@@ -217,7 +218,7 @@ export default function Hero() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-            </a>
+            </button>
           </div>
           <div className="flex items-center justify-center gap-2 text-sm">
             <span className="text-gray-500">Creator:</span>
@@ -257,7 +258,7 @@ export default function Hero() {
                 const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
                 const croVal = live ? formatBalance(live.croBalance) : '0';
                 const hodlVal = live && parseFloat(live.tokenBalance) > 0 ? formatBalance(live.tokenBalance) : '0';
-                const clgVal = live && (live as Record<string, string>).clgBalance && parseFloat((live as Record<string, string>).clgBalance) > 0 ? formatBalance((live as Record<string, string>).clgBalance) : '0';
+                const clgVal = live?.clgBalance && parseFloat(live.clgBalance) > 0 ? formatBalance(live.clgBalance) : '0';
                 return (
                   <div key={w.label} className={`glass-card rounded-2xl overflow-hidden pointer-events-auto border ${w.border} hover:ring-2 hover:ring-white/10 transition-all`}>
                     <div className={`h-1.5 bg-gradient-to-r ${w.gradient}`} />
@@ -271,11 +272,14 @@ export default function Hero() {
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">CRO Balance</div>
                         <div className="text-3xl font-black text-white">{croVal}</div>
                       </div>
-<div className="rounded-xl p-4 bg-gold-400/5 border border-gold-400/20 mb-3">                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">$HODL Balance</div>                        <div className="text-2xl font-bold text-gold-400">{hodlVal}</div>                      </div>
+                      <div className="rounded-xl p-4 bg-gold-400/5 border border-gold-400/20 mb-3">
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">$HODL Balance</div>
+                        <div className="text-2xl font-bold text-gold-400">{hodlVal}</div>
+                      </div>
 
                       <div className="rounded-xl p-4 bg-black/40 border border-white/5 mb-5">
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">{w.tokenName} Bought</div>
-                        <div className={`text-2xl font-bold ${w.color}`}>{w.tokenName === "" ? clgVal : "0"}</div>
+                        <div className={`text-2xl font-bold ${w.color}`}>{w.tokenName === '$CLG' ? clgVal : '0'}</div>
                       </div>
 
                       <div className="flex items-center justify-center gap-2">
@@ -295,7 +299,7 @@ export default function Hero() {
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                           </svg>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
