@@ -114,8 +114,8 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
     clickCount.current++;
     const clicks = clickCount.current;
 
-    // Mobile nuke prompt at 10 clicks
-    if (mobileRef.current && clicks === 10) {
+    // Mobile nuke prompt at 15 clicks
+    if (mobileRef.current && clicks === 15) {
       setNukePrompt(true);
       return;
     }
