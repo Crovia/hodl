@@ -17,7 +17,7 @@ export default function TierSystem() {
     {
       name: 'Gold Hands',
       image: '/Ghand.png',
-      threshold: '1.5%+ of supply',
+      threshold: '1%+ of supply',
       poolShare: '30%',
       description: 'Strong conviction. You believe in the mission and it shows.',
       gradient: 'from-gold-400 via-gold-300 to-gold-500',

@@ -47,7 +47,7 @@ type Tier = 'diamond' | 'gold' | 'silver';
 function getTier(allocation: number): Tier {
   const supplyPct = (allocation / totalAllocation) * TOTAL_PRESALE_SUPPLY_PCT;
   if (supplyPct >= 2.12) return 'diamond';
-  if (supplyPct >= 1.5) return 'gold';
+  if (supplyPct >= 1) return 'gold';
   return 'silver';
 }
 
