@@ -128,6 +128,7 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
 
     if (clicks >= 500) {
       setWon(true);
+      setTimeout(() => setWon(false), 3000);
       setImages([]);
       return;
     }
@@ -157,6 +158,7 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
       setExplosions([]);
       setNuking(false);
       setWon(true);
+      setTimeout(() => setWon(false), 3000);
     }, 1200);
   }, [images]);
 
