@@ -172,7 +172,7 @@ export default function Presale() {
         </div>
 
         {/* Summary cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Participants</div>
             <div className="text-3xl font-black diamond-text">{participants.length}</div>
@@ -185,11 +185,6 @@ export default function Presale() {
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Est. Supply Share</div>
             <div className="text-3xl font-black text-gold-400">~{TOTAL_PRESALE_SUPPLY_PCT}%</div>
             <div className="text-xs text-gray-500 mt-1">of total token supply</div>
-          </div>
-          <div className="glass-card rounded-xl p-6 text-center">
-            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Cap</div>
-            <div className="text-3xl font-black text-gold-400">25</div>
-            <div className="text-xs text-gray-500 mt-1">Max participants</div>
           </div>
         </div>
 

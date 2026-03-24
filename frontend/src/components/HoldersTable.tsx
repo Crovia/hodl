@@ -41,6 +41,7 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
     <div className="flex items-center gap-1">
       {milestones.map((day) => {
         const reached = holdingDays >= day;
+        const boost = (day / 10) * 3;
         return (
           <div key={day} className="flex items-center">
             <div
@@ -48,18 +49,21 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
                 reached ? 'text-gold-400' : 'text-gray-700'
               }`}
             >
-              <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-all ${
-                  reached
-                    ? 'border-gold-400 bg-gold-400/20 text-gold-400'
-                    : 'border-gray-700 bg-gray-800 text-gray-600'
-                }`}
-              >
-                {day}d
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-all ${
+                    reached
+                      ? 'border-gold-400 bg-gold-400/20 text-gold-400'
+                      : 'border-gray-700 bg-gray-800 text-gray-600'
+                  }`}
+                >
+                  {day}d
+                </div>
+                <div className={`text-[8px] mt-0.5 font-bold ${reached ? 'text-green-400' : 'text-gray-600'}`}>+{boost}%</div>
               </div>
             </div>
             {day < 50 && (
-              <div className={`w-3 h-0.5 ${holdingDays >= day + 10 ? 'bg-gold-400' : 'bg-gray-700'}`} />
+              <div className={`w-3 h-0.5 mb-3 ${holdingDays >= day + 10 ? 'bg-gold-400' : 'bg-gray-700'}`} />
             )}
           </div>
         );
@@ -91,7 +95,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
               <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
             </svg>
             <p className="text-gray-400">
-              <span className="text-gold-400 font-bold">Note:</span> This page is manually updated and may not reflect real-time data.
+              <span className="text-gold-400 font-bold">Note:</span> Prior to launch this page is manually updated. After launch, data will be updated live from the blockchain.
             </p>
           </div>
         </div>
