@@ -3,7 +3,7 @@
 import { Holder, getTierLabel } from '@/lib/types';
 
 function truncateAddress(addr: string): string {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  return `${addr.slice(0, 4)}..${addr.slice(-4)}`;
 }
 
 function TierBadge({ tier }: { tier: Holder['tier'] }) {
@@ -78,7 +78,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
         <div className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
           {/* Table header */}
-          <div className="grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[750px]">
+          <div className="grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] text-xs gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[620px]">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -94,7 +94,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
           {holders.map((holder, i) => (
             <div
               key={holder.address}
-              className={`grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors min-w-[750px] ${
+              className={`grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] text-xs gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors min-w-[620px] ${
                 holder.hasSold ? 'opacity-40 line-through' : ''
               } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
             >

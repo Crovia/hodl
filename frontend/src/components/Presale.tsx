@@ -108,7 +108,7 @@ function formatTokens(n: number): string {
 }
 
 function truncateAddress(addr: string): string {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  return `${addr.slice(0, 4)}..${addr.slice(-4)}`;
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -260,7 +260,7 @@ export default function Presale() {
 
           <div className="overflow-x-auto">
           {/* Table header */}
-          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[700px]">
+          <div className="grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[500px]">
             <div>#</div>
             <div>Tier</div>
             <div>Name</div>
@@ -278,7 +278,7 @@ export default function Presale() {
             return (
               <div
                 key={p.address}
-                className={`grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group min-w-[700px]`}
+                className={`grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group min-w-[500px]`}
                 style={{ animation: `fadeSlideIn 0.4s ease-out ${i * 0.06}s both` }}
               >
                 <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
@@ -326,7 +326,7 @@ export default function Presale() {
           })}
 
           {/* Total row */}
-          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20 min-w-[700px]">
+          <div className="grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20 min-w-[500px]">
             <div />
             <div />
             <div />
