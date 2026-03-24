@@ -176,6 +176,34 @@ export default function Hero() {
               0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D
             </a>
           </div>
+
+          {/* Tax collection wallets */}
+          <div className="mt-6">
+            <div className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-bold">Tax Collection Wallets</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+              {[
+                { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400' },
+                { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400' },
+                { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400' },
+              ].map((w) => (
+                <a
+                  key={w.label}
+                  href={`https://cronoscan.com/address/${w.address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card rounded-lg p-3 text-center hover:bg-white/5 transition-colors pointer-events-auto"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <span className={`text-xs font-bold ${w.color}`}>{w.label}</span>
+                    <span className="text-xs text-gray-500">({w.pct})</span>
+                  </div>
+                  <div className="font-mono text-[10px] text-gray-500 hover:text-gray-300 transition-colors">
+                    {w.address.slice(0, 6)}...{w.address.slice(-4)}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
