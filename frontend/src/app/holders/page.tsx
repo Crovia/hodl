@@ -70,7 +70,7 @@ export default function HoldersPage() {
   const [totalCro, setTotalCro] = useState(0);
 
   useEffect(() => {
-    fetch('/data/holders.json')
+    fetch('/holders-live.json')
       .then(res => res.json())
       .then(data => {
         if (data.holders?.length > 0) {

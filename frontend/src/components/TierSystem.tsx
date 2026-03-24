@@ -21,7 +21,7 @@ export default function TierSystem() {
   const [sellers, setSellers] = useState<Seller[]>([]);
 
   useEffect(() => {
-    fetch('/data/holders.json')
+    fetch('/holders-live.json')
       .then(res => res.json())
       .then(data => {
         if (data.holders) {
