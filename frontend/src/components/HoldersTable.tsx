@@ -76,8 +76,9 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
         </div>
 
         <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="overflow-x-auto">
           {/* Table header */}
-          <div className="grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
+          <div className="grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[750px]">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -93,7 +94,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
           {holders.map((holder, i) => (
             <div
               key={holder.address}
-              className={`grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
+              className={`grid grid-cols-[3rem_11rem_8rem_4.5rem_3rem_5.5rem_3.5rem_6rem_11rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors min-w-[750px] ${
                 holder.hasSold ? 'opacity-40 line-through' : ''
               } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
             >
@@ -142,6 +143,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
               </div>
             </div>
           ))}
+          </div>{/* close overflow-x-auto */}
         </div>
 
         {/* Legend */}

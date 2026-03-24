@@ -258,8 +258,9 @@ export default function Presale() {
             <h2 className="text-2xl font-bold diamond-text">Participants</h2>
           </div>
 
+          <div className="overflow-x-auto">
           {/* Table header */}
-          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
+          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[700px]">
             <div>#</div>
             <div>Tier</div>
             <div>Name</div>
@@ -277,7 +278,7 @@ export default function Presale() {
             return (
               <div
                 key={p.address}
-                className={`grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group`}
+                className={`grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group min-w-[700px]`}
                 style={{ animation: `fadeSlideIn 0.4s ease-out ${i * 0.06}s both` }}
               >
                 <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
@@ -325,7 +326,7 @@ export default function Presale() {
           })}
 
           {/* Total row */}
-          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20">
+          <div className="grid grid-cols-[3rem_2.5rem_1fr_1fr_6rem_5rem_6rem] gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20 min-w-[700px]">
             <div />
             <div />
             <div />
@@ -340,6 +341,7 @@ export default function Presale() {
               ~{formatTokens(PRESALE_TOKENS)}
             </div>
           </div>
+          </div>{/* close overflow-x-auto */}
         </div>
 
         {/* Estimation note */}
