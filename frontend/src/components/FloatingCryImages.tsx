@@ -36,13 +36,16 @@ function randomImage(): string {
 
 const sizeMultipliers = [1, 1, 1, 1, 2, 2, 3];
 
-function spawnImage(id: number): FloatingImage {
-  const baseSize = 70 + Math.floor(Math.random() * 50);
-  const multiplier = sizeMultipliers[Math.floor(Math.random() * sizeMultipliers.length)];
+function spawnImage(id: number, mobile = false): FloatingImage {
+  const baseSize = mobile ? 35 + Math.floor(Math.random() * 25) : 70 + Math.floor(Math.random() * 50);
+  const mobileMultipliers = [1, 1, 1, 1, 1.5, 2];
+  const multiplier = mobile
+    ? mobileMultipliers[Math.floor(Math.random() * mobileMultipliers.length)]
+    : sizeMultipliers[Math.floor(Math.random() * sizeMultipliers.length)];
   return {
     id,
     src: randomImage(),
-    size: baseSize * multiplier,
+    size: Math.round(baseSize * multiplier),
     top: `${5 + Math.random() * 85}%`,
     left: `${5 + Math.random() * 85}%`,
     delay: '0s',
@@ -51,21 +54,36 @@ function spawnImage(id: number): FloatingImage {
   };
 }
 
-function generateImages(count: number): FloatingImage[] {
-  return Array.from({ length: count }, (_, i) => spawnImage(i));
+function generateImages(count: number, mobile = false): FloatingImage[] {
+  return Array.from({ length: count }, (_, i) => spawnImage(i, mobile));
 }
 
 // Messages imported from @/lib/clickMessages
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return mobile;
+}
+
 export default function FloatingCryImages({ count = 8 }: { count?: number }) {
-  const [images, setImages] = useState<FloatingImage[]>(() => generateImages(count));
+  const isMobile = useIsMobile();
+  const effectiveCount = isMobile ? Math.ceil(count / 2) : count;
+  const [images, setImages] = useState<FloatingImage[]>(() => generateImages(effectiveCount));
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [won, setWon] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const nextId = useRef(count);
+  const nextId = useRef(effectiveCount);
   const clickCount = useRef(0);
   const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mobileRef = useRef(isMobile);
+  mobileRef.current = isMobile;
 
   useEffect(() => {
     const handler = () => setHidden(h => !h);
@@ -111,7 +129,7 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
     setImages(prev => {
       const filtered = prev.filter(img => img.id !== clickedId);
       const spawnCount = isDoubleClick ? 3 : 1;
-      const newImages = Array.from({ length: spawnCount }, () => spawnImage(nextId.current++));
+      const newImages = Array.from({ length: spawnCount }, () => spawnImage(nextId.current++, mobileRef.current));
       return [...filtered, ...newImages];
     });
   }, [won, showToast]);
