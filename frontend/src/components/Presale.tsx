@@ -253,8 +253,8 @@ export default function Presale() {
           </div>
         </div>
 
-        {/* Participants table */}
-        <div className="glass-card rounded-2xl overflow-hidden mb-16">
+        {/* Participants table - temporarily hidden */}
+        {false && <div className="glass-card rounded-2xl overflow-hidden mb-16">
           <div className="p-6 border-b border-gold-400/10">
             <h2 className="text-2xl font-bold diamond-text">Participants</h2>
           </div>
@@ -358,6 +358,13 @@ export default function Presale() {
             <span className="text-xs font-bold text-gray-400 uppercase">Total</span>
             <span className="text-sm font-black diamond-text">{totalAllocation.toLocaleString()} CRO</span>
           </div>
+        </div>}
+
+        {/* TBA placeholder */}
+        <div className="glass-card rounded-2xl overflow-hidden mb-16 p-12 text-center">
+          <h2 className="text-2xl font-bold diamond-text mb-4">Participants</h2>
+          <div className="text-5xl font-black text-gold-400 mb-3">TBA</div>
+          <p className="text-gray-500 text-sm">Participant list will be revealed soon.</p>
         </div>
 
         {/* Estimation note */}
