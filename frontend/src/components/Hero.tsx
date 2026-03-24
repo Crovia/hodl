@@ -93,14 +93,14 @@ interface WalletBalance {
 }
 
 const WALLET_DEFAULTS = [
-  { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400' },
-  { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400' },
-  { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400' },
+  { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400', border: 'border-gold-400/30', bg: 'bg-gold-400/5', gradient: 'from-gold-400 to-gold-600', tokenName: '$HODL' },
+  { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400', border: 'border-diamond-400/30', bg: 'bg-diamond-400/5', gradient: 'from-diamond-400 to-diamond-600', tokenName: '$CLG' },
+  { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400', border: 'border-pink-400/30', bg: 'bg-pink-400/5', gradient: 'from-pink-400 to-pink-600', tokenName: 'Community Vote' },
 ];
 
 function formatBalance(val: string): string {
   const n = parseFloat(val);
-  if (isNaN(n) || n === 0) return '0';
+  if (isNaN(n)) return '0';
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return n.toFixed(2);
@@ -211,58 +211,65 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Tax collection wallets */}
-          <div className="mt-10">
-            <h3 className="text-2xl font-black diamond-text mb-2">Tax Treasury</h3>
-            <p className="text-sm text-gray-500 mb-6">100% of taxes collected are used for buybacks and airdrops to holders.</p>
+          {/* Tax Treasury */}
+          <div className="mt-12">
+            <h3 className="text-3xl md:text-4xl font-black diamond-text mb-2">Tax Treasury</h3>
+            <p className="text-gray-400 mb-8">100% of taxes are used for buybacks and airdrops. Fully transparent on-chain.</p>
 
             {/* Total collected */}
-            {walletBalances.length > 0 && (
-              <div className="glass-card rounded-xl p-5 mb-5 border border-gold-400/20 max-w-3xl mx-auto">
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Tax Collected</div>
-                <div className="text-3xl md:text-4xl font-black diamond-text">
-                  {formatBalance(walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0).toString())} CRO
-                </div>
+            <div className="glass-card rounded-2xl p-6 md:p-8 mb-6 border border-gold-400/20 bg-gold-400/5 max-w-4xl mx-auto">
+              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-bold">Total Tax Collected</div>
+              <div className="text-4xl md:text-5xl font-black diamond-text">
+                {walletBalances.length > 0
+                  ? `${formatBalance(walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0).toString())} CRO`
+                  : '0 CRO'}
               </div>
-            )}
+              <div className="text-xs text-gray-500 mt-2">Across all 3 buyback wallets</div>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
               {WALLET_DEFAULTS.map((w) => {
                 const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
+                const croVal = live ? formatBalance(live.croBalance) : '0';
+                const tokenVal = live && parseFloat(live.tokenBalance) > 0 ? formatBalance(live.tokenBalance) : '0';
                 return (
-                  <div key={w.label} className="glass-card rounded-xl p-5 text-center pointer-events-auto border border-white/5 hover:border-white/10 transition-all">
-                    <div className="flex items-center justify-center gap-2 mb-3">
-                      <span className={`text-sm font-bold ${w.color}`}>{w.label}</span>
-                      <span className="text-sm text-gray-500">({w.pct})</span>
-                    </div>
-                    {live ? (
-                      <div className="mb-3 space-y-1">
-                        <div className="text-2xl font-black text-white">{formatBalance(live.croBalance)} <span className="text-sm text-gray-400">CRO</span></div>
-                        {parseFloat(live.tokenBalance) > 0 && (
-                          <div className={`text-lg font-bold ${w.color}`}>{formatBalance(live.tokenBalance)} <span className="text-xs text-gray-500">tokens</span></div>
-                        )}
+                  <div key={w.label} className={`glass-card rounded-2xl overflow-hidden pointer-events-auto border ${w.border} hover:ring-2 hover:ring-white/10 transition-all`}>
+                    <div className={`h-1.5 bg-gradient-to-r ${w.gradient}`} />
+                    <div className="p-6">
+                      <div className="flex items-center justify-center gap-2 mb-5">
+                        <span className={`text-lg font-black ${w.color}`}>{w.label}</span>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${w.bg} ${w.color} border ${w.border}`}>{w.pct}</span>
                       </div>
-                    ) : (
-                      <div className="text-2xl font-black text-gray-600 mb-3">—</div>
-                    )}
-                    <div className="flex items-center justify-center gap-1.5">
-                      <a
-                        href={`https://cronoscan.com/address/${w.address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-xs text-gray-500 hover:text-gold-400 transition-colors"
-                      >
-                        {w.address.slice(0, 6)}...{w.address.slice(-4)}
-                      </a>
-                      <button
-                        onClick={() => navigator.clipboard.writeText(w.address)}
-                        className="text-gray-600 hover:text-gold-400 transition-colors"
-                        title="Copy address"
-                      >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                      </button>
+
+                      <div className={`rounded-xl p-4 ${w.bg} border ${w.border} mb-3`}>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">CRO Balance</div>
+                        <div className="text-3xl font-black text-white">{croVal}</div>
+                      </div>
+
+                      <div className="rounded-xl p-4 bg-black/40 border border-white/5 mb-5">
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">{w.tokenName} Bought</div>
+                        <div className={`text-2xl font-bold ${w.color}`}>{tokenVal}</div>
+                      </div>
+
+                      <div className="flex items-center justify-center gap-2">
+                        <a
+                          href={`https://cronoscan.com/address/${w.address}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-xs text-gray-500 hover:text-gold-400 transition-colors"
+                        >
+                          {w.address.slice(0, 6)}...{w.address.slice(-4)}
+                        </a>
+                        <button
+                          onClick={() => navigator.clipboard.writeText(w.address)}
+                          className="text-gray-600 hover:text-gold-400 transition-colors p-1"
+                          title="Copy address"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );

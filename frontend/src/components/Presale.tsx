@@ -31,7 +31,7 @@ const participants: Participant[] = [
   { name: 'Kikodog', address: '0x87664C30CFba8FE860439bBF94e3521686Dec0de', allocation: 1000 },
   { name: 'kajebara', address: '0xE375805D3FB202d028939bB39D2ba9385FFFFde6', allocation: 1000 },
   { name: 'Seevin', address: '0x5237454DAC7D259Dd88B34cEb17E195Dca0A3F4d', allocation: 1000 },
-  { name: 'Nicholoco', address: '0xEce1b63218A249708B521E22BbAA7bAC35F6f20f', allocation: 1000 },
+  { name: 'Nicholoco', address: '0xEce1b63218A249708B521E22BbAA7bAC35F6f20f', allocation: 1500 },
   { name: 'Chiefboss', address: '0x0e4eaCc2887A58D157a4A9f036F7499fFcC68831', allocation: 1000 },
   { name: 'ArdentVRory', address: '0x89c132E654699C953C6Ddb4e27e7Cbcd19B13E8a', allocation: 1000 },
   { name: 'Nosnah84', address: '0x3283b4937D1BBfDa4b24D9f110C5731CE209244e', allocation: 1000 },
@@ -95,7 +95,7 @@ function TierIcon({ tier, className }: { tier: Tier; className?: string }) {
 }
 
 const totalAllocation = participants.reduce((sum, p) => sum + p.allocation, 0);
-const TOTAL_CRO_RAISED = 43000; // actual total raised
+const TOTAL_CRO_RAISED = 43500; // actual total raised
 
 // From bonding curve calculator: 43,000 CRO = 63% of supply (~637M tokens)
 const TOTAL_PRESALE_SUPPLY_PCT = 63;

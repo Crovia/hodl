@@ -52,7 +52,7 @@ app.get('/api/wallets', async () => {
       const croBalance = await provider.getBalance(wallet.address);
       const croFormatted = ethers.formatEther(croBalance);
 
-      // Get JUICE token balance if token address is set
+      // Get $HODL token balance if token address is set
       let tokenBalance = '0';
       if (CONFIG.TOKEN_ADDRESS !== '0x0000000000000000000000000000000000000000') {
         const token = new ethers.Contract(CONFIG.TOKEN_ADDRESS, ERC20_ABI, provider);
@@ -61,6 +61,16 @@ app.get('/api/wallets', async () => {
         tokenBalance = ethers.formatUnits(bal, decimals);
       }
 
+      // Get $CLG balance for the CLG wallet
+      let clgBalance = '0';
+      const CLG_ADDRESS = '0xa40764b6878e6eb86fac5de4f1f1a80aa6fc67fe';
+      try {
+        const clgToken = new ethers.Contract(CLG_ADDRESS, ERC20_ABI, provider);
+        const clgDecimals = await clgToken.decimals();
+        const clgBal = await clgToken.balanceOf(wallet.address);
+        clgBalance = ethers.formatUnits(clgBal, clgDecimals);
+      } catch { /* CLG not available */ }
+
       wallets.push({
         id: key,
         token: wallet.token,
@@ -68,6 +78,7 @@ app.get('/api/wallets', async () => {
         allocation: wallet.allocation,
         croBalance: croFormatted,
         tokenBalance,
+        clgBalance,
       });
     } catch (err) {
       wallets.push({
