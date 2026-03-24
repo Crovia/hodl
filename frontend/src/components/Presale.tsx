@@ -12,7 +12,8 @@ interface Participant {
 const participants: Participant[] = [
   { name: 'Cronos Legends Participation', address: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D', allocation: 1500 },
   { name: 'Obsidian Finance', address: '0x185D93b0F57A22e6cAb7d9F0D4EB657341fF90B3', allocation: 3000 },
-  { name: 'Haten', address: '0x7E3e91b6912042f8FC446385299785Ac2F12C0d0', allocation: 1500 },
+  { name: 'haten.cro', address: '0x7E3e91b6912042f8FC446385299785Ac2F12C0d0', allocation: 1500 },
+  { name: 'TBK', address: '0x52076D4f01440225e5A8baBB77B3eB1391C617e6', allocation: 1500 },
   { name: 'Liberty', address: '0x32dF940EdbF734971aF4707fE35f3ADe91660358', allocation: 1500 },
   { name: 'Boula', address: '0xC3F1087176485Ec5518cbC88169205fF26f75702', allocation: 1500 },
   { name: 'Zerokrypto', address: '0x36D21fD7EAfa01abC35578Ea940c545DCe8AC10C', allocation: 1500 },
@@ -95,7 +96,7 @@ function TierIcon({ tier, className }: { tier: Tier; className?: string }) {
 }
 
 const totalAllocation = participants.reduce((sum, p) => sum + p.allocation, 0);
-const TOTAL_CRO_RAISED = 43500; // actual total raised
+const TOTAL_CRO_RAISED = 45000; // actual total raised
 
 // From bonding curve calculator: 43,000 CRO = 63% of supply (~637M tokens)
 const TOTAL_PRESALE_SUPPLY_PCT = 63;

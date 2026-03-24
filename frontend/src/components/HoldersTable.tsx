@@ -72,7 +72,7 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   );
 }
 
-export default function HoldersTable({ holders, ogAddresses = [] }: { holders: Holder[]; ogAddresses?: string[] }) {
+export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string> }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
@@ -124,6 +124,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
           {/* Table rows */}
           {holders.map((holder, i) => {
             const isOg = ogSet.has(holder.address.toLowerCase());
+            const name = nameMap[holder.address.toLowerCase()];
             const isExpanded = expandedRow === i;
             return (
               <div key={holder.address}>
@@ -134,10 +135,11 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
                   } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
                 >
                   <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm text-gray-300">{truncateAddress(holder.address)}</span>
-                    {isOg && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
-                    {holder.hasSold && <span className="text-xs text-red-400 font-bold">SOLD</span>}
+                  <div className="flex items-center gap-2 min-w-0">
+                    {name && <span className="text-sm font-medium text-white truncate">{name}</span>}
+                    <span className="font-mono text-sm text-gray-400">{truncateAddress(holder.address)}</span>
+                    {isOg && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30 flex-shrink-0">OG</span>}
+                    {holder.hasSold && <span className="text-xs text-red-400 font-bold flex-shrink-0">SOLD</span>}
                   </div>
                   <div><TierBadge tier={holder.tier} /></div>
                   <div className="text-right"><div className="text-sm font-bold text-white">{holder.percentage}%</div></div>
@@ -171,7 +173,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
                 >
                   <div className="text-gray-600 font-mono text-[10px]">{i + 1}</div>
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="font-mono text-[11px] text-gray-300">{truncateAddress(holder.address)}</span>
+                    {name ? <span className="text-[11px] font-medium text-white truncate">{name}</span> : <span className="font-mono text-[11px] text-gray-300">{truncateAddress(holder.address)}</span>}
                     {isOg && <span className="px-1 py-0.5 rounded text-[7px] font-bold bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
                     {holder.hasSold && <span className="text-[8px] text-red-400 font-bold">SOLD</span>}
                   </div>
