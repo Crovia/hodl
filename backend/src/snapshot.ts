@@ -152,7 +152,8 @@ export async function takeSnapshot() {
   const excludeFromSellers = new Set([
     ...buybackAddresses,
     CONFIG.DEX_PAIR.toLowerCase(),
-    CONFIG.TOKEN_ADDRESS.toLowerCase(), // token contract itself
+    CONFIG.TOKEN_ADDRESS.toLowerCase(),
+    CONFIG.CREATOR_WALLET.toLowerCase(),
   ]);
 
   // Scan in chunks of 2000 blocks (Cronos limit)

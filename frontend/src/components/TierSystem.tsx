@@ -1,6 +1,42 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
+interface Seller {
+  address: string;
+  percentage: number;
+  holdingDays: number;
+}
+
+function truncateAddress(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+const shameImages = [
+  '/cry33.png', '/cry19.png', '/cry20.png', '/cry17.png', '/cry22.png',
+  '/cry18.png', '/cry23.png', '/cry25.png',
+];
+
 export default function TierSystem() {
+  const [sellers, setSellers] = useState<Seller[]>([]);
+
+  useEffect(() => {
+    fetch('/api/holders')
+      .then(res => res.json())
+      .then(data => {
+        if (data.holders) {
+          const sold = data.holders
+            .filter((h: { hasSold: boolean }) => h.hasSold)
+            .map((h: { address: string; percentage: number; holdingDays: number }) => ({
+              address: h.address,
+              percentage: h.percentage,
+              holdingDays: h.holdingDays,
+            }));
+          setSellers(sold);
+        }
+      })
+      .catch(() => {});
+  }, []);
   const tiers = [
     {
       name: 'Diamond Hands',
@@ -133,7 +169,7 @@ export default function TierSystem() {
           </div>
         </div>
 
-        {/* Hall of Shame — TODO: replace with live data once CA is provided */}
+        {/* Hall of Shame — live from blockchain */}
         <div className="mt-16">
           <h3 className="text-2xl font-bold text-center mb-3">
             <span className="text-red-400">Hall of Shame</span>
@@ -142,11 +178,54 @@ export default function TierSystem() {
             These wallets sold or transferred tokens. Permanently disqualified. The chain sees everything.
           </p>
 
-          <div className="glass-card rounded-xl p-8 border border-red-500/10 text-center">
-            <img src="/jeeter.png" alt="Jeeter" className="w-16 h-16 mx-auto mb-4 opacity-30" />
-            <p className="text-gray-500 text-sm">No jeeters yet. Token is not live.</p>
-            <p className="text-gray-600 text-xs mt-1">Sellers will appear here automatically once trading begins.</p>
-          </div>
+          {sellers.length > 0 ? (
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {sellers.map((seller, i) => (
+                <div
+                  key={seller.address}
+                  className="glass-card rounded-xl p-5 border border-red-500/20 bg-red-500/5 hover:border-red-500/40 transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={shameImages[i % shameImages.length]}
+                      alt="Jeeter"
+                      className="w-14 h-14 rounded-full object-cover bg-black/30 flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-400 uppercase">
+                          Jeeter
+                        </span>
+                        <span className="text-xs text-gray-600">
+                          Held {seller.holdingDays}d before selling
+                        </span>
+                      </div>
+                      <a
+                        href={`https://cronoscan.com/address/${seller.address}#tokentxns`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-sm text-gray-400 hover:text-red-400 transition-colors"
+                      >
+                        {truncateAddress(seller.address)}
+                      </a>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Was holding <span className="text-white font-medium">{seller.percentage}%</span> of supply
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 p-2 rounded-lg bg-black/30 text-center">
+                    <span className="text-xs text-red-400 font-bold">Forfeited all future airdrops</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="glass-card rounded-xl p-8 border border-red-500/10 text-center">
+              <img src="/jeeter.png" alt="Jeeter" className="w-16 h-16 mx-auto mb-4 opacity-30" />
+              <p className="text-gray-500 text-sm">No jeeters yet.</p>
+              <p className="text-gray-600 text-xs mt-1">Sellers will appear here automatically.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
