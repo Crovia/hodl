@@ -73,11 +73,12 @@ function useIsMobile() {
 export default function FloatingCryImages({ count = 8 }: { count?: number }) {
   const isMobile = useIsMobile();
   const effectiveCount = isMobile ? Math.ceil(count / 2) : count;
-  const [images, setImages] = useState<FloatingImage[]>(() => generateImages(effectiveCount));
+  const nuked = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('nuked') === '1';
+  const [images, setImages] = useState<FloatingImage[]>(() => nuked ? [] : generateImages(effectiveCount));
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [won, setWon] = useState(false);
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(nuked);
   const [nukePrompt, setNukePrompt] = useState(false);
   const [nuking, setNuking] = useState(false);
   const nextId = useRef(effectiveCount);
@@ -128,6 +129,8 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
 
     if (clicks >= 500) {
       setWon(true);
+      setHidden(true);
+      sessionStorage.setItem('nuked', '1');
       setTimeout(() => setWon(false), 3000);
       setImages([]);
       return;
@@ -158,6 +161,8 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
       setExplosions([]);
       setNuking(false);
       setWon(true);
+      setHidden(true);
+      sessionStorage.setItem('nuked', '1');
       setTimeout(() => setWon(false), 3000);
     }, 1200);
   }, [images]);
