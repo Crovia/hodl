@@ -34,7 +34,7 @@ export interface PoolInfo {
 }
 
 export function getTier(percentage: number): Holder['tier'] {
-  if (percentage >= 2) return 'diamond';
+  if (percentage >= 2.12) return 'diamond';
   if (percentage >= 1.5) return 'gold';
   // Jeeter is not a tier — it's assigned only when a wallet sells/transfers
   return 'silver';

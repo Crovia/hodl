@@ -209,7 +209,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
         {/* Legend */}
         <div className="mt-6 flex flex-wrap gap-4 md:gap-6 justify-center text-xs text-gray-500">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full tier-diamond" /> Diamond (2%+)
+            <div className="w-3 h-3 rounded-full tier-diamond" /> Diamond (2.12%+)
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full tier-gold" /> Gold (1.5%+)

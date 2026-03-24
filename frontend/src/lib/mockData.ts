@@ -46,8 +46,8 @@ function generateHolders(): Holder[] {
 
   // Filter only eligible holders for tier calculations
   const eligible = holders.filter(h => !h.hasSold);
-  const diamondHolders = eligible.filter(h => h.pct >= 2);
-  const goldHolders = eligible.filter(h => h.pct >= 1.5 && h.pct < 2);
+  const diamondHolders = eligible.filter(h => h.pct >= 2.12);
+  const goldHolders = eligible.filter(h => h.pct >= 1.5 && h.pct < 2.12);
   const silverHolders = eligible.filter(h => h.pct >= 0.5 && h.pct < 1.5);
 
   return holders.map(h => {
