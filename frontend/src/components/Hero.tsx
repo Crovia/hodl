@@ -256,7 +256,8 @@ export default function Hero() {
               {WALLET_DEFAULTS.map((w) => {
                 const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
                 const croVal = live ? formatBalance(live.croBalance) : '0';
-                const tokenVal = live && parseFloat(live.tokenBalance) > 0 ? formatBalance(live.tokenBalance) : '0';
+                const hodlVal = live && parseFloat(live.tokenBalance) > 0 ? formatBalance(live.tokenBalance) : '0';
+                const clgVal = live && (live as Record<string, string>).clgBalance && parseFloat((live as Record<string, string>).clgBalance) > 0 ? formatBalance((live as Record<string, string>).clgBalance) : '0';
                 return (
                   <div key={w.label} className={`glass-card rounded-2xl overflow-hidden pointer-events-auto border ${w.border} hover:ring-2 hover:ring-white/10 transition-all`}>
                     <div className={`h-1.5 bg-gradient-to-r ${w.gradient}`} />
@@ -270,10 +271,11 @@ export default function Hero() {
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">CRO Balance</div>
                         <div className="text-3xl font-black text-white">{croVal}</div>
                       </div>
+<div className="rounded-xl p-4 bg-gold-400/5 border border-gold-400/20 mb-3">                        <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">$HODL Balance</div>                        <div className="text-2xl font-bold text-gold-400">{hodlVal}</div>                      </div>
 
                       <div className="rounded-xl p-4 bg-black/40 border border-white/5 mb-5">
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">{w.tokenName} Bought</div>
-                        <div className={`text-2xl font-bold ${w.color}`}>{tokenVal}</div>
+                        <div className={`text-2xl font-bold ${w.color}`}>{w.tokenName === "" ? clgVal : "0"}</div>
                       </div>
 
                       <div className="flex items-center justify-center gap-2">
