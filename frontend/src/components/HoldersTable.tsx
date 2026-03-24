@@ -84,9 +84,21 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
           </p>
         </div>
 
+        <div className="glass-card rounded-xl p-4 mb-6 border border-gold-400/20 bg-gold-400/5">
+          <div className="flex items-center gap-3 text-sm">
+            <svg className="w-5 h-5 text-gold-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
+            </svg>
+            <p className="text-gray-400">
+              <span className="text-gold-400 font-bold">Note:</span> This page is manually updated and may not reflect real-time data.
+            </p>
+          </div>
+        </div>
+
         <div className="glass-card rounded-2xl overflow-hidden">
           {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
+          <div className="hidden md:grid grid-cols-[2rem_8rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -113,7 +125,7 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
               <div key={holder.address}>
                 {/* Desktop row */}
                 <div
-                  className={`hidden md:grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
+                  className={`hidden md:grid grid-cols-[2rem_8rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
                     holder.hasSold ? 'opacity-40 line-through' : ''
                   } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
                 >

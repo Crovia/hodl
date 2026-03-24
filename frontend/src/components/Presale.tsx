@@ -163,11 +163,11 @@ export default function Presale() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Participants</div>
-            <div className="text-3xl font-black diamond-text">{participants.length}</div>
+            <div className="text-3xl font-black diamond-text">23</div>
           </div>
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Raised</div>
-            <div className="text-3xl font-black diamond-text">{totalAllocation.toLocaleString()} CRO</div>
+            <div className="text-3xl font-black diamond-text">30,000 CRO</div>
           </div>
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Est. Supply Share</div>
