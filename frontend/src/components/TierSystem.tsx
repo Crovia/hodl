@@ -21,7 +21,7 @@ export default function TierSystem() {
   const [sellers, setSellers] = useState<Seller[]>([]);
 
   useEffect(() => {
-    fetch('/api/holders')
+    fetch('http://62.171.160.71:3025/api/holders')
       .then(res => res.json())
       .then(data => {
         if (data.holders) {
