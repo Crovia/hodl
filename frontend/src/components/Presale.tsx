@@ -145,6 +145,7 @@ const floatingMemes = [
 ];
 
 export default function Presale() {
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
   return (
     <div className="relative py-24 px-6">
       <div className="relative max-w-5xl mx-auto">
@@ -258,9 +259,8 @@ export default function Presale() {
             <h2 className="text-2xl font-bold diamond-text">Participants</h2>
           </div>
 
-          <div className="overflow-x-auto">
-          {/* Table header */}
-          <div className="grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[500px]">
+          {/* Table header - desktop */}
+          <div className="hidden md:grid grid-cols-[2rem_2rem_1fr_1fr_4rem_4rem_5rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Tier</div>
             <div>Name</div>
@@ -269,79 +269,95 @@ export default function Presale() {
             <div className="text-right">% Supply</div>
             <div className="text-right">Est. Tokens</div>
           </div>
+          {/* Table header - mobile */}
+          <div className="md:hidden grid grid-cols-[1.5rem_1.5rem_1fr_3.5rem] gap-2 p-3 bg-black/40 border-b border-gold-400/10 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+            <div>#</div>
+            <div></div>
+            <div>Name</div>
+            <div className="text-right">CRO</div>
+          </div>
 
           {/* Rows */}
           {participants.map((p, i) => {
             const { sharePct, tokens } = getParticipantShare(p.allocation);
             const tier = getTier(p.allocation);
             const config = tierConfig[tier];
+            const isExpanded = expandedRow === i;
             return (
-              <div
-                key={p.address}
-                className={`grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group min-w-[500px]`}
-                style={{ animation: `fadeSlideIn 0.4s ease-out ${i * 0.06}s both` }}
-              >
-                <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
-                <div className="flex items-center" title={config.label}>
-                  <TierIcon
-                    tier={tier}
-                    className={`w-5 h-5 ${config.color} transition-transform duration-300 group-hover:scale-125 ${tier === 'diamond' ? 'animate-pulse' : ''}`}
-                  />
+              <div key={p.address} style={{ animation: `fadeSlideIn 0.4s ease-out ${i * 0.06}s both` }}>
+                {/* Desktop row */}
+                <div className="hidden md:grid grid-cols-[2rem_2rem_1fr_1fr_4rem_4rem_5rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-all duration-300 group">
+                  <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
+                  <div className="flex items-center" title={config.label}>
+                    <TierIcon tier={tier} className={`w-5 h-5 ${config.color} transition-transform duration-300 group-hover:scale-125 ${tier === 'diamond' ? 'animate-pulse' : ''}`} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {p.twitter ? (
+                      <a href={`https://x.com/${p.twitter}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-white hover:text-gold-400 transition-colors">{p.name}</a>
+                    ) : (
+                      <span className="text-sm font-medium text-white">{p.name}</span>
+                    )}
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${config.bg} ${config.color} border ${config.border}`}>{config.label}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <a href={`https://cronoscan.com/address/${p.address}#tokentxns`} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-gray-300 hover:text-gold-400 transition-colors" title="View on Cronoscan">{truncateAddress(p.address)}</a>
+                    <CopyButton text={p.address} />
+                  </div>
+                  <div className="text-right text-sm font-bold text-gold-400">{p.allocation.toLocaleString()}</div>
+                  <div className="text-right text-sm font-bold text-diamond-400">~{sharePct.toFixed(2)}%</div>
+                  <div className="text-right text-sm text-gray-300">~{formatTokens(tokens)}</div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {p.twitter ? (
-                    <a href={`https://x.com/${p.twitter}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-white hover:text-gold-400 transition-colors">
-                      {p.name}
-                    </a>
-                  ) : (
-                    <span className="text-sm font-medium text-white">{p.name}</span>
-                  )}
-                  <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${config.bg} ${config.color} border ${config.border}`}>
-                    {config.label}
-                  </span>
+
+                {/* Mobile row - tap to expand */}
+                <div
+                  className="md:hidden grid grid-cols-[1.5rem_1.5rem_1fr_3.5rem] gap-2 p-3 items-center border-b border-white/5 active:bg-white/5 cursor-pointer"
+                  onClick={() => setExpandedRow(isExpanded ? null : i)}
+                >
+                  <div className="text-gray-500 font-mono text-[11px]">{i + 1}</div>
+                  <TierIcon tier={tier} className={`w-4 h-4 ${config.color}`} />
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[11px] font-medium text-white truncate">{p.name}</span>
+                    <span className={`text-[8px] font-bold uppercase px-1 py-0.5 rounded ${config.bg} ${config.color} border ${config.border} flex-shrink-0`}>{config.label}</span>
+                  </div>
+                  <div className="text-right text-[11px] font-bold text-gold-400">{p.allocation.toLocaleString()}</div>
                 </div>
-                <div className="flex items-center">
-                  <a
-                    href={`https://cronoscan.com/address/${p.address}#tokentxns`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-sm text-gray-300 hover:text-gold-400 transition-colors"
-                    title="View on Cronoscan"
-                  >
-                    {truncateAddress(p.address)}
-                  </a>
-                  <CopyButton text={p.address} />
-                </div>
-                <div className="text-right text-sm font-bold text-gold-400">
-                  {p.allocation.toLocaleString()}
-                </div>
-                <div className="text-right text-sm font-bold text-diamond-400">
-                  ~{sharePct.toFixed(2)}%
-                </div>
-                <div className="text-right text-sm text-gray-300">
-                  ~{formatTokens(tokens)}
-                </div>
+
+                {/* Mobile expanded details */}
+                {isExpanded && (
+                  <div className="md:hidden px-3 py-2 bg-white/5 border-b border-white/5 grid grid-cols-3 gap-2 text-[10px]">
+                    <div>
+                      <div className="text-gray-500 uppercase mb-0.5">Wallet</div>
+                      <a href={`https://cronoscan.com/address/${p.address}#tokentxns`} target="_blank" rel="noopener noreferrer" className="font-mono text-gray-300 hover:text-gold-400">{truncateAddress(p.address)}</a>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-gray-500 uppercase mb-0.5">% Supply</div>
+                      <div className="font-bold text-diamond-400">~{sharePct.toFixed(2)}%</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-gray-500 uppercase mb-0.5">Est. Tokens</div>
+                      <div className="text-gray-300">~{formatTokens(tokens)}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
 
-          {/* Total row */}
-          <div className="grid grid-cols-[2rem_2rem_5rem_5.5rem_4rem_4rem_4.5rem] text-xs gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20 min-w-[500px]">
+          {/* Total row - desktop */}
+          <div className="hidden md:grid grid-cols-[2rem_2rem_1fr_1fr_4rem_4rem_5rem] gap-4 p-4 items-center bg-gold-400/5 border-t border-gold-400/20">
             <div />
             <div />
             <div />
             <div className="text-sm font-bold text-gray-400 uppercase">Total</div>
-            <div className="text-right text-lg font-black diamond-text">
-              {totalAllocation.toLocaleString()}
-            </div>
-            <div className="text-right text-lg font-black text-diamond-400">
-              ~{TOTAL_PRESALE_SUPPLY_PCT}%
-            </div>
-            <div className="text-right text-sm font-bold text-gray-300">
-              ~{formatTokens(PRESALE_TOKENS)}
-            </div>
+            <div className="text-right text-lg font-black diamond-text">{totalAllocation.toLocaleString()}</div>
+            <div className="text-right text-lg font-black text-diamond-400">~{TOTAL_PRESALE_SUPPLY_PCT}%</div>
+            <div className="text-right text-sm font-bold text-gray-300">~{formatTokens(PRESALE_TOKENS)}</div>
           </div>
-          </div>{/* close overflow-x-auto */}
+          {/* Total row - mobile */}
+          <div className="md:hidden flex justify-between p-3 bg-gold-400/5 border-t border-gold-400/20">
+            <span className="text-xs font-bold text-gray-400 uppercase">Total</span>
+            <span className="text-sm font-black diamond-text">{totalAllocation.toLocaleString()} CRO</span>
+          </div>
         </div>
 
         {/* Estimation note */}
