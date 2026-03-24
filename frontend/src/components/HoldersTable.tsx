@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Holder, getTierLabel } from '@/lib/types';
 
 function truncateAddress(addr: string): string {
@@ -20,13 +21,26 @@ function TierBadge({ tier }: { tier: Holder['tier'] }) {
   );
 }
 
-function BoostTimeline({ holdingDays, boostPercentage }: { holdingDays: number; boostPercentage: number }) {
+function TierBadgeSmall({ tier }: { tier: Holder['tier'] }) {
+  const styles: Record<string, string> = {
+    diamond: 'tier-diamond',
+    gold: 'tier-gold',
+    silver: 'tier-silver',
+    jeeter: 'tier-jeeter',
+  };
+  return (
+    <span className={`${styles[tier]} px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white whitespace-nowrap`}>
+      {getTierLabel(tier)}
+    </span>
+  );
+}
+
+function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   const milestones = [10, 20, 30, 40, 50];
   return (
     <div className="flex items-center gap-1">
       {milestones.map((day) => {
         const reached = holdingDays >= day;
-        const boost = `+${Math.floor(day / 10) * 3}%`;
         return (
           <div key={day} className="flex items-center">
             <div
@@ -43,13 +57,6 @@ function BoostTimeline({ holdingDays, boostPercentage }: { holdingDays: number; 
               >
                 {day}d
               </div>
-              {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-                <div className="bg-black/90 border border-gold-400/30 rounded-lg px-3 py-1.5 text-xs whitespace-nowrap">
-                  <div className="text-gold-400 font-bold">{boost}</div>
-                  <div className="text-gray-500">{day} days</div>
-                </div>
-              </div>
             </div>
             {day < 50 && (
               <div className={`w-3 h-0.5 ${holdingDays >= day + 10 ? 'bg-gold-400' : 'bg-gray-700'}`} />
@@ -63,6 +70,8 @@ function BoostTimeline({ holdingDays, boostPercentage }: { holdingDays: number; 
 
 export default function HoldersTable({ holders, ogAddresses = [] }: { holders: Holder[]; ogAddresses?: string[] }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+
   return (
     <section id="holders" className="py-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -76,9 +85,8 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
         </div>
 
         <div className="glass-card rounded-2xl overflow-hidden">
-          <div className="overflow-x-auto">
-          {/* Table header */}
-          <div className="grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] text-xs gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[620px]">
+          {/* Desktop header */}
+          <div className="hidden md:grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -89,65 +97,104 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
             <div className="text-right">Total</div>
             <div className="text-center">Boost Progress</div>
           </div>
+          {/* Mobile header */}
+          <div className="md:hidden grid grid-cols-[1.5rem_1fr_3rem_3rem] gap-2 p-3 bg-black/40 border-b border-gold-400/10 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+            <div>#</div>
+            <div>Wallet</div>
+            <div className="text-right">Tier</div>
+            <div className="text-right">%</div>
+          </div>
 
           {/* Table rows */}
-          {holders.map((holder, i) => (
-            <div
-              key={holder.address}
-              className={`grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] text-xs gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors min-w-[620px] ${
-                holder.hasSold ? 'opacity-40 line-through' : ''
-              } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
-            >
-              <div className="text-gray-500 font-mono text-sm">
-                {i + 1}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-sm text-gray-300">
-                  {truncateAddress(holder.address)}
-                </span>
-                {ogSet.has(holder.address.toLowerCase()) && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>
+          {holders.map((holder, i) => {
+            const isOg = ogSet.has(holder.address.toLowerCase());
+            const isExpanded = expandedRow === i;
+            return (
+              <div key={holder.address}>
+                {/* Desktop row */}
+                <div
+                  className={`hidden md:grid grid-cols-[2rem_7rem_6.5rem_3.5rem_2.5rem_4.5rem_3rem_5rem_9rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
+                    holder.hasSold ? 'opacity-40 line-through' : ''
+                  } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
+                >
+                  <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-sm text-gray-300">{truncateAddress(holder.address)}</span>
+                    {isOg && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
+                    {holder.hasSold && <span className="text-xs text-red-400 font-bold">SOLD</span>}
+                  </div>
+                  <div><TierBadge tier={holder.tier} /></div>
+                  <div className="text-right"><div className="text-sm font-bold text-white">{holder.percentage}%</div></div>
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${holder.holdingDays >= 10 ? 'text-gold-400' : 'text-gray-500'}`}>
+                      {holder.holdingDays}d {holder.holdingDays >= 10 ? '✓' : ''}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
+                      {holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-gold-300">{holder.eligible ? `${holder.totalWithBoost.toLocaleString()} CRO` : '-'}</div>
+                  </div>
+                  <div className="flex justify-center">
+                    <BoostTimeline holdingDays={holder.holdingDays} />
+                  </div>
+                </div>
+
+                {/* Mobile row - tap to expand */}
+                <div
+                  className={`md:hidden grid grid-cols-[1.5rem_1fr_3rem_3rem] gap-2 p-3 items-center border-b border-white/5 active:bg-white/5 cursor-pointer ${
+                    holder.hasSold ? 'opacity-40' : ''
+                  }`}
+                  onClick={() => setExpandedRow(isExpanded ? null : i)}
+                >
+                  <div className="text-gray-500 font-mono text-[11px]">{i + 1}</div>
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="font-mono text-[11px] text-gray-300">{truncateAddress(holder.address)}</span>
+                    {isOg && <span className="px-1 py-0.5 rounded text-[7px] font-bold bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
+                  </div>
+                  <div className="text-right"><TierBadgeSmall tier={holder.tier} /></div>
+                  <div className="text-right text-[11px] font-bold text-white">{holder.percentage}%</div>
+                </div>
+
+                {/* Mobile expanded */}
+                {isExpanded && (
+                  <div className="md:hidden px-3 py-2 bg-white/5 border-b border-white/5">
+                    <div className="grid grid-cols-4 gap-2 text-[10px] mb-2">
+                      <div>
+                        <div className="text-gray-500 uppercase mb-0.5">Days</div>
+                        <div className={holder.holdingDays >= 10 ? 'text-gold-400 font-bold' : 'text-gray-400'}>{holder.holdingDays}d</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
+                        <div className="font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount} CRO` : '-'}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 uppercase mb-0.5">Boost</div>
+                        <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-600'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 uppercase mb-0.5">Total</div>
+                        <div className="font-bold text-gold-300">{holder.eligible ? `${holder.totalWithBoost} CRO` : '-'}</div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center py-1">
+                      <BoostTimeline holdingDays={holder.holdingDays} />
+                    </div>
+                  </div>
                 )}
-                {holder.hasSold && (
-                  <span className="text-xs text-red-400 font-bold">SOLD</span>
-                )}
               </div>
-              <div>
-                <TierBadge tier={holder.tier} />
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-white">{holder.percentage}%</div>
-              </div>
-              <div className="text-right">
-                <div className={`text-sm font-medium ${holder.holdingDays >= 10 ? 'text-gold-400' : 'text-gray-500'}`}>
-                  {holder.holdingDays}d {holder.holdingDays >= 10 ? '✓' : ''}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-gold-400">
-                  {holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
-                  {holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-gold-300">
-                  {holder.eligible ? `${holder.totalWithBoost.toLocaleString()} CRO` : '-'}
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <BoostTimeline holdingDays={holder.holdingDays} boostPercentage={holder.boostPercentage} />
-              </div>
-            </div>
-          ))}
-          </div>{/* close overflow-x-auto */}
+            );
+          })}
         </div>
 
         {/* Legend */}
-        <div className="mt-6 flex flex-wrap gap-6 justify-center text-xs text-gray-500">
+        <div className="mt-6 flex flex-wrap gap-4 md:gap-6 justify-center text-xs text-gray-500">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full tier-diamond" /> Diamond (2%+)
           </div>
