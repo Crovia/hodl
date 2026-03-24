@@ -38,7 +38,7 @@ const presaleParticipants = [
 
 const OG_ADDRESSES = presaleParticipants.map(p => p.address);
 const TOTAL_PRESALE_CRO = 37000;
-const PRESALE_SUPPLY_PCT = 71.2;
+const PRESALE_SUPPLY_PCT = 60;
 
 function buildPresaleHolders(): Holder[] {
   return presaleParticipants

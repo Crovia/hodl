@@ -39,6 +39,7 @@ const participants: Participant[] = [
   { name: 'CryptoCharlesManson', address: '0xDFB2E6486507A90c820a634F59483470e621Ac4B', allocation: 1000 },
   { name: 'Memeseason', address: '0x08C2ceEcA0E01066B4e46081AcC621a34E8e21F1', allocation: 1000 },
   { name: 'Dougie', address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 500 },
+  { name: 'Cronos Legends Participation', address: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D', allocation: 1500 },
 ];
 
 type Tier = 'diamond' | 'gold' | 'silver';
@@ -94,12 +95,10 @@ function TierIcon({ tier, className }: { tier: Tier; className?: string }) {
 const totalAllocation = participants.reduce((sum, p) => sum + p.allocation, 0);
 const TOTAL_CRO_RAISED = 37000; // actual total raised
 
-// Based on bonding curve: 10K CRO = 28%, 20K CRO = 44%
-// Rate: 1.6% per 1000 CRO above 10K
-// 37,000 CRO: 28% + (27000/10000) * 16% = 71.2%
-const TOTAL_PRESALE_SUPPLY_PCT = 71.2;
+// From bonding curve calculator: 37,000 CRO = 60% of supply (~601.6M tokens)
+const TOTAL_PRESALE_SUPPLY_PCT = 60;
 const TOTAL_SUPPLY = 1_000_000_000; // 1 billion
-const PRESALE_TOKENS = Math.round(TOTAL_SUPPLY * TOTAL_PRESALE_SUPPLY_PCT / 100);
+const PRESALE_TOKENS = 601_626_016; // exact from bonding curve
 
 const TRANSFER_TAX = 0.10; // 10% tax on transfer
 
