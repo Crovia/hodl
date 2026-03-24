@@ -98,10 +98,10 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
-          <div className="md:hidden grid grid-cols-[1.5rem_1fr_3rem_3rem] gap-2 p-3 bg-black/40 border-b border-gold-400/10 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+          <div className="md:hidden grid grid-cols-[1.5rem_1fr_auto_2.5rem] gap-2 p-3 bg-black/40 border-b border-gold-400/10 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Wallet</div>
-            <div className="text-right">Tier</div>
+            <div>Tier</div>
             <div className="text-right">%</div>
           </div>
 
@@ -148,17 +148,18 @@ export default function HoldersTable({ holders, ogAddresses = [] }: { holders: H
 
                 {/* Mobile row - tap to expand */}
                 <div
-                  className={`md:hidden grid grid-cols-[1.5rem_1fr_3rem_3rem] gap-2 p-3 items-center border-b border-white/5 active:bg-white/5 cursor-pointer ${
+                  className={`md:hidden grid grid-cols-[1.5rem_1fr_auto_2.5rem] gap-2 py-2.5 px-3 items-center border-b border-white/5 active:bg-white/10 cursor-pointer ${
                     holder.hasSold ? 'opacity-40' : ''
                   }`}
                   onClick={() => setExpandedRow(isExpanded ? null : i)}
                 >
-                  <div className="text-gray-500 font-mono text-[11px]">{i + 1}</div>
+                  <div className="text-gray-600 font-mono text-[10px]">{i + 1}</div>
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="font-mono text-[11px] text-gray-300">{truncateAddress(holder.address)}</span>
                     {isOg && <span className="px-1 py-0.5 rounded text-[7px] font-bold bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
+                    {holder.hasSold && <span className="text-[8px] text-red-400 font-bold">SOLD</span>}
                   </div>
-                  <div className="text-right"><TierBadgeSmall tier={holder.tier} /></div>
+                  <div><TierBadgeSmall tier={holder.tier} /></div>
                   <div className="text-right text-[11px] font-bold text-white">{holder.percentage}%</div>
                 </div>
 
