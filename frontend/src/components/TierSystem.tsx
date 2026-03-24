@@ -5,7 +5,7 @@ export default function TierSystem() {
     {
       name: 'Diamond Hands',
       image: '/Dhand.png',
-      threshold: '2.12%+ of supply',
+      threshold: '1.8%+ of supply',
       poolShare: '55%',
       description: 'The elite. The unshakeable. Maximum rewards for maximum commitment.',
       gradient: 'from-diamond-400 via-purple-400 to-diamond-400',
