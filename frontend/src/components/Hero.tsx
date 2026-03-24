@@ -144,10 +144,11 @@ export default function Hero() {
         <LaunchCountdown />
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
           {[
             { label: 'Buy Tax', value: '10%', sub: '100% airdropped to holders' },
             { label: 'Sell Tax', value: '10%', sub: '100% airdropped to holders' },
+            { label: 'Transfer Tax', value: '10%', sub: 'Sender = OUT. Receiver = safe.' },
             { label: 'Burned', value: 'ZERO', sub: 'Never. Ever.' },
           ].map((stat) => (
             <div key={stat.label} className="glass-card rounded-xl p-4 text-center">
