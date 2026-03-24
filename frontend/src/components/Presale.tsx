@@ -11,24 +11,34 @@ interface Participant {
 
 const participants: Participant[] = [
   { name: 'Liberty', address: '0x32dF940EdbF734971aF4707fE35f3ADe91660358', allocation: 1500 },
+  { name: 'Boula', address: '0xC3F1087176485Ec5518cbC88169205fF26f75702', allocation: 1500 },
   { name: 'Zerokrypto', address: '0x36D21fD7EAfa01abC35578Ea940c545DCe8AC10C', allocation: 1500 },
   { name: 'AarzyK', address: '0x4E730ac6A1A9D53aeF0239331d90E0da4642FBb5', allocation: 1500 },
   { name: 'Snapmaster', address: '0x8aD01eD7fC839e9523447AE7d00fbA695EF9875f', allocation: 1500 },
   { name: 'Baas343', address: '0x5148E8932a8f9E7bedb04303a12187e56446956c', allocation: 1500 },
   { name: 'Steve', address: '0x5034E11bd0e61f2811396324B685cd58d2f6c206', allocation: 1500 },
   { name: 'Tohmee', address: '0x2270cBad5072b7685357EC83dDC959FFDE535b27', allocation: 1500 },
-  { name: 'ExtermiNate', address: '0x1D9B981b7ABa1a747883833fB8a1B5072Eac5d8f', allocation: 1500 },
+  { name: 'Exterminate', address: '0x1D9B981b7ABa1a747883833fB8a1B5072Eac5d8f', allocation: 1500 },
   { name: 'Rdeepanraj', address: '0x3b428943Ef1C49bf81Ddb00f9A11e55811Fc7b3c', allocation: 1500 },
   { name: 'Awerghx', address: '0x499E30AEa1540FdA665412C779f00c6Dd8A6D27D', allocation: 1500, twitter: 'Awerghx' },
   { name: 'JePu', address: '0xD45b551473f1819Ef9fc9EFa2C654b98eAb21850', allocation: 1500 },
+  { name: 'Naddy', address: '0x3868150e5fF9EC5B052A36F2d8a5D8Bc348b4967', allocation: 1500 },
+  { name: 'El presidentee', address: '0xF085359DB5Df9dfa01ef31a269D5cDf99685bd4a', allocation: 1500 },
   { name: 'CroSsoulL', address: '0x172B4E1E7c0772c4dBE152914CeF9e9F427c7585', allocation: 1000 },
   { name: 'Kikodog', address: '0x87664C30CFba8FE860439bBF94e3521686Dec0de', allocation: 1000 },
-  { name: 'Boula', address: '0xC3F1087176485Ec5518cbC88169205fF26f75702', allocation: 1000 },
   { name: 'kajebara', address: '0xE375805D3FB202d028939bB39D2ba9385FFFFde6', allocation: 1000 },
   { name: 'Seevin', address: '0x5237454DAC7D259Dd88B34cEb17E195Dca0A3F4d', allocation: 1000 },
   { name: 'Nicholoco', address: '0xEce1b63218A249708B521E22BbAA7bAC35F6f20f', allocation: 1000 },
   { name: 'Chiefboss', address: '0x0e4eaCc2887A58D157a4A9f036F7499fFcC68831', allocation: 1000 },
   { name: 'ArdentVRory', address: '0x89c132E654699C953C6Ddb4e27e7Cbcd19B13E8a', allocation: 1000 },
+  { name: 'Nosnah84', address: '0x3283b4937D1BBfDa4b24D9f110C5731CE209244e', allocation: 1000 },
+  { name: 'Paysagiste00', address: '0x782Bdee22753EA3e5A4C16cBF8887a098D13b432', allocation: 1000 },
+  { name: 'Willys', address: '0x584B5505DE4A4e7393e915b2e44593934D528d63', allocation: 1000 },
+  { name: 'sebastiaan', address: '0xFB28A731959997bf41E57397209BAB78Cd2A0406', allocation: 1000 },
+  { name: 'Gmbino', address: '0x212246c1bB44C4d70ecC1F6fE64C1Fe68638624F', allocation: 1000 },
+  { name: 'CryptoCharlesManson', address: '0xDFB2E6486507A90c820a634F59483470e621Ac4B', allocation: 1000 },
+  { name: 'Memeseason', address: '0x08C2ceEcA0E01066B4e46081AcC621a34E8e21F1', allocation: 1000 },
+  { name: 'Dougie', address: '0x38eB9a99EA4D612F7C516368242FB7DABfFD1A75', allocation: 500 },
 ];
 
 type Tier = 'diamond' | 'gold' | 'silver';
@@ -82,20 +92,20 @@ function TierIcon({ tier, className }: { tier: Tier; className?: string }) {
 }
 
 const totalAllocation = participants.reduce((sum, p) => sum + p.allocation, 0);
+const TOTAL_CRO_RAISED = 37000; // actual total raised
 
-// Based on bonding curve data points:
-// 10,000 CRO = 28% of supply (~289.8M tokens)
-// 20,000 CRO = 44% of supply (~449.4M tokens)
-// Interpolation for 16,500 CRO: 28% + (6500/10000) * 16% ≈ 38.4%
-const TOTAL_PRESALE_SUPPLY_PCT = 38.4;
+// Based on bonding curve: 10K CRO = 28%, 20K CRO = 44%
+// Rate: 1.6% per 1000 CRO above 10K
+// 37,000 CRO: 28% + (27000/10000) * 16% = 71.2%
+const TOTAL_PRESALE_SUPPLY_PCT = 71.2;
 const TOTAL_SUPPLY = 1_000_000_000; // 1 billion
 const PRESALE_TOKENS = Math.round(TOTAL_SUPPLY * TOTAL_PRESALE_SUPPLY_PCT / 100);
 
 const TRANSFER_TAX = 0.10; // 10% tax on transfer
 
 function getParticipantShare(allocation: number) {
-  const preTaxPct = (allocation / totalAllocation) * TOTAL_PRESALE_SUPPLY_PCT;
-  const preTaxTokens = Math.round((allocation / totalAllocation) * PRESALE_TOKENS);
+  const preTaxPct = (allocation / TOTAL_CRO_RAISED) * TOTAL_PRESALE_SUPPLY_PCT;
+  const preTaxTokens = Math.round((allocation / TOTAL_CRO_RAISED) * PRESALE_TOKENS);
   const sharePct = preTaxPct * (1 - TRANSFER_TAX);
   const tokens = Math.round(preTaxTokens * (1 - TRANSFER_TAX));
   return { sharePct, tokens };
@@ -154,8 +164,11 @@ export default function Presale() {
           <h1 className="text-4xl md:text-5xl font-black mb-4">
             <span className="diamond-text">Pre-Sale</span>
           </h1>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 mb-4">
+            <span className="text-red-400 text-sm font-bold uppercase tracking-wider">Pre-Sale Closed</span>
+          </div>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Early supporters who believed from the start. Limited to 25 participants. Just diamond hands.
+            Early supporters who believed from the start. Pre-sale is now closed. Thank you to all {participants.length} participants.
           </p>
         </div>
 
@@ -163,11 +176,11 @@ export default function Presale() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Participants</div>
-            <div className="text-3xl font-black diamond-text">23</div>
+            <div className="text-3xl font-black diamond-text">{participants.length}</div>
           </div>
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Raised</div>
-            <div className="text-3xl font-black diamond-text">30,000 CRO</div>
+            <div className="text-3xl font-black diamond-text">{totalAllocation.toLocaleString()} CRO</div>
           </div>
           <div className="glass-card rounded-xl p-6 text-center">
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Est. Supply Share</div>
@@ -253,8 +266,8 @@ export default function Presale() {
           </div>
         </div>
 
-        {/* Participants table - temporarily hidden */}
-        {false && <div className="glass-card rounded-2xl overflow-hidden mb-16">
+        {/* Participants table */}
+        <div className="glass-card rounded-2xl overflow-hidden mb-16">
           <div className="p-6 border-b border-gold-400/10">
             <h2 className="text-2xl font-bold diamond-text">Participants</h2>
           </div>
@@ -358,13 +371,19 @@ export default function Presale() {
             <span className="text-xs font-bold text-gray-400 uppercase">Total</span>
             <span className="text-sm font-black diamond-text">{totalAllocation.toLocaleString()} CRO</span>
           </div>
-        </div>}
+        </div>
 
-        {/* TBA placeholder */}
-        <div className="glass-card rounded-2xl overflow-hidden mb-16 p-12 text-center">
-          <h2 className="text-2xl font-bold diamond-text mb-4">Participants</h2>
-          <div className="text-5xl font-black text-gold-400 mb-3">TBA</div>
-          <p className="text-gray-500 text-sm">Participant list will be revealed soon.</p>
+        {/* Missing address notice */}
+        <div className="glass-card rounded-xl p-4 mb-4 border border-diamond-400/20 bg-diamond-400/5">
+          <div className="flex items-center gap-3 text-sm">
+            <svg className="w-5 h-5 text-diamond-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
+            </svg>
+            <p className="text-gray-400">
+              <span className="text-diamond-400 font-bold">Your address missing?</span> Contact <a href="https://x.com/Awerghx" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300">Awerghx</a> in Cronos Legends Discord by creating a ticket.
+            </p>
+          </div>
         </div>
 
         {/* Estimation note */}
