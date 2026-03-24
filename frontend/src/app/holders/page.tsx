@@ -70,7 +70,7 @@ export default function HoldersPage() {
   const [totalCro, setTotalCro] = useState(0);
 
   useEffect(() => {
-    fetch('http://62.171.160.71:3025/api/holders')
+    fetch('/api/holders')
       .then(res => res.json())
       .then(data => {
         if (data.holders?.length > 0) {

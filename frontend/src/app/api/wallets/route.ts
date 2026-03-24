@@ -2,10 +2,13 @@ import { NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://62.171.160.71:3025';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const res = await fetch(`${BACKEND_URL}/api/wallets`, {
-      next: { revalidate: 60 }, // cache for 60 seconds
+      cache: 'no-store',
     });
 
     if (!res.ok) {
@@ -14,7 +17,8 @@ export async function GET() {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch {
+  } catch (err) {
+    console.error('Failed to proxy /api/wallets:', err);
     return NextResponse.json({ error: 'Backend unavailable' }, { status: 502 });
   }
 }

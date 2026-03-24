@@ -110,7 +110,7 @@ export default function Hero() {
   const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
 
   useEffect(() => {
-    fetch('http://62.171.160.71:3025/api/wallets')
+    fetch('/api/wallets')
       .then(res => res.json())
       .then(data => {
         if (data.wallets) setWalletBalances(data.wallets);
