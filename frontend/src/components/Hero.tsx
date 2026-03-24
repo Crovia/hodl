@@ -93,7 +93,7 @@ interface WalletBalance {
 }
 
 const WALLET_DEFAULTS = [
-  { label: '$HODL Buyback', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400', border: 'border-gold-400/30', bg: 'bg-gold-400/5', gradient: 'from-gold-400 to-gold-600', tokenName: '$HODL' },
+  { label: '35% airdropped back to hodlers', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400', border: 'border-gold-400/30', bg: 'bg-gold-400/5', gradient: 'from-gold-400 to-gold-600', tokenName: '$HODL' },
   { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400', border: 'border-diamond-400/30', bg: 'bg-diamond-400/5', gradient: 'from-diamond-400 to-diamond-600', tokenName: '$CLG' },
   { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400', border: 'border-pink-400/30', bg: 'bg-pink-400/5', gradient: 'from-pink-400 to-pink-600', tokenName: 'Community Vote' },
 ];
