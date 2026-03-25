@@ -7,12 +7,10 @@ import DiamondIcon from './DiamondIcon';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
-  { href: '/presale', label: 'Pre-Sale' },
-  { href: '/rules', label: 'Rules' },
+  { href: '/rules', label: 'Info' },
   { href: '/holders', label: 'Holders' },
-  { href: '/jeeters', label: 'Jeeters' },
+  { href: '/jeeters', label: 'Traders & Jeeters' },
   { href: '/airdrops', label: 'Airdrops' },
-  { href: '/tiers', label: 'Tiers' },
 ];
 
 export default function Header() {

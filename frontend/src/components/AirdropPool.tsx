@@ -59,6 +59,22 @@ export default function AirdropPool({
   return (
     <section id="airdrops" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
+        <div className="glass-card rounded-xl p-5 mb-6 border-2 border-red-500/30 bg-red-500/5">
+          <div className="flex items-start gap-4">
+            <svg className="w-8 h-8 text-red-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M12 9v4M12 17h.01" strokeLinecap="round" />
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+            <div>
+              <h4 className="text-red-400 font-bold text-lg mb-1">Page Under Development</h4>
+              <p className="text-gray-400 text-sm">
+                This page is being updated and currently may show incorrect values. Join{' '}
+                <a href="https://discord.com/invite/cronoslegends" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold underline">Cronos Legends Discord</a>
+                {' '}to stay up-to-date and ask any questions.
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black mb-4">
             <span className="diamond-text">Airdrop Pool</span>

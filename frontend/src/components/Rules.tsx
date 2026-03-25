@@ -32,9 +32,73 @@ export default function Rules() {
     },
   ];
 
+  const tiers = [
+    {
+      name: 'Diamond Hands',
+      image: '/Dhand.png',
+      threshold: '1.8%+ of supply',
+      poolShare: '55%',
+      description: 'The elite. The unshakeable. Maximum rewards for maximum commitment.',
+      gradient: 'from-diamond-400 via-purple-400 to-diamond-400',
+      borderColor: 'border-diamond-400/30',
+      bgColor: 'bg-diamond-400/5',
+      accentColor: 'text-diamond-400',
+      ringColor: 'ring-diamond-400/20',
+    },
+    {
+      name: 'Gold Hands',
+      image: '/Ghand.png',
+      threshold: '1%+ of supply',
+      poolShare: '30%',
+      description: 'Strong conviction. You believe in the mission and it shows.',
+      gradient: 'from-gold-400 via-gold-300 to-gold-500',
+      borderColor: 'border-gold-400/30',
+      bgColor: 'bg-gold-400/5',
+      accentColor: 'text-gold-400',
+      ringColor: 'ring-gold-400/20',
+    },
+    {
+      name: 'Silver Hands',
+      image: '/Shand.png',
+      threshold: '0.5%+ of supply',
+      poolShare: '15%',
+      description: 'You\'re in the game. Hold strong and climb the ranks.',
+      gradient: 'from-gray-300 via-gray-200 to-gray-400',
+      borderColor: 'border-gray-400/30',
+      bgColor: 'bg-gray-400/5',
+      accentColor: 'text-gray-300',
+      ringColor: 'ring-gray-400/20',
+    },
+    {
+      name: 'Bronze Hands',
+      image: '/Shand.png',
+      threshold: 'Under 0.5% of supply',
+      poolShare: '0%',
+      description: 'You\'re holding but not enough for airdrop rewards yet. Keep accumulating to reach Silver and start earning.',
+      gradient: 'from-amber-700 via-amber-600 to-amber-800',
+      borderColor: 'border-amber-700/30',
+      bgColor: 'bg-amber-700/5',
+      accentColor: 'text-amber-600',
+      ringColor: 'ring-amber-700/20',
+    },
+    {
+      name: 'Jeeter',
+      image: '/jeeter.png',
+      threshold: 'Sold or transferred',
+      poolShare: '0%',
+      description: 'You sold. You\'re out. Permanently disqualified from all airdrops. No second chances.',
+      gradient: 'from-red-500 via-red-400 to-red-600',
+      borderColor: 'border-red-500/30',
+      bgColor: 'bg-red-500/5',
+      accentColor: 'text-red-400',
+      ringColor: 'ring-red-500/20',
+    },
+  ];
+
   return (
-    <section id="rules" className="py-24 px-6">
+    <section id="info" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
+        {/* Rules section */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black mb-4">
             <span className="diamond-text">The Rules Are Simple</span>
@@ -101,6 +165,7 @@ export default function Rules() {
             </div>
           </div>
         </div>
+
         {/* Rotating Token Phases */}
         <div className="glass-card rounded-2xl overflow-hidden mt-6">
           <div className="p-6 border-b border-gold-400/10">
@@ -177,6 +242,140 @@ export default function Rules() {
                 <span className="text-purple-400 font-bold">Community-Driven: </span>
                 Tax adjustments, phase token selection, and project direction are decided among Diamond Hand holders. Your voice matters — join the conversation and help shape what comes next.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tokenomics */}
+        <div className="mt-16 glass-card rounded-2xl overflow-hidden p-8">
+          <h3 className="text-2xl font-black mb-8">
+            <span className="text-gold-400">Tokenomics</span>
+          </h3>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="text-lg font-bold text-white mb-4">Tax Distribution</h4>
+              <div className="space-y-3">
+                {[
+                  { label: 'Launch Tax', value: '10%', dot: 'bg-gold-400' },
+                  { label: 'Tax Reduction', value: '-1% every 10 days', dot: 'bg-diamond-400' },
+                  { label: 'Minimum Tax', value: '5%', dot: 'bg-green-400' },
+                  { label: 'Burned', value: 'ZERO', dot: 'bg-gray-500' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
+                      <span className="text-sm text-gray-300">{item.label}</span>
+                    </div>
+                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-lg font-bold text-white mt-6 mb-4">Buyback Split</h4>
+              <div className="space-y-3">
+                {[
+                  { label: '$HODL buyback', value: '35%', dot: 'bg-gold-400' },
+                  { label: '$CLG', value: '33%', dot: 'bg-purple-400' },
+                  { label: 'Rotating tokens', value: '32%', dot: 'bg-pink-400' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
+                      <span className="text-sm text-gray-300">{item.label}</span>
+                    </div>
+                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-white mb-4">How It Works</h4>
+              <div className="space-y-3">
+                {[
+                  { title: '100% Airdropped', desc: 'All taxes are used to buy tokens and airdrop them to holders. No funds are burned — you will receive them back. Exception: Dexscreener is paid with taxes, and any other possible costs are agreed with the Diamond holders first. If you just hold? Simple.', color: 'text-gold-400' },
+                  { title: '~10 Day Cycles', desc: 'Every ~10 days, buybacks are executed and tokens airdropped. Equal amounts distributed to holders based on their tier (Diamond, Gold, Silver).', color: 'text-diamond-400' },
+                  { title: 'Diamond Path', desc: '$HODL holders who still hold after 30 days get a 10% boost every month, up to 100%. Who\'s the real Diamond Hand?', color: 'text-purple-400' },
+                  { title: 'Rotating 32%', desc: '32% of buybacks go to rotating tokens. Each phase is voted by the community — one suggestion per person, no repeats from previous phases.', color: 'text-pink-400' },
+                  { title: 'Sell = Permanent Ban', desc: 'If you sell or transfer any tokens, you are permanently disqualified from all future airdrops. The chain sees everything.', color: 'text-red-400' },
+                ].map((item) => (
+                  <div key={item.title} className="p-4 rounded-lg bg-black/40">
+                    <div className={`font-bold text-sm mb-1 ${item.color}`}>{item.title}</div>
+                    <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tier System */}
+        <div className="mt-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black mb-4">
+              <span className="diamond-text">Tier System</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-xl mx-auto">
+              The pool splits equally between tiers. Within each tier, rewards scale by your holdings.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {tiers.map((tier) => (
+              <div
+                key={tier.name}
+                className={`glass-card rounded-2xl overflow-hidden ${tier.borderColor} hover:ring-2 ${tier.ringColor} transition-all duration-300 group`}
+              >
+                <div className={`h-1 bg-gradient-to-r ${tier.gradient}`} />
+                <div className="p-8">
+                  <div className="flex items-center gap-5 mb-6">
+                    <div className={`relative flex-shrink-0 w-24 h-24 rounded-2xl ${tier.bgColor} flex items-center justify-center overflow-hidden`}>
+                      <img src={tier.image} alt={tier.name} className="w-20 h-20 object-contain" />
+                    </div>
+                    <div>
+                      <h3 className={`text-2xl font-black bg-gradient-to-r ${tier.gradient} bg-clip-text text-transparent`}>
+                        {tier.name}
+                      </h3>
+                      <div className={`text-sm font-medium ${tier.accentColor} mt-0.5`}>{tier.threshold}</div>
+                    </div>
+                  </div>
+                  <p className="text-gray-400 text-sm mb-6 leading-relaxed">{tier.description}</p>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Pool Share</span>
+                    <span className={`text-3xl font-black bg-gradient-to-r ${tier.gradient} bg-clip-text text-transparent`}>
+                      {tier.poolShare}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Boost timeline */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-center mb-8">
+              <span className="diamond-text">Loyalty Boost Timeline</span>
+            </h3>
+            <div className="glass-card rounded-2xl p-8">
+              <div className="relative">
+                <div className="absolute top-[7px] left-0 right-0 h-0.5 bg-gradient-to-r from-gray-700 via-gold-400/50 to-purple-400/50 rounded-full" />
+                <div className="relative flex justify-between items-start">
+                  {[
+                    { day: '10d', boost: '+3%', color: 'text-gray-400', dot: 'bg-gray-400', ring: 'ring-gray-400/30' },
+                    { day: '20d', boost: '+6%', color: 'text-gold-400', dot: 'bg-gold-400', ring: 'ring-gold-400/30' },
+                    { day: '30d', boost: '+9%', color: 'text-gold-300', dot: 'bg-gold-300', ring: 'ring-gold-300/30' },
+                    { day: '40d', boost: '+12%', color: 'text-diamond-400', dot: 'bg-diamond-400', ring: 'ring-diamond-400/30' },
+                    { day: '50d', boost: '+15%', color: 'text-purple-400', dot: 'bg-purple-400', ring: 'ring-purple-400/30' },
+                    { day: '60d+', boost: '+18%+', color: 'text-pink-400', dot: 'bg-pink-400', ring: 'ring-pink-400/30' },
+                  ].map((milestone, i) => (
+                    <div key={milestone.day} className="flex flex-col items-center">
+                      <div className={`w-4 h-4 rounded-full ${milestone.dot} ring-4 ${milestone.ring} ${i > 0 ? 'animate-sparkle' : ''}`}
+                        style={{ animationDelay: `${i * 0.3}s` }}
+                      />
+                      <div className={`text-lg font-bold ${milestone.color} mt-3`}>{milestone.boost}</div>
+                      <div className="text-xs text-gray-600 mt-0.5">{milestone.day}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
