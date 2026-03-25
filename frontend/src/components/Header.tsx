@@ -8,7 +8,7 @@ import DiamondIcon from './DiamondIcon';
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/rules', label: 'Info' },
-  { href: '/holders', label: 'Holders' },
+  { href: '/holders', label: 'Hodlers' },
   { href: '/jeeters', label: 'Traders & Jeeters' },
   { href: '/airdrops', label: 'Airdrops' },
 ];

@@ -10,6 +10,7 @@ interface WalletData {
   allocation: number;
   croBalance: string;
   tokenBalance: string;
+  clgBalance?: string;
 }
 
 interface WalletsResponse {
@@ -43,6 +44,8 @@ export default function AirdropPool({
 }) {
   const [walletData, setWalletData] = useState<WalletsResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [croUsd, setCroUsd] = useState(0);
+  const [hodlUsd, setHodlUsd] = useState(0);
 
   useEffect(() => {
     fetch('/holders-live.json')
@@ -50,15 +53,43 @@ export default function AirdropPool({
       .then(setWalletData)
       .catch(err => console.error('Failed to fetch wallets:', err))
       .finally(() => setLoading(false));
+
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+      .then(res => res.json())
+      .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+      .catch(() => {});
+
+    fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
+      .then(res => res.json())
+      .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
+      .catch(() => {});
   }, []);
 
   const totalCro = Number(walletData?.totals?.totalCro || 0);
   const airdropCro = Number(walletData?.totals?.airdropCro || 0);
   const distributionPct = walletData?.totals?.distributionPct || 20;
   const wallets = walletData?.wallets || [];
+
+  // Get $HODL token balance from the DHAND wallet (0x3614...)
+  const dhandWallet = wallets.find(w => w.id === 'DHAND');
+  const hodlTokenBalance = Number(dhandWallet?.tokenBalance || 0);
+  const hodlTokenUsd = hodlTokenBalance * hodlUsd;
+
+  // Total treasury in USD = CRO value + $HODL token value
+  const totalUsd = (totalCro * croUsd) + hodlTokenUsd;
+  const airdropUsd = (totalUsd * distributionPct) / 100;
+  const pricesReady = croUsd > 0;
+
+  const walletStyles: Record<string, { label: string; gradient: string; border: string; bg: string; icon: string }> = {
+    DHAND: { label: '$HODL Buyback', gradient: 'from-gold-400 to-gold-600', border: 'border-gold-400/30', bg: 'bg-gold-400/5', icon: '/Dhand.png' },
+    CLG: { label: '$CLG Buyback', gradient: 'from-diamond-400 to-diamond-600', border: 'border-diamond-400/30', bg: 'bg-diamond-400/5', icon: '/Ghand.png' },
+    ROTATING: { label: 'Rotating Token', gradient: 'from-pink-400 to-pink-600', border: 'border-pink-400/30', bg: 'bg-pink-400/5', icon: '/Shand.png' },
+  };
+
   return (
     <section id="airdrops" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
+        {/* Disclaimer */}
         <div className="glass-card rounded-xl p-5 mb-6 border-2 border-red-500/30 bg-red-500/5">
           <div className="flex items-start gap-4">
             <svg className="w-8 h-8 text-red-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -75,6 +106,8 @@ export default function AirdropPool({
             </div>
           </div>
         </div>
+
+        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black mb-4">
             <span className="diamond-text">Airdrop Pool</span>
@@ -95,124 +128,178 @@ export default function AirdropPool({
           </div>
         </div>
 
-        {/* Pool stats */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="glass-card rounded-2xl p-6 text-center animate-glow">
-            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Treasury Total</div>
-            <div className="text-3xl font-black diamond-text">
-              {loading ? '...' : totalCro > 0 ? `${formatCro(totalCro)} CRO` : 'TBA'}
+        {/* Treasury overview */}
+        <div className="glass-card rounded-2xl overflow-hidden mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
+            <div className="p-6 text-center">
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Treasury Total</div>
+              <div className="text-2xl md:text-3xl font-black diamond-text">
+                {loading ? '...' : pricesReady && totalUsd > 0 ? `$${formatCro(totalUsd)}` : 'TBA'}
+              </div>
+              {pricesReady && totalCro > 0 && (
+                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(hodlTokenBalance)} $HODL</div>
+              )}
             </div>
-          </div>
-
-          <div className="glass-card rounded-2xl p-6 text-center border-gold-400/20">
-            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Next Airdrop ({distributionPct}%)</div>
-            <div className="text-3xl font-black text-gold-400">
-              {loading ? '...' : airdropCro > 0 ? `${formatCro(airdropCro)} CRO` : 'TBA'}
+            <div className="p-6 text-center">
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Next Airdrop ({distributionPct}%)</div>
+              <div className="text-2xl md:text-3xl font-black text-gold-400">
+                {loading ? '...' : pricesReady && airdropUsd > 0 ? `$${formatCro(airdropUsd)}` : 'TBA'}
+              </div>
+              {pricesReady && airdropUsd > 0 && (
+                <div className="text-xs text-gray-600 mt-1">CRO + $HODL buybacks</div>
+              )}
             </div>
-          </div>
-
-          <div className="glass-card rounded-2xl p-6 text-center">
-            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Next Airdrop (est.)</div>
-            <div className="text-3xl font-black text-white">Apr 3</div>
-            <div className="text-xs text-gray-500 mt-1">May be delayed</div>
-          </div>
-
-          <div className="glass-card rounded-2xl p-6 text-center">
-            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Airdrops Completed</div>
-            <div className="text-4xl font-black text-diamond-400">{snapshots.filter(s => s.distributed).length}</div>
-            <div className="text-sm text-gray-500 mt-1">
-              {snapshots.length === 0 ? 'None yet — launching soon' : `${snapshots.length} total`}
+            <div className="p-6 text-center">
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Next Airdrop (est.)</div>
+              <div className="text-2xl md:text-3xl font-black text-white">Apr 3</div>
+              <div className="text-xs text-gray-500 mt-1">May be delayed</div>
+            </div>
+            <div className="p-6 text-center">
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Airdrops Completed</div>
+              <div className="text-2xl md:text-3xl font-black text-diamond-400">{snapshots.filter(s => s.distributed).length}</div>
+              <div className="text-xs text-gray-500 mt-1">
+                {snapshots.length === 0 ? 'None yet — launching soon' : `${snapshots.length} total`}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Live Wallet Balances */}
+        {/* Buyback wallets — unified 3-column grid */}
         {!loading && wallets.length > 0 && (
-          <div className="glass-card rounded-2xl p-8 mb-12">
-            <h3 className="text-lg font-bold text-white mb-6 text-center">Live Wallet Balances</h3>
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-center mb-2">
+              <span className="diamond-text">Buyback Wallets</span>
+            </h3>
+            <p className="text-center text-sm text-gray-500 mb-8">
+              Tax revenue is split into 3 wallets. Each buys back different tokens for airdrops.
+            </p>
+
+            {/* Buyback split bar */}
+            <div className="glass-card rounded-2xl p-6 mb-6">
+              <div className="flex rounded-xl overflow-hidden h-10 mb-3">
+                <div className="bg-gradient-to-r from-gold-400 to-gold-500 flex items-center justify-center text-sm font-bold text-black" style={{ width: '35%' }}>
+                  $HODL 35%
+                </div>
+                <div className="bg-gradient-to-r from-diamond-400 to-diamond-500 flex items-center justify-center text-sm font-bold text-black" style={{ width: '33%' }}>
+                  $CLG 33%
+                </div>
+                <div className="bg-gradient-to-r from-pink-400 to-pink-500 flex items-center justify-center text-sm font-bold text-black" style={{ width: '32%' }}>
+                  Rotating 32%
+                </div>
+              </div>
+              <p className="text-center text-xs text-gray-500">
+                All tax revenue goes to buybacks and airdrops. Nothing is burned or kept.
+              </p>
+            </div>
+
+            {/* Wallet cards */}
             <div className="grid md:grid-cols-3 gap-6">
-              {wallets.filter(w => w.token === '$HODL' || w.token === '$CLG').map((wallet) => {
-                const colors: Record<string, { gradient: string; border: string }> = {
-                  '$HODL': { gradient: 'from-gold-400 to-gold-600', border: 'border-gold-400/30' },
-                  '$CLG': { gradient: 'from-diamond-400 to-diamond-600', border: 'border-diamond-400/30' },
-                };
-                const c = colors[wallet.token] || { gradient: 'from-pink-400 to-pink-600', border: 'border-pink-400/30' };
+              {wallets.map((wallet) => {
+                const style = walletStyles[wallet.id] || walletStyles.ROTATING;
                 const croBalance = Number(wallet.croBalance);
                 const tokenBalance = Number(wallet.tokenBalance);
-                const airdropAmount = croBalance * (distributionPct / 100);
+                const clgBalance = Number(wallet.clgBalance || 0);
+                const isRotating = wallet.id === 'ROTATING';
+                const isDhand = wallet.id === 'DHAND';
+
+                // Total wallet value in USD (CRO + tokens)
+                const croValueUsd = croBalance * croUsd;
+                const tokenValueUsd = isDhand ? tokenBalance * hodlUsd : 0;
+                const walletTotalUsd = croValueUsd + tokenValueUsd;
+                const walletAirdropUsd = walletTotalUsd * (distributionPct / 100);
 
                 return (
-                  <div key={wallet.id} className={`rounded-xl p-5 bg-black/30 border ${c.border}`}>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className={`text-lg font-black bg-gradient-to-r ${c.gradient} bg-clip-text text-transparent`}>
-                        {wallet.token}
-                      </span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold bg-gradient-to-r ${c.gradient} text-black`}>
-                        {wallet.allocation}%
-                      </span>
-                    </div>
-                    <a
-                      href={`https://cronoscan.com/address/${wallet.address}#tokentxns`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-xs text-gray-500 hover:text-white transition-colors block mb-3"
-                    >
-                      {truncateAddress(wallet.address)}
-                    </a>
-                    <div className="p-3 rounded-lg bg-black/40 mb-2">
-                      <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">CRO Balance</div>
-                      <div className="text-xl font-bold text-white">{formatCro(croBalance)} CRO</div>
-                    </div>
-                    {tokenBalance > 0 && (
-                      <div className="p-3 rounded-lg bg-black/40 mb-2">
-                        <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">{wallet.token} Balance</div>
-                        <div className={`text-xl font-bold bg-gradient-to-r ${c.gradient} bg-clip-text text-transparent`}>
-                          {formatCro(tokenBalance)}
+                  <div key={wallet.id} className={`glass-card rounded-2xl overflow-hidden ${style.border} hover:ring-1 hover:ring-white/10 transition-all`}>
+                    <div className={`h-1 bg-gradient-to-r ${style.gradient}`} />
+                    <div className="p-6">
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-xl ${style.bg} flex items-center justify-center overflow-hidden`}>
+                            <img src={style.icon} alt={style.label} className="w-8 h-8 object-contain" />
+                          </div>
+                          <div>
+                            <div className={`font-bold bg-gradient-to-r ${style.gradient} bg-clip-text text-transparent`}>
+                              {style.label}
+                            </div>
+                            <a
+                              href={`https://cronoscan.com/address/${wallet.address}#tokentxns`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-[10px] text-gray-600 hover:text-white transition-colors"
+                            >
+                              {truncateAddress(wallet.address)}
+                            </a>
+                          </div>
+                        </div>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${style.gradient} text-black`}>
+                          {wallet.allocation}%
+                        </span>
+                      </div>
+
+                      {/* Wallet total in USD */}
+                      {pricesReady && walletTotalUsd > 0 && (
+                        <div className="p-3 rounded-lg bg-black/40 mb-3 text-center">
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Wallet Value</div>
+                          <div className="text-2xl font-black text-white">${formatCro(walletTotalUsd)}</div>
+                        </div>
+                      )}
+
+                      {/* Balances */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                          <span className="text-xs text-gray-500 uppercase">CRO</span>
+                          <div className="text-right">
+                            <div className="text-sm font-bold text-white">{formatCro(croBalance)}</div>
+                            {croUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(croValueUsd)}</div>}
+                          </div>
+                        </div>
+                        {isDhand && tokenBalance > 0 && (
+                          <div className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                            <span className="text-xs text-gray-500 uppercase">$HODL</span>
+                            <div className="text-right">
+                              <div className="text-sm font-bold text-white">{formatCro(tokenBalance)}</div>
+                              {hodlUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(tokenValueUsd)}</div>}
+                            </div>
+                          </div>
+                        )}
+                        {wallet.id === 'CLG' && clgBalance > 0 && (
+                          <div className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                            <span className="text-xs text-gray-500 uppercase">$CLG</span>
+                            <div className="text-sm font-bold text-diamond-400">{formatCro(clgBalance)}</div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Airdrop amount */}
+                      <div className="mt-3 p-3 rounded-lg bg-gold-400/5 border border-gold-400/10">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500 uppercase">Next Airdrop</span>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-gold-400">
+                              {pricesReady && walletAirdropUsd > 0 ? `$${formatCro(walletAirdropUsd)}` : 'TBA'}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    )}
-                    <div className="p-3 rounded-lg bg-black/40 border border-gold-400/10">
-                      <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">Next Airdrop ({distributionPct}%)</div>
-                      <div className="text-lg font-bold text-gold-400">{formatCro(airdropAmount)} CRO</div>
+
+                      {/* Rotating note */}
+                      {isRotating && (
+                        <div className="mt-3 text-center">
+                          <span className="text-xs text-pink-400 font-bold">Token decided by community vote</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
               })}
-              {/* Rotating token placeholder */}
-              <div className="rounded-xl p-5 bg-black/30 border border-pink-400/30 border-dashed">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-lg font-black bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">
-                    Rotating 32%
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-gradient-to-r from-pink-400 to-pink-600 text-black">
-                    32%
-                  </span>
-                </div>
-                <div className="flex items-center justify-center py-8">
-                  <div className="text-center">
-                    <div className="text-3xl mb-2">&#128499;</div>
-                    <div className="text-sm font-bold text-pink-400">To be voted</div>
-                    <div className="text-xs text-gray-500 mt-1">Community decides the next token</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div className="p-3 rounded-lg bg-black/40 text-center">
-                <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">Total Across All Wallets</div>
-                <div className="text-2xl font-black diamond-text">{formatCro(totalCro)} CRO</div>
-              </div>
-              <div className="p-3 rounded-lg bg-black/40 text-center border border-gold-400/10">
-                <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">Total Next Airdrop ({distributionPct}%)</div>
-                <div className="text-2xl font-black text-gold-400">{formatCro(airdropCro)} CRO</div>
-              </div>
             </div>
           </div>
         )}
 
-        {/* Pool distribution visual */}
+        {/* Tier distribution */}
         <div className="glass-card rounded-2xl p-8 mb-12">
-          <h3 className="text-lg font-bold text-white mb-6 text-center">Airdrop Distribution (20% of Treasury)</h3>
+          <h3 className="text-lg font-bold text-white mb-6 text-center">Airdrop Distribution ({distributionPct}% of Treasury)</h3>
           <div className="flex rounded-xl overflow-hidden h-12">
             <div className="tier-diamond flex items-center justify-center text-sm font-bold text-white" style={{ width: '55%' }}>
               Diamond 55%
@@ -225,7 +312,7 @@ export default function AirdropPool({
             </div>
           </div>
           <div className="text-center mt-4 text-sm text-gray-500">
-            Jeeters: Sold or transferred tokens — permanently disqualified
+            Jeeters &amp; Bronze: Not eligible for airdrops
           </div>
         </div>
 
@@ -244,9 +331,7 @@ export default function AirdropPool({
             {snapshots.map((snap) => (
               <div key={snap.id} className="glass-card rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-500">
-                    Epoch #{snap.id}
-                  </span>
+                  <span className="text-sm text-gray-500">Epoch #{snap.id}</span>
                   <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                     snap.distributed
                       ? 'bg-green-500/20 text-green-400'
@@ -259,7 +344,7 @@ export default function AirdropPool({
                 <div className="text-xl font-bold text-gray-300 mb-2">
                   ${snap.treasuryTotal.toLocaleString()}
                 </div>
-                <div className="text-sm text-gray-500 mb-1">Airdropped (20%)</div>
+                <div className="text-sm text-gray-500 mb-1">Airdropped ({distributionPct}%)</div>
                 <div className="text-2xl font-black text-gold-400 mb-3">
                   ${snap.airdropDistributed.toLocaleString()}
                 </div>
