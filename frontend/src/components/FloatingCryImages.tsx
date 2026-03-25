@@ -46,7 +46,7 @@ function spawnImage(id: number, mobile = false): FloatingImage {
     src: randomImage(),
     size: Math.round(baseSize * multiplier),
     top: `${5 + Math.random() * 85}%`,
-    left: `${5 + Math.random() * 85}%`,
+    left: Math.random() > 0.5 ? `${Math.random() * 12}%` : `${88 + Math.random() * 10}%`,
     delay: '0s',
     duration: `${5 + Math.random() * 5}s`,
     rotation: Math.floor(Math.random() * 30) - 15,
