@@ -23,7 +23,7 @@ interface HolderRecord {
   address: string;
   balance: string;
   percentage: number;
-  tier: 'diamond' | 'gold' | 'silver' | 'jeeter';
+  tier: 'diamond' | 'gold' | 'silver' | 'bronze' | 'jeeter';
   firstSeen: number; // block number
   holdingDays: number;
   hasSold: boolean;
@@ -73,7 +73,8 @@ function getTier(percentage: number): HolderRecord['tier'] {
   if (percentage >= CONFIG.TIERS.DIAMOND) return 'diamond';
   if (percentage >= CONFIG.TIERS.GOLD) return 'gold';
   if (percentage >= CONFIG.TIERS.SILVER) return 'silver';
-  return 'jeeter';
+  // Below silver threshold — bronze hands. "jeeter" is only assigned based on hasSold, not holding amount
+  return 'bronze';
 }
 
 function getBoost(holdingDays: number): number {
@@ -171,11 +172,15 @@ export async function takeSnapshot() {
         const fromLower = fromAddr.toLowerCase();
         const toLower = toAddr.toLowerCase();
 
-        // Track sellers — exclude zero address, tax wallet, buyback wallets, DEX pair, token contract
+        // Track sellers — only count as sell if transferring to DEX pair (actual sell)
+        // or to another regular wallet (p2p transfer).
+        // Exclude: transfers TO tax wallet or token contract (automatic tax deductions on buy/transfer)
         if (
           fromAddr !== ethers.ZeroAddress &&
           fromLower !== CONFIG.TAX_WALLET.toLowerCase() &&
-          !excludeFromSellers.has(fromLower)
+          !excludeFromSellers.has(fromLower) &&
+          toLower !== CONFIG.TAX_WALLET.toLowerCase() &&
+          toLower !== CONFIG.TOKEN_ADDRESS.toLowerCase()
         ) {
           sellers.add(fromLower);
         }
@@ -220,12 +225,13 @@ export async function takeSnapshot() {
 
       const hasSold = sellers.has(address);
       const boost = hasSold ? 0 : getBoost(holdingDays);
+      const finalTier = hasSold ? 'jeeter' as const : tier;
 
       holderRecords.push({
         address,
         balance: ethers.formatUnits(balance, decimals),
         percentage: Math.round(percentage * 10000) / 10000,
-        tier,
+        tier: finalTier,
         firstSeen: info.firstSeen,
         holdingDays,
         hasSold,
@@ -239,7 +245,7 @@ export async function takeSnapshot() {
   }
 
   // Calculate airdrop amounts based on 20% of wallet totals
-  // Diamond 55%, Gold 30%, Silver 15%
+  // Diamond 55%, Gold 30%, Silver 15% — Bronze is visual only (no pool)
   const diamondPool = airdropCro * 0.55;
   const goldPool = airdropCro * 0.30;
   const silverPool = airdropCro * 0.15;

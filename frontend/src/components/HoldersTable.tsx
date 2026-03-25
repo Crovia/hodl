@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Holder, getTierLabel } from '@/lib/types';
+import { Holder, getTierLabel, getTierShare } from '@/lib/types';
 
 function truncateAddress(addr: string): string {
   return `${addr.slice(0, 4)}..${addr.slice(-4)}`;
@@ -12,6 +12,7 @@ function TierBadge({ tier }: { tier: Holder['tier'] }) {
     diamond: 'tier-diamond',
     gold: 'tier-gold',
     silver: 'tier-silver',
+    bronze: 'tier-bronze',
     jeeter: 'tier-jeeter',
   };
   return (
@@ -26,6 +27,7 @@ function TierBadgeSmall({ tier }: { tier: Holder['tier'] }) {
     diamond: 'tier-diamond',
     gold: 'tier-gold',
     silver: 'tier-silver',
+    bronze: 'tier-bronze',
     jeeter: 'tier-jeeter',
   };
   return (
@@ -271,7 +273,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             <div className="w-3 h-3 rounded-full tier-silver" /> Silver (0.5%+)
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gray-600" /> Holder (&lt;0.5%)
+            <div className="w-3 h-3 rounded-full tier-bronze" /> Bronze (&lt;0.5%)
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full tier-jeeter" /> Jeeter (Sold/Transferred)

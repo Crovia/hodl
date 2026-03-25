@@ -116,6 +116,18 @@ export default function TierSystem() {
       ringColor: 'ring-gray-400/20',
     },
     {
+      name: 'Bronze Hands',
+      image: '/Shand.png',
+      threshold: 'Under 0.5% of supply',
+      poolShare: '0%',
+      description: 'You\'re holding but not enough for airdrop rewards yet. Keep accumulating to reach Silver and start earning.',
+      gradient: 'from-amber-700 via-amber-600 to-amber-800',
+      borderColor: 'border-amber-700/30',
+      bgColor: 'bg-amber-700/5',
+      accentColor: 'text-amber-600',
+      ringColor: 'ring-amber-700/20',
+    },
+    {
       name: 'Jeeter',
       image: '/jeeter.png',
       threshold: 'Sold or transferred',

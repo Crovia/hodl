@@ -2,7 +2,7 @@ export interface Holder {
   address: string;
   balance: number;
   percentage: number;
-  tier: 'diamond' | 'gold' | 'silver' | 'jeeter';
+  tier: 'diamond' | 'gold' | 'silver' | 'bronze' | 'jeeter';
   firstBuyBlock: number;
   firstBuyTimestamp: number;
   holdingDays: number;
@@ -36,8 +36,9 @@ export interface PoolInfo {
 export function getTier(percentage: number): Holder['tier'] {
   if (percentage >= 1.8) return 'diamond';
   if (percentage >= 1) return 'gold';
-  // Jeeter is not a tier — it's assigned only when a wallet sells/transfers
-  return 'silver';
+  if (percentage >= 0.5) return 'silver';
+  // Below silver threshold — bronze hands. Jeeter is only assigned when a wallet sells/transfers
+  return 'bronze';
 }
 
 export function getTierLabel(tier: Holder['tier']): string {
@@ -45,6 +46,7 @@ export function getTierLabel(tier: Holder['tier']): string {
     case 'diamond': return 'Diamond Hands';
     case 'gold': return 'Gold Hands';
     case 'silver': return 'Silver Hands';
+    case 'bronze': return 'Bronze Hands';
     case 'jeeter': return 'Jeeter';
   }
 }
@@ -58,9 +60,10 @@ export function getBoostPercentage(holdingDays: number): number {
 
 export function getTierShare(tier: Holder['tier']): number {
   switch (tier) {
-    case 'diamond': return 50;
+    case 'diamond': return 55;
     case 'gold': return 30;
-    case 'silver': return 20;
+    case 'silver': return 15;
+    case 'bronze': return 0;
     case 'jeeter': return 0;
   }
 }

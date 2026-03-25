@@ -135,6 +135,11 @@ body {
   box-shadow: 0 0 20px rgba(148, 163, 184, 0.3);
 }
 
+.tier-bronze {
+  background: linear-gradient(135deg, #cd7f32, #8b5e3c);
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.3);
+}
+
 .tier-jeeter {
   background: linear-gradient(135deg, #ef4444, #991b1b);
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
