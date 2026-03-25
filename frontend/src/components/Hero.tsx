@@ -109,8 +109,35 @@ function formatBalance(val: string): string {
 
 export default function Hero() {
   const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
+  const [croUsd, setCroUsd] = useState(0);
+  const [hodlUsd, setHodlUsd] = useState(0);
 
-  useEffect(() => {    const loadWallets = () => {      fetch(`/wallets-live.json?t=${Date.now()}`)        .then(res => res.json())        .then(data => {          if (data.wallets) setWalletBalances(data.wallets);          else if (Array.isArray(data)) setWalletBalances(data);        })        .catch(() => {});    };    loadWallets();    const interval = setInterval(loadWallets, 60000);    return () => clearInterval(interval);  }, []);
+  useEffect(() => {
+    const loadWallets = () => {
+      fetch(`/wallets-live.json?t=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.wallets) setWalletBalances(data.wallets);
+          else if (Array.isArray(data)) setWalletBalances(data);
+        })
+        .catch(() => {});
+    };
+    const loadPrices = () => {
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+        .then(res => res.json())
+        .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+        .catch(() => {});
+      fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
+        .then(res => res.json())
+        .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
+        .catch(() => {});
+    };
+    loadWallets();
+    loadPrices();
+    const walletInterval = setInterval(loadWallets, 60000);
+    const priceInterval = setInterval(loadPrices, 120000);
+    return () => { clearInterval(walletInterval); clearInterval(priceInterval); };
+  }, []);
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
       {/* Intense radial glows */}
@@ -238,20 +265,21 @@ export default function Hero() {
             {(() => {
               const totalCro = walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0);
               const totalHodl = walletBalances.reduce((s, w) => s + parseFloat(w.tokenBalance || '0'), 0);
-              const airdropCro = totalCro * 0.2;
-              const airdropHodl = totalHodl * 0.2;
+              const totalUsd = (totalCro * croUsd) + (totalHodl * hodlUsd);
+              const airdropUsd = totalUsd * 0.2;
+              const fmtUsd = (n: number) => n >= 1000 ? `$${(n/1000).toFixed(1)}K` : n >= 1 ? `$${n.toFixed(2)}` : '$0';
               return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl mx-auto">
                   <div className="glass-card rounded-2xl p-6 border border-gold-400/20 bg-gold-400/5">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Total Treasury Value</div>
-                    <div className="text-3xl md:text-4xl font-black diamond-text">{formatBalance(totalCro.toString())} CRO</div>
-                    <div className="text-lg font-bold text-gold-400 mt-1">{formatBalance(totalHodl.toString())} $HODL</div>
+                    {totalUsd > 0 && <div className="text-3xl md:text-4xl font-black diamond-text">{fmtUsd(totalUsd)}</div>}
+                    <div className="text-sm text-gray-300 mt-1">{formatBalance(totalCro.toString())} CRO + {formatBalance(totalHodl.toString())} $HODL</div>
                     <div className="text-xs text-gray-500 mt-2">Across all 3 buyback wallets</div>
                   </div>
                   <div className="glass-card rounded-2xl p-6 border border-green-500/20 bg-green-500/5">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Next Airdrop (20%)</div>
-                    <div className="text-3xl md:text-4xl font-black text-green-400">{formatBalance(airdropCro.toString())} CRO</div>
-                    <div className="text-lg font-bold text-green-300 mt-1">{formatBalance(airdropHodl.toString())} $HODL</div>
+                    {airdropUsd > 0 && <div className="text-3xl md:text-4xl font-black text-green-400">{fmtUsd(airdropUsd)}</div>}
+                    <div className="text-sm text-green-300 mt-1">{formatBalance((totalCro*0.2).toString())} CRO + {formatBalance((totalHodl*0.2).toString())} $HODL</div>
                     <div className="text-xs text-gray-500 mt-2">Distributed every ~10 days to holders</div>
                   </div>
                 </div>

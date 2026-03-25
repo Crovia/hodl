@@ -97,9 +97,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
             <div>Tier</div>
             <div className="text-right">Holdings</div>
             <div className="text-right">Days Held</div>
-            <div className="text-right">Est. Airdrop</div>
+            <div className="text-right">Next Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right">Est. Total</div>
+            <div className="text-right">Total</div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
