@@ -110,15 +110,7 @@ function formatBalance(val: string): string {
 export default function Hero() {
   const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
 
-  useEffect(() => {
-    fetch('/wallets-live.json')
-      .then(res => res.json())
-      .then(data => {
-        if (data.wallets) setWalletBalances(data.wallets);
-        else if (Array.isArray(data)) setWalletBalances(data);
-      })
-      .catch(() => {});
-  }, []);
+  useEffect(() => {    const loadWallets = () => {      fetch(`/wallets-live.json?t=${Date.now()}`)        .then(res => res.json())        .then(data => {          if (data.wallets) setWalletBalances(data.wallets);          else if (Array.isArray(data)) setWalletBalances(data);        })        .catch(() => {});    };    loadWallets();    const interval = setInterval(loadWallets, 60000);    return () => clearInterval(interval);  }, []);
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
       {/* Intense radial glows */}
@@ -243,15 +235,28 @@ export default function Hero() {
             <p className="text-gray-400 mb-8">100% of taxes are used for buybacks and airdrops. Fully transparent on-chain.</p>
 
             {/* Total collected */}
-            <div className="glass-card rounded-2xl p-6 md:p-8 mb-6 border border-gold-400/20 bg-gold-400/5 max-w-4xl mx-auto">
-              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-bold">Total Tax Collected</div>
-              <div className="text-4xl md:text-5xl font-black diamond-text">
-                {walletBalances.length > 0
-                  ? `${formatBalance(walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0).toString())} CRO`
-                  : '0 CRO'}
-              </div>
-              <div className="text-xs text-gray-500 mt-2">Across all 3 buyback wallets</div>
-            </div>
+            {(() => {
+              const totalCro = walletBalances.reduce((s, w) => s + parseFloat(w.croBalance || '0'), 0);
+              const totalHodl = walletBalances.reduce((s, w) => s + parseFloat(w.tokenBalance || '0'), 0);
+              const airdropCro = totalCro * 0.2;
+              const airdropHodl = totalHodl * 0.2;
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl mx-auto">
+                  <div className="glass-card rounded-2xl p-6 border border-gold-400/20 bg-gold-400/5">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Total Treasury Value</div>
+                    <div className="text-3xl md:text-4xl font-black diamond-text">{formatBalance(totalCro.toString())} CRO</div>
+                    <div className="text-lg font-bold text-gold-400 mt-1">{formatBalance(totalHodl.toString())} $HODL</div>
+                    <div className="text-xs text-gray-500 mt-2">Across all 3 buyback wallets</div>
+                  </div>
+                  <div className="glass-card rounded-2xl p-6 border border-green-500/20 bg-green-500/5">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Next Airdrop (20%)</div>
+                    <div className="text-3xl md:text-4xl font-black text-green-400">{formatBalance(airdropCro.toString())} CRO</div>
+                    <div className="text-lg font-bold text-green-300 mt-1">{formatBalance(airdropHodl.toString())} $HODL</div>
+                    <div className="text-xs text-gray-500 mt-2">Distributed every ~10 days to holders</div>
+                  </div>
+                </div>
+              );
+            })()}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
               {WALLET_DEFAULTS.map((w) => {
