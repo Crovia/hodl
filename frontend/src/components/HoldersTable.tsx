@@ -88,17 +88,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
           </p>
         </div>
 
-        <div className="glass-card rounded-xl p-4 mb-6 border border-gold-400/20 bg-gold-400/5">
-          <div className="flex items-center gap-3 text-sm">
-            <svg className="w-5 h-5 text-gold-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
-            </svg>
-            <p className="text-gray-400">
-              <span className="text-gold-400 font-bold">Note:</span> Prior to launch this page is manually updated. After launch, data will be updated live from the blockchain.
-            </p>
-          </div>
-        </div>
 
         <div className="glass-card rounded-2xl overflow-hidden">
           {/* Desktop header */}
