@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Holder, getTierLabel } from '@/lib/types';
 
 function truncateAddress(addr: string): string {
@@ -75,6 +75,19 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
 export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string> }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [croUsd, setCroUsd] = useState(0);
+  const [hodlUsd, setHodlUsd] = useState(0);
+
+  useEffect(() => {
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+      .then(res => res.json())
+      .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+      .catch(() => {});
+    fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
+      .then(res => res.json())
+      .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
+      .catch(() => {});
+  }, []);
 
   return (
     <section id="holders" className="py-24 px-6">
@@ -99,7 +112,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
             <div className="text-right">Days Held</div>
             <div className="text-right">Next Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right">Total</div>
+            <div className="text-right">With Boost</div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
@@ -139,6 +152,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>
+                    {holder.eligible && croUsd > 0 && <div className="text-[10px] text-gray-500">~${(holder.airdropAmount * croUsd).toFixed(2)}</div>}
                   </div>
                   <div className="text-right">
                     <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
@@ -146,7 +160,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-gold-300">{holder.eligible ? `${holder.totalWithBoost.toLocaleString()} CRO` : '-'}</div>
+                    <div className="text-sm font-bold text-gold-300">{holder.eligible && holder.boostPercentage > 0 ? `${holder.totalWithBoost.toLocaleString()} CRO` : '-'}</div>
                   </div>
                   <div className="flex justify-center">
                     <BoostTimeline holdingDays={holder.holdingDays} />
