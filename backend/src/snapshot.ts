@@ -252,10 +252,12 @@ export async function takeSnapshot() {
 
   const tierPools: Record<string, number> = { diamond: diamondPool, gold: goldPool, silver: silverPool };
 
+  const excludeFromRewards = new Set(CONFIG.EXCLUDE_FROM_REWARDS.map(a => a.toLowerCase()));
+
   const tiers: Record<string, HolderRecord[]> = {
-    diamond: holderRecords.filter(h => h.tier === 'diamond' && !h.hasSold),
-    gold: holderRecords.filter(h => h.tier === 'gold' && !h.hasSold),
-    silver: holderRecords.filter(h => h.tier === 'silver' && !h.hasSold),
+    diamond: holderRecords.filter(h => h.tier === 'diamond' && !h.hasSold && !excludeFromRewards.has(h.address)),
+    gold: holderRecords.filter(h => h.tier === 'gold' && !h.hasSold && !excludeFromRewards.has(h.address)),
+    silver: holderRecords.filter(h => h.tier === 'silver' && !h.hasSold && !excludeFromRewards.has(h.address)),
   };
 
   for (const [tierName, tierHolders] of Object.entries(tiers)) {

@@ -122,7 +122,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
         <div className="glass-card rounded-2xl overflow-hidden">
           {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-[2rem_8rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
+          <div className="hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -150,14 +150,16 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
               <div key={holder.address}>
                 {/* Desktop row */}
                 <div
-                  className={`hidden md:grid grid-cols-[2rem_8rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
+                  className={`hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
                     holder.hasSold ? 'opacity-40 line-through' : ''
                   } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
                 >
                   <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
                   <div className="flex items-center gap-2 min-w-0">
-                    {name && <span className="text-sm font-medium text-white truncate">{name}</span>}
-                    <span className="font-mono text-sm text-gray-400">{truncateAddress(holder.address)}</span>
+                    {name
+                      ? <span className="text-sm font-medium text-white truncate" title={holder.address}>{name}</span>
+                      : <span className="font-mono text-sm text-gray-400">{truncateAddress(holder.address)}</span>
+                    }
                     {isOg && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30 flex-shrink-0">OG</span>}
                     {holder.hasSold && <span className="text-xs text-red-400 font-bold flex-shrink-0">SOLD</span>}
                   </div>
@@ -174,7 +176,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
                       const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
-                      return <div className="text-sm font-bold text-gold-400">${totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
+                      return <div className="text-sm font-bold text-gold-400">{totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
                     })() : <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>}
                   </div>
                   <div className="text-right">
@@ -193,7 +195,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                         const boost = 1 + (Math.min(cycle, 5) * 0.03);
                         total += baseUsd * boost;
                       }
-                      return <div className="text-sm font-bold text-green-400">${total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
+                      return <div className="text-sm font-bold text-green-400">{total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
                     })() : <div className="text-sm font-bold text-green-400">-</div>}
                   </div>
                   <div className="flex justify-center">

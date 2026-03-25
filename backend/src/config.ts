@@ -11,6 +11,12 @@ export const CONFIG = {
   // Creator wallet — excluded from seller tracking (distributes presale tokens)
   CREATOR_WALLET: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D',
 
+  // Addresses excluded from airdrop rewards (still shown in holder list)
+  EXCLUDE_FROM_REWARDS: [
+    '0xb4c50913f70b870f68e6143126163ba0e9186ad7', // Liquidity Pool (DEX pair)
+    '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3', // Obsidian Finance
+  ],
+
   // 3 Buyback wallets — taxes are split into these for manual buybacks
   BUYBACK_WALLETS: {
     DHAND: {
