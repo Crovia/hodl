@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: '/presale', label: 'Pre-Sale' },
   { href: '/rules', label: 'Rules' },
   { href: '/holders', label: 'Holders' },
+  { href: '/jeeters', label: 'Jeeters' },
   { href: '/airdrops', label: 'Airdrops' },
   { href: '/tiers', label: 'Tiers' },
 ];
