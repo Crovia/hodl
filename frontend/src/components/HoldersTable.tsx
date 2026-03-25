@@ -151,14 +151,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>
-                    {holder.eligible && croUsd > 0 && (() => {
+                    {holder.eligible && croUsd > 0 ? (() => {
                       const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
                       const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
-                      return <div className="text-[10px] text-gray-500">~${totalUsd.toFixed(2)}</div>;
-                    })()}
+                      return <div className="text-sm font-bold text-gold-400">${totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
+                    })() : <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>}
                   </div>
                   <div className="text-right">
                     <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
@@ -166,7 +165,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-gold-300">{holder.eligible && holder.boostPercentage > 0 ? `${holder.totalWithBoost.toLocaleString()} CRO` : '-'}</div>
+                    {holder.eligible && holder.boostPercentage > 0 && croUsd > 0 ? (() => {
+                      const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                      const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
+                      const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
+                      const totalUsd = (holder.totalWithBoost * croUsd) + (hodlPerPerson * (1 + holder.boostPercentage / 100) * hodlUsd);
+                      return <div className="text-sm font-bold text-gold-300">${totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
+                    })() : <div className="text-sm font-bold text-gold-300">-</div>}
                   </div>
                   <div className="flex justify-center">
                     <BoostTimeline holdingDays={holder.holdingDays} />
@@ -200,15 +205,25 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
-                        <div className="font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount} CRO` : '-'}</div>
+                        <div className="font-bold text-gold-400">{holder.eligible && croUsd > 0 ? (() => {
+                          const th = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                          const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
+                          const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
+                          return `$${((holder.airdropAmount * croUsd) + (hp * hodlUsd)).toFixed(2)}`;
+                        })() : '-'}</div>
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Boost</div>
                         <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-600'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
                       </div>
                       <div>
-                        <div className="text-gray-500 uppercase mb-0.5">Total</div>
-                        <div className="font-bold text-gold-300">{holder.eligible ? `${holder.totalWithBoost} CRO` : '-'}</div>
+                        <div className="text-gray-500 uppercase mb-0.5">With Boost</div>
+                        <div className="font-bold text-gold-300">{holder.eligible && holder.boostPercentage > 0 ? (() => {
+                          const th = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                          const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
+                          const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
+                          return `$${((holder.totalWithBoost * croUsd) + (hp * (1 + holder.boostPercentage/100) * hodlUsd)).toFixed(2)}`;
+                        })() : '-'}</div>
                       </div>
                     </div>
                     <div className="flex justify-center py-1">
