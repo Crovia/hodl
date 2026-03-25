@@ -253,13 +253,14 @@ export async function takeSnapshot() {
   };
 
   for (const [tierName, tierHolders] of Object.entries(tiers)) {
-    const totalPct = tierHolders.reduce((s, h) => s + h.percentage, 0);
-    if (totalPct === 0) continue;
+    if (tierHolders.length === 0) continue;
     const pool = tierPools[tierName] || 0;
+    // Equal split within tier — everyone in the tier gets the same amount
+    const perPerson = Math.round((pool / tierHolders.length) * 100) / 100;
 
     for (const holder of tierHolders) {
-      holder.airdropAmount = Math.round(((holder.percentage / totalPct) * pool) * 100) / 100;
-      holder.totalWithBoost = Math.round(holder.airdropAmount * (1 + holder.boostPercentage / 100) * 100) / 100;
+      holder.airdropAmount = perPerson;
+      holder.totalWithBoost = Math.round(perPerson * (1 + holder.boostPercentage / 100) * 100) / 100;
     }
   }
 
