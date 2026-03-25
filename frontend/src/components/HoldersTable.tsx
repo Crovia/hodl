@@ -112,7 +112,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             <div className="text-right">Days Held</div>
             <div className="text-right">Next Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right">With Boost</div>
+            <div className="text-right">If You HODL</div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
@@ -165,13 +165,18 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    {holder.eligible && holder.boostPercentage > 0 && croUsd > 0 ? (() => {
+                    {holder.eligible && croUsd > 0 ? (() => {
                       const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
-                      const totalUsd = (holder.totalWithBoost * croUsd) + (hodlPerPerson * (1 + holder.boostPercentage / 100) * hodlUsd);
-                      return <div className="text-sm font-bold text-gold-300">${totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
-                    })() : <div className="text-sm font-bold text-gold-300">-</div>}
+                      const baseUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
+                      let total = 0;
+                      for (let cycle = 0; cycle < 6; cycle++) {
+                        const boost = 1 + (Math.min(cycle, 5) * 0.03);
+                        total += baseUsd * boost;
+                      }
+                      return <div className="text-sm font-bold text-green-400">${total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
+                    })() : <div className="text-sm font-bold text-green-400">-</div>}
                   </div>
                   <div className="flex justify-center">
                     <BoostTimeline holdingDays={holder.holdingDays} />
@@ -217,12 +222,14 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                         <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-600'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
                       </div>
                       <div>
-                        <div className="text-gray-500 uppercase mb-0.5">With Boost</div>
-                        <div className="font-bold text-gold-300">{holder.eligible && holder.boostPercentage > 0 ? (() => {
+                        <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
+                        <div className="font-bold text-green-400">{holder.eligible && croUsd > 0 ? (() => {
                           const th = holders.filter(h => h.tier === holder.tier && !h.hasSold);
                           const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
                           const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
-                          return `$${((holder.totalWithBoost * croUsd) + (hp * (1 + holder.boostPercentage/100) * hodlUsd)).toFixed(2)}`;
+                          const base = (holder.airdropAmount * croUsd) + (hp * hodlUsd);
+                          let t = 0; for (let c = 0; c < 6; c++) t += base * (1 + Math.min(c, 5) * 0.03);
+                          return `$${t.toFixed(2)}`;
                         })() : '-'}</div>
                       </div>
                     </div>
