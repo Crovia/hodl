@@ -72,7 +72,7 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   );
 }
 
-export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string> }) {
+export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0 }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [croUsd, setCroUsd] = useState(0);
@@ -152,7 +152,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>
-                    {holder.eligible && croUsd > 0 && <div className="text-[10px] text-gray-500">~${(holder.airdropAmount * croUsd).toFixed(2)}</div>}
+                    {holder.eligible && croUsd > 0 && (() => {
+                      const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                      const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : 0.15;
+                      const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
+                      const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
+                      return <div className="text-[10px] text-gray-500">~${totalUsd.toFixed(2)}</div>;
+                    })()}
                   </div>
                   <div className="text-right">
                     <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>

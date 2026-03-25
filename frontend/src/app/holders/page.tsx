@@ -131,9 +131,25 @@ export default function HoldersPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch wallet totals for USD calculation
+  const [treasuryCro, setTreasuryCro] = useState(0);
+  const [treasuryHodl, setTreasuryHodl] = useState(0);
+
+  useEffect(() => {
+    fetch(`/wallets-live.json?t=${Date.now()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.wallets) {
+          setTreasuryCro(data.wallets.reduce((s: number, w: { croBalance?: string }) => s + parseFloat(w.croBalance || '0'), 0));
+          setTreasuryHodl(data.wallets.reduce((s: number, w: { tokenBalance?: string }) => s + parseFloat(w.tokenBalance || '0'), 0));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div>
-      <HoldersTable holders={holders} ogAddresses={OG_ADDRESSES} nameMap={ADDRESS_NAMES} />
+      <HoldersTable holders={holders} ogAddresses={OG_ADDRESSES} nameMap={ADDRESS_NAMES} treasuryCro={treasuryCro} treasuryHodl={treasuryHodl} />
       {totalCro > 0 && (
         <div className="max-w-7xl mx-auto px-6 pb-12">
           <div className="glass-card rounded-xl p-4 border border-gold-400/10">
