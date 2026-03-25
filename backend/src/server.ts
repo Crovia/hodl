@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ethers } from 'ethers';
 import { CONFIG } from './config';
+import { takeSnapshot } from './snapshot';
 
 const app = Fastify({ logger: true });
 
@@ -256,6 +257,76 @@ async function getProviderWithFallback(): Promise<ethers.JsonRpcProvider> {
   }
 }
 
+// --- Auto-snapshot scheduler ---
+const SNAPSHOT_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const FRONTEND_PUBLIC = path.resolve(__dirname, '../../frontend/public');
+let snapshotRunning = false;
+
+// POST /api/snapshot — trigger manual snapshot
+app.post('/api/snapshot', async (req, reply) => {
+  if (snapshotRunning) {
+    reply.status(409);
+    return { error: 'Snapshot already in progress' };
+  }
+  runAutoSnapshot();
+  return { message: 'Snapshot started', status: 'running' };
+});
+
+// GET /api/snapshot/status — check if snapshot is running
+app.get('/api/snapshot/status', async () => {
+  return { running: snapshotRunning };
+});
+
+async function runAutoSnapshot() {
+  if (snapshotRunning) {
+    console.log('[auto-snapshot] Already running, skipping');
+    return;
+  }
+  snapshotRunning = true;
+  try {
+    console.log('[auto-snapshot] Starting scheduled snapshot...');
+    const snapshot = await takeSnapshot();
+
+    // Update frontend static JSON files
+    const holdersLive = {
+      epoch: snapshot.epoch,
+      timestamp: snapshot.timestamp,
+      holders: snapshot.holders,
+      totals: {
+        totalCro: snapshot.totalWalletsCro,
+        totalToken: snapshot.totalWalletsToken,
+        airdropCro: snapshot.airdropAmountCro,
+        airdropToken: snapshot.airdropAmountToken,
+      },
+    };
+
+    const walletsLive = {
+      wallets: snapshot.walletBalances,
+      totals: {
+        totalCro: snapshot.totalWalletsCro,
+        totalToken: snapshot.totalWalletsToken,
+        airdropCro: snapshot.airdropAmountCro,
+        airdropToken: snapshot.airdropAmountToken,
+        distributionPct: snapshot.distributionPct,
+      },
+    };
+
+    if (fs.existsSync(FRONTEND_PUBLIC)) {
+      fs.writeFileSync(path.join(FRONTEND_PUBLIC, 'holders-live.json'), JSON.stringify(holdersLive, null, 2));
+      fs.writeFileSync(path.join(FRONTEND_PUBLIC, 'wallets-live.json'), JSON.stringify(walletsLive, null, 2));
+      console.log(`[auto-snapshot] Updated frontend static files (epoch ${snapshot.epoch})`);
+    } else {
+      console.warn('[auto-snapshot] Frontend public dir not found, skipping static file update');
+    }
+
+    console.log(`[auto-snapshot] Complete — epoch ${snapshot.epoch}, ${snapshot.holders.length} holders`);
+  } catch (err) {
+    console.error('[auto-snapshot] Failed:', err);
+  } finally {
+    snapshotRunning = false;
+  }
+}
+
 async function start() {
   // Startup validation
   if (CONFIG.TOKEN_ADDRESS === '0x0000000000000000000000000000000000000000') {
@@ -265,6 +336,13 @@ async function start() {
   try {
     await app.listen({ port: CONFIG.PORT, host: '0.0.0.0' });
     console.log(`DiamondHands API running on port ${CONFIG.PORT}`);
+
+    // Run first snapshot 30s after boot, then every 6 hours
+    setTimeout(() => {
+      runAutoSnapshot();
+      setInterval(runAutoSnapshot, SNAPSHOT_INTERVAL_MS);
+    }, 30_000);
+    console.log(`[auto-snapshot] Scheduled: first run in 30s, then every 6 hours`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
