@@ -108,9 +108,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
             <div>Tier</div>
             <div className="text-right">Holdings</div>
             <div className="text-right">Days Held</div>
-            <div className="text-right">Airdrop</div>
+            <div className="text-right">Est. Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right">Total</div>
+            <div className="text-right">Est. Total</div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
@@ -230,6 +230,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {} }
             <div className="w-3 h-3 rounded-full tier-jeeter" /> Jeeter (Sold/Transferred)
           </div>
         </div>
+<div className="mt-4 glass-card rounded-xl p-4 border border-gold-400/10">          <p className="text-xs text-gray-500 text-center">            Airdrop amounts are <span className="text-gold-400 font-bold">estimates</span> based on current tax treasury balance (20% distributed per cycle). Actual amounts may vary. Pool split: Diamond 55% / Gold 30% / Silver 15%.          </p>        </div>
       </div>
     </section>
   );
