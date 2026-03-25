@@ -67,6 +67,16 @@ export default function AirdropPool({
             Every ~10 days, buybacks are executed and equal amounts airdropped to holders
             depending on their tier (Diamond, Gold, Silver). No funds are burned — you receive them back.
           </p>
+          <div className="mt-4 inline-block px-4 py-2 rounded-xl bg-gold-400/5 border border-gold-400/20">
+            <p className="text-sm text-gray-400">
+              <span className="text-gold-400 font-bold">Next estimated airdrop:</span>{' '}
+              <span className="text-white font-bold">April 3, 2026</span>
+              <span className="text-gray-500 ml-1">(~10 days from launch)</span>
+            </p>
+            <p className="text-xs text-gray-600 mt-1">
+              Exact timing may vary — airdrops are processed manually and there can be some delay.
+            </p>
+          </div>
         </div>
 
         {/* Pool stats */}
@@ -86,8 +96,9 @@ export default function AirdropPool({
           </div>
 
           <div className="glass-card rounded-2xl p-6 text-center">
-            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Next Airdrop In</div>
-            <div className="text-3xl font-black text-gray-400">TBA</div>
+            <div className="text-sm text-gray-500 uppercase tracking-wider mb-2">Next Airdrop (est.)</div>
+            <div className="text-3xl font-black text-white">Apr 3</div>
+            <div className="text-xs text-gray-500 mt-1">May be delayed</div>
           </div>
 
           <div className="glass-card rounded-2xl p-6 text-center">
@@ -187,14 +198,14 @@ export default function AirdropPool({
         <div className="glass-card rounded-2xl p-8 mb-12">
           <h3 className="text-lg font-bold text-white mb-6 text-center">Airdrop Distribution (20% of Treasury)</h3>
           <div className="flex rounded-xl overflow-hidden h-12">
-            <div className="tier-diamond flex items-center justify-center text-sm font-bold text-white" style={{ width: '50%' }}>
-              Diamond 50%
+            <div className="tier-diamond flex items-center justify-center text-sm font-bold text-white" style={{ width: '55%' }}>
+              Diamond 55%
             </div>
             <div className="tier-gold flex items-center justify-center text-sm font-bold text-black" style={{ width: '30%' }}>
               Gold 30%
             </div>
-            <div className="tier-silver flex items-center justify-center text-sm font-bold text-white" style={{ width: '20%' }}>
-              Silver 20%
+            <div className="tier-silver flex items-center justify-center text-sm font-bold text-white" style={{ width: '15%' }}>
+              Silver 15%
             </div>
           </div>
           <div className="text-center mt-4 text-sm text-gray-500">

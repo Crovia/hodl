@@ -296,6 +296,10 @@ export default function Hero() {
                 const croVal = live ? formatBalance(live.croBalance) : '0';
                 const hodlVal = live && parseFloat(live.tokenBalance) > 0 ? formatBalance(live.tokenBalance) : '0';
                 const clgVal = live?.clgBalance && parseFloat(live.clgBalance) > 0 ? formatBalance(live.clgBalance) : '0';
+                const walletCro = live ? parseFloat(live.croBalance || '0') : 0;
+                const walletHodl = live ? parseFloat(live.tokenBalance || '0') : 0;
+                const walletUsd = (walletCro * croUsd) + (walletHodl * hodlUsd);
+                const fmtWalletUsd = walletUsd >= 1000 ? `$${(walletUsd/1000).toFixed(1)}K` : walletUsd >= 1 ? `$${walletUsd.toFixed(2)}` : '$0';
                 return (
                   <div key={w.label} className={`glass-card rounded-2xl overflow-hidden pointer-events-auto border ${w.border} hover:ring-2 hover:ring-white/10 transition-all`}>
                     <div className={`h-1.5 bg-gradient-to-r ${w.gradient}`} />
@@ -304,6 +308,13 @@ export default function Hero() {
                         <span className={`text-lg font-black ${w.color}`}>{w.label}</span>
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${w.bg} ${w.color} border ${w.border}`}>{w.pct}</span>
                       </div>
+
+                      {croUsd > 0 && walletUsd > 0 && (
+                        <div className="rounded-xl p-4 bg-green-500/5 border border-green-500/20 mb-3 text-center">
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">Total in USD</div>
+                          <div className="text-3xl font-black text-green-400">{fmtWalletUsd}</div>
+                        </div>
+                      )}
 
                       <div className={`rounded-xl p-4 ${w.bg} border ${w.border} mb-3`}>
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-bold">CRO Balance</div>
