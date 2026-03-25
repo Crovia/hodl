@@ -57,21 +57,26 @@ export default function TierSystem() {
   const [sellers, setSellers] = useState<Seller[]>([]);
 
   useEffect(() => {
-    fetch('/holders-live.json')
-      .then(res => res.json())
-      .then(data => {
-        if (data.holders) {
-          const sold = data.holders
-            .filter((h: { hasSold: boolean }) => h.hasSold)
-            .map((h: { address: string; percentage: number; holdingDays: number }) => ({
-              address: h.address,
-              percentage: h.percentage,
-              holdingDays: h.holdingDays,
-            }));
-          setSellers(sold);
-        }
-      })
-      .catch(() => {});
+    const loadSellers = () => {
+      fetch(`/holders-live.json?t=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.holders) {
+            const sold = data.holders
+              .filter((h: { hasSold: boolean }) => h.hasSold)
+              .map((h: { address: string; percentage: number; holdingDays: number }) => ({
+                address: h.address,
+                percentage: h.percentage,
+                holdingDays: h.holdingDays,
+              }));
+            setSellers(sold);
+          }
+        })
+        .catch(() => {});
+    };
+    loadSellers();
+    const interval = setInterval(loadSellers, 60000);
+    return () => clearInterval(interval);
   }, []);
   const tiers = [
     {

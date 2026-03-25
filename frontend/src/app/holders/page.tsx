@@ -109,24 +109,26 @@ export default function HoldersPage() {
   const [totalCro, setTotalCro] = useState(0);
 
   useEffect(() => {
-    fetch('/holders-live.json')
-      .then(res => res.json())
-      .then(data => {
-        if (data.holders?.length > 0) {
-          // Use live data from backend (already has airdrop amounts calculated)
-          const liveHolders: Holder[] = data.holders.map((h: Holder) => ({
-            ...h,
-            eligible: !h.hasSold && h.tier !== 'jeeter',
-          }));
-          setHolders(liveHolders);
-        }
-        if (data.totals?.totalCro) {
-          setTotalCro(Number(data.totals.totalCro));
-        }
-      })
-      .catch(() => {
-        // Keep presale data on error
-      });
+    const loadData = () => {
+      fetch(`/holders-live.json?t=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.holders?.length > 0) {
+            const liveHolders: Holder[] = data.holders.map((h: Holder) => ({
+              ...h,
+              eligible: !h.hasSold && h.tier !== 'jeeter',
+            }));
+            setHolders(liveHolders);
+          }
+          if (data.totals?.totalCro) {
+            setTotalCro(Number(data.totals.totalCro));
+          }
+        })
+        .catch(() => {});
+    };
+    loadData();
+    const interval = setInterval(loadData, 60000); // refresh every 60s
+    return () => clearInterval(interval);
   }, []);
 
   return (
