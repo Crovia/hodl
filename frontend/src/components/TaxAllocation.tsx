@@ -112,7 +112,8 @@ export default function TaxAllocation() {
   const wallets = data?.wallets || [];
   const totalCro = Number(data?.totals?.totalCro || 0);
   const totalHodl = Number(data?.totals?.totalToken || 0);
-  const totalUsd = (totalCro * croUsd) + (totalHodl * hodlUsd);
+  const totalClg = wallets.reduce((s, w) => s + Number(w.clgBalance || 0), 0);
+  const totalUsd = (totalCro * croUsd) + (totalHodl * hodlUsd) + (totalClg * clgUsd);
 
   return (
     <section className="py-24 px-6">
@@ -138,12 +139,12 @@ export default function TaxAllocation() {
             <div className="glass-card rounded-2xl p-6 border border-gold-400/20 bg-gold-400/5 text-center">
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Total Treasury Value</div>
               <div className="text-3xl font-black diamond-text">{fmtUsd(totalUsd)}</div>
-              <div className="text-sm text-gray-400 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL</div>
+              <div className="text-sm text-gray-400 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg)} $CLG`}</div>
             </div>
             <div className="glass-card rounded-2xl p-6 border border-green-500/20 bg-green-500/5 text-center">
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Next Airdrop (20%)</div>
               <div className="text-3xl font-black text-green-400">{fmtUsd(totalUsd * 0.2)}</div>
-              <div className="text-sm text-green-300 mt-1">{formatCro(totalCro * 0.2)} CRO + {formatCro(totalHodl * 0.2)} $HODL</div>
+              <div className="text-sm text-green-300 mt-1">{formatCro(totalCro * 0.2)} CRO + {formatCro(totalHodl * 0.2)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg * 0.2)} $CLG`}</div>
             </div>
           </div>
         )}

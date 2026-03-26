@@ -64,7 +64,7 @@ app.get('/api/wallets', async () => {
 
       // Get $CLG balance for the CLG wallet
       let clgBalance = '0';
-      const CLG_ADDRESS = '0xa40764b6878e6eb86fac5de4f1f1a80aa6fc67fe';
+      const CLG_ADDRESS = '0x08d9cb5100C306C2909B63415d7ff05268633b41';
       try {
         const clgToken = new ethers.Contract(CLG_ADDRESS, ERC20_ABI, provider);
         const clgDecimals = await clgToken.decimals();
