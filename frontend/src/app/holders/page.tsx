@@ -74,10 +74,11 @@ export default function HoldersPage() {
   const [totalCro, setTotalCro] = useState(0);
   const [treasuryCro, setTreasuryCro] = useState(0);
   const [treasuryHodl, setTreasuryHodl] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = () => {
-      fetch(`/holders-live.json?t=${Date.now()}`)
+      fetch('/api/holders')
         .then(res => res.json())
         .then(data => {
           if (data.holders?.length > 0) {
@@ -90,6 +91,7 @@ export default function HoldersPage() {
           if (data.totals?.totalCro) {
             setTotalCro(Number(data.totals.totalCro));
           }
+          if (data.timestamp) setLastUpdated(data.timestamp);
         })
         .catch(() => {});
     };
@@ -99,7 +101,7 @@ export default function HoldersPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`/wallets-live.json?t=${Date.now()}`)
+    fetch('/api/wallets')
       .then(res => res.json())
       .then(data => {
         if (data.wallets) {
@@ -130,7 +132,7 @@ export default function HoldersPage() {
 
   return (
     <div>
-      <HoldersTable holders={activeHolders} ogAddresses={OG_ADDRESSES} nameMap={mergedNameMap} treasuryCro={treasuryCro} treasuryHodl={treasuryHodl} />
+      <HoldersTable holders={activeHolders} ogAddresses={OG_ADDRESSES} nameMap={mergedNameMap} treasuryCro={treasuryCro} treasuryHodl={treasuryHodl} lastUpdated={lastUpdated} />
       {totalCro > 0 && (
         <div className="max-w-7xl mx-auto px-6 pb-12">
           <div className="glass-card rounded-xl p-4 border border-gold-400/10">

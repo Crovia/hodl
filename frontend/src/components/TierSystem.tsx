@@ -58,7 +58,7 @@ export default function TierSystem() {
 
   useEffect(() => {
     const loadSellers = () => {
-      fetch(`/holders-live.json?t=${Date.now()}`)
+      fetch('/api/holders')
         .then(res => res.json())
         .then(data => {
           if (data.holders) {

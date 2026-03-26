@@ -73,7 +73,7 @@ export default function HoldersVsJeeters() {
 
   useEffect(() => {
     const load = () => {
-      fetch(`/holders-live.json?t=${Date.now()}`)
+      fetch('/api/holders')
         .then(res => res.json())
         .then(data => {
           if (data.holders) setHolders(data.holders);

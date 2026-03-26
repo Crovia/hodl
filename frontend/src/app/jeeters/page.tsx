@@ -51,7 +51,7 @@ export default function TradersJeetersPage() {
 
   useEffect(() => {
     const load = () => {
-      fetch(`/holders-live.json?t=${Date.now()}`)
+      fetch('/api/holders')
         .then(res => res.json())
         .then(data => {
           if (data.holders) setAllHolders(data.holders);

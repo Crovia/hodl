@@ -74,7 +74,7 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   );
 }
 
-export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0 }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number }) {
+export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0, lastUpdated = null }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number; lastUpdated?: string | null }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [croUsd, setCroUsd] = useState(0);
@@ -101,6 +101,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
           <p className="text-gray-400 text-lg max-w-xl mx-auto">
             Every wallet. Every position. Transparent. The chain doesn&apos;t lie.
           </p>
+          {lastUpdated && (
+            <p className="text-gray-600 text-sm mt-3">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
+          )}
         </div>
 
         <div className="glass-card rounded-xl p-5 mb-6 border-2 border-red-500/30 bg-red-500/5">

@@ -119,7 +119,7 @@ export default function Hero() {
 
   useEffect(() => {
     const loadWallets = () => {
-      fetch(`/wallets-live.json?t=${Date.now()}`)
+      fetch('/api/wallets')
         .then(res => res.json())
         .then(data => {
           if (data.wallets) setWalletBalances(data.wallets);

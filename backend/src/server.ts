@@ -100,6 +100,7 @@ app.get('/api/wallets', async () => {
   const airdropPct = CONFIG.AIRDROP_DISTRIBUTION_PCT / 100;
 
   return {
+    timestamp: new Date().toISOString(),
     wallets,
     totals: {
       totalCro: totalCro.toFixed(4),
@@ -161,6 +162,14 @@ app.get('/api/holders', async () => {
     epoch: latest.epoch,
     timestamp: latest.timestamp,
     holders: latest.holders,
+    totals: {
+      totalCro: latest.totalWalletsCro,
+      totalToken: latest.totalWalletsToken,
+      airdropCro: latest.airdropAmountCro,
+      airdropToken: latest.airdropAmountToken,
+      distributionPct: latest.distributionPct,
+    },
+    wallets: latest.walletBalances,
   };
 });
 
@@ -258,7 +267,7 @@ async function getProviderWithFallback(): Promise<ethers.JsonRpcProvider> {
 }
 
 // --- Auto-snapshot scheduler ---
-const SNAPSHOT_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const SNAPSHOT_INTERVAL_MS = 1 * 60 * 60 * 1000; // 1 hour
 const FRONTEND_PUBLIC = path.resolve(__dirname, '../../frontend/public');
 let snapshotRunning = false;
 

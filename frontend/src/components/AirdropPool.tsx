@@ -14,6 +14,7 @@ interface WalletData {
 }
 
 interface WalletsResponse {
+  timestamp?: string;
   wallets: WalletData[];
   totals: {
     totalCro: string;
@@ -48,7 +49,7 @@ export default function AirdropPool({
   const [hodlUsd, setHodlUsd] = useState(0);
 
   useEffect(() => {
-    fetch('/holders-live.json')
+    fetch('/api/holders')
       .then(res => res.json())
       .then(setWalletData)
       .catch(err => console.error('Failed to fetch wallets:', err))
@@ -125,6 +126,9 @@ export default function AirdropPool({
               Exact timing may vary — airdrops are processed manually and there can be some delay.
             </p>
           </div>
+          {walletData?.timestamp && (
+            <p className="text-gray-600 text-sm mt-3">Last updated: {new Date(walletData.timestamp).toLocaleString()}</p>
+          )}
         </div>
 
         {/* Treasury overview */}
