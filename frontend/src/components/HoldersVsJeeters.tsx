@@ -43,9 +43,16 @@ interface HolderData {
   address: string;
   percentage: number;
   balance: string;
+  totalReceived?: string;
   tier: string;
   holdingDays: number;
   hasSold: boolean;
+}
+
+function fmtTokens(n: number): string {
+  if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(0)}K`;
+  return Math.round(n).toLocaleString();
 }
 
 function truncAddr(addr: string) {
@@ -188,7 +195,12 @@ export default function HoldersVsJeeters() {
                     <div className="text-lg w-8 text-center">{cfg.emoji}</div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-white truncate">{getName(h.address)}</div>
-                      <div className="text-xs text-gray-500">{h.holdingDays}d holding &middot; {h.percentage}%</div>
+                      <div className="text-xs text-gray-500">
+                        {h.holdingDays}d holding &middot; {h.percentage}%
+                        {h.totalReceived && parseFloat(h.totalReceived) > 0 && (
+                          <span> &middot; Bought {fmtTokens(parseFloat(h.totalReceived))}</span>
+                        )}
+                      </div>
                     </div>
                     <span className={`${cfg.css} px-2 py-0.5 rounded-full text-[10px] font-bold text-white`}>
                       {cfg.label}
@@ -225,8 +237,19 @@ export default function HoldersVsJeeters() {
                     <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
                     <div className="text-xs text-gray-600">
                       Held {h.holdingDays}d &middot; Was {h.percentage}%
-                      {h.balance && parseFloat(h.balance) > 0 && (
-                        <span className="text-gray-500"> &middot; Holds {parseFloat(h.balance) >= 1e6 ? `${(parseFloat(h.balance)/1e6).toFixed(1)}M` : parseFloat(h.balance) >= 1e3 ? `${(parseFloat(h.balance)/1e3).toFixed(1)}K` : Math.round(parseFloat(h.balance)).toLocaleString()}</span>
+                      {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
+                        const received = parseFloat(h.totalReceived!);
+                        const remaining = parseFloat(h.balance || '0');
+                        const sold = received - remaining;
+                        return (
+                          <>
+                            <span className="text-red-400"> &middot; Sold {fmtTokens(sold > 0 ? sold : 0)}</span>
+                            {remaining > 0 && <span className="text-green-400"> &middot; Left {fmtTokens(remaining)}</span>}
+                          </>
+                        );
+                      })()}
+                      {!h.totalReceived && h.balance && parseFloat(h.balance) > 0 && (
+                        <span className="text-gray-500"> &middot; Holds {fmtTokens(parseFloat(h.balance))}</span>
                       )}
                     </div>
                   </div>

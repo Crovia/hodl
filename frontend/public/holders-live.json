@@ -1,18 +1,19 @@
 {
-  "epoch": 5,
-  "timestamp": "2026-03-25T19:35:05.770Z",
+  "epoch": 14,
+  "timestamp": "2026-03-26T19:04:38.363Z",
   "holders": [
     {
       "address": "0xb4c50913f70b870f68e6143126163ba0e9186ad7",
-      "balance": "206934844.54979666628046929",
-      "percentage": 20.6935,
+      "balance": "194160298.2988353202650759",
+      "percentage": 19.416,
       "tier": "diamond",
       "firstSeen": 61499631,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 0,
+      "totalReceived": "199313472.980240822998504443"
     },
     {
       "address": "0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3",
@@ -20,35 +21,25 @@
       "percentage": 3.6578,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
-    },
-    {
-      "address": "0x2816bca1667f2cf5978307154e4c42ab1e187ad5",
-      "balance": "27850636.164496111801089848",
-      "percentage": 2.7851,
-      "tier": "diamond",
-      "firstSeen": 61503953,
-      "holdingDays": 1,
-      "hasSold": false,
-      "airdropAmount": 54.12,
-      "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 0,
+      "totalReceived": "36577527.3"
     },
     {
       "address": "0x1d9b981b7aba1a747883833fb8a1b5072eac5d8f",
-      "balance": "25913133.934712665753885221",
-      "percentage": 2.5913,
+      "balance": "31188031.27919461036994266",
+      "percentage": 3.1188,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "31188031.27919461036994266"
     },
     {
       "address": "0x5034e11bd0e61f2811396324b685cd58d2f6c206",
@@ -56,11 +47,12 @@
       "percentage": 2.3651,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "23651026.841660960680983817"
     },
     {
       "address": "0x5a96370944c2869b07156e079baf947d8cebb986",
@@ -68,11 +60,12 @@
       "percentage": 2.2543,
       "tier": "diamond",
       "firstSeen": 61633699,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "22543464.115183605545794645"
     },
     {
       "address": "0xc3f1087176485ec5518cbc88169205ff26f75702",
@@ -80,11 +73,12 @@
       "percentage": 2.0612,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "20612425.623196534037957633"
     },
     {
       "address": "0x32df940edbf734971af4707fe35f3ade91660358",
@@ -92,11 +86,12 @@
       "percentage": 2.0379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "20378764.1"
     },
     {
       "address": "0x8ad01ed7fc839e9523447ae7d00fba695ef9875f",
@@ -104,11 +99,38 @@
       "percentage": 2.0179,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "20178764.1"
+    },
+    {
+      "address": "0x2816bca1667f2cf5978307154e4c42ab1e187ad5",
+      "balance": "20136978.891264760839248652",
+      "percentage": 2.0137,
+      "tier": "jeeter",
+      "firstSeen": 61503953,
+      "holdingDays": 2,
+      "hasSold": true,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "27987615.0557608726403385"
+    },
+    {
+      "address": "0x36d21fd7eafa01abc35578ea940c545dce8ac10c",
+      "balance": "20049401.124872168150457644",
+      "percentage": 2.0049,
+      "tier": "diamond",
+      "firstSeen": 61502177,
+      "holdingDays": 2,
+      "hasSold": false,
+      "airdropAmount": 82.12,
+      "boostPercentage": 0,
+      "totalWithBoost": 82.12,
+      "totalReceived": "20049401.124872168150457644"
     },
     {
       "address": "0xf2ef64f71b82af0883aeb3c47cb3f38ed567c217",
@@ -116,11 +138,12 @@
       "percentage": 1.985,
       "tier": "diamond",
       "firstSeen": 61530993,
-      "holdingDays": 0,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "6840815.999371533736314937"
     },
     {
       "address": "0x2270cbad5072b7685357ec83ddc959ffde535b27",
@@ -128,11 +151,12 @@
       "percentage": 1.9677,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18792756.345122098529202239"
     },
     {
       "address": "0x08c2ceeca0e01066b4e46081acc621a34e8e21f1",
@@ -140,35 +164,51 @@
       "percentage": 1.9468,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "16716622.525492069796119794"
     },
     {
       "address": "0xd3ef72e596664443f9368eabc28bea282fc49dfc",
-      "balance": "19257374.072785824783720769",
-      "percentage": 1.9257,
+      "balance": "19463513.386082598949315468",
+      "percentage": 1.9464,
       "tier": "diamond",
       "firstSeen": 61513210,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "19463513.386082598949315468"
     },
     {
-      "address": "0x36d21fd7eafa01abc35578ea940c545dce8ac10c",
-      "balance": "18378764.1",
-      "percentage": 1.8379,
+      "address": "0x499e30aea1540fda665412c779f00c6dd8a6d27d",
+      "balance": "19115820.189386585098085076",
+      "percentage": 1.9116,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "19115820.189386585098085076"
+    },
+    {
+      "address": "0x7614a361217fcfe9a7f5cb8d950b40514d7b45aa",
+      "balance": "18934859.25145595119702348",
+      "percentage": 1.8935,
+      "tier": "diamond",
+      "firstSeen": 61524972,
+      "holdingDays": 2,
+      "hasSold": false,
+      "airdropAmount": 82.12,
+      "boostPercentage": 0,
+      "totalWithBoost": 82.12,
+      "totalReceived": "18934859.25145595119702348"
     },
     {
       "address": "0x4e730ac6a1a9d53aef0239331d90e0da4642fbb5",
@@ -176,11 +216,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0x5148e8932a8f9e7bedb04303a12187e56446956c",
@@ -188,11 +229,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0x3b428943ef1c49bf81ddb00f9a11e55811fc7b3c",
@@ -200,23 +242,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
-    },
-    {
-      "address": "0x499e30aea1540fda665412c779f00c6dd8a6d27d",
-      "balance": "18378764.1",
-      "percentage": 1.8379,
-      "tier": "diamond",
-      "firstSeen": 61502177,
-      "holdingDays": 1,
-      "hasSold": false,
-      "airdropAmount": 54.12,
-      "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0xd45b551473f1819ef9fc9efa2c654b98eab21850",
@@ -224,11 +255,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0xece1b63218a249708b521e22bbaa7bac35f6f20f",
@@ -236,11 +268,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0x3868150e5ff9ec5b052a36f2d8a5d8bc348b4967",
@@ -248,11 +281,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0xf085359db5df9dfa01ef31a269d5cdf99685bd4a",
@@ -260,11 +294,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0x7e3e91b6912042f8fc446385299785ac2f12c0d0",
@@ -272,11 +307,12 @@
       "percentage": 1.8379,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18378764.1"
     },
     {
       "address": "0x0e4eacc2887a58d157a4a9f036f7499ffcc68831",
@@ -284,11 +320,12 @@
       "percentage": 1.8021,
       "tier": "diamond",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 54.12,
+      "airdropAmount": 82.12,
       "boostPercentage": 0,
-      "totalWithBoost": 54.12
+      "totalWithBoost": 82.12,
+      "totalReceived": "18020770.317601177480183185"
     },
     {
       "address": "0x894699829e53ba0826949a6f683a4ffdef0af329",
@@ -296,11 +333,12 @@
       "percentage": 1.4789,
       "tier": "gold",
       "firstSeen": 61526088,
-      "holdingDays": 0,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "14789054.391984582791377767"
     },
     {
       "address": "0x5237454dac7d259dd88b34ceb17e195dca0a3f4d",
@@ -308,11 +346,12 @@
       "percentage": 1.4591,
       "tier": "gold",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "14590674.434809930935545335"
     },
     {
       "address": "0x172b4e1e7c0772c4dbe152914cef9e9f427c7585",
@@ -320,11 +359,12 @@
       "percentage": 1.2253,
       "tier": "gold",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0xe375805d3fb202d028939bb39d2ba9385ffffde6",
@@ -332,11 +372,12 @@
       "percentage": 1.2253,
       "tier": "gold",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0x89c132e654699c953c6ddb4e27e7cbcd19b13e8a",
@@ -344,11 +385,12 @@
       "percentage": 1.2253,
       "tier": "gold",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0x3283b4937d1bbfda4b24d9f110c5731ce209244e",
@@ -356,23 +398,12 @@
       "percentage": 1.2253,
       "tier": "gold",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
-    },
-    {
-      "address": "0xfb28a731959997bf41e57397209bab78cd2a0406",
-      "balance": "12252509.1",
-      "percentage": 1.2253,
-      "tier": "gold",
-      "firstSeen": 61502177,
-      "holdingDays": 1,
-      "hasSold": false,
-      "airdropAmount": 88.56,
-      "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0x45d7032650c6a87804dbc7d226bb6c208393657e",
@@ -380,23 +411,64 @@
       "percentage": 1.208,
       "tier": "gold",
       "firstSeen": 61499658,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 140.77,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 140.77,
+      "totalReceived": "12079863.825457174019264734"
+    },
+    {
+      "address": "0x1f168a365bb70ed7ea8a8ac704de33a9c827fef3",
+      "balance": "11519230.478897607397480016",
+      "percentage": 1.1519,
+      "tier": "jeeter",
+      "firstSeen": 61527922,
+      "holdingDays": 2,
+      "hasSold": true,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "6476784.372942886720377773"
     },
     {
       "address": "0x38eb9a99ea4d612f7c516368242fb7dabffd1a75",
-      "balance": "9790105.80260394973378551",
-      "percentage": 0.979,
+      "balance": "9842018.545532989249306638",
+      "percentage": 0.9842,
       "tier": "silver",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 70.39,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 70.39,
+      "totalReceived": "8402382.535715601055764723"
+    },
+    {
+      "address": "0x343ad5e2d2e252ab6fd2aa11bf912db3f68b69aa",
+      "balance": "9417773.683783850861992025",
+      "percentage": 0.9418,
+      "tier": "silver",
+      "firstSeen": 61718340,
+      "holdingDays": 0,
+      "hasSold": false,
+      "airdropAmount": 70.39,
+      "boostPercentage": 0,
+      "totalWithBoost": 70.39,
+      "totalReceived": "9417773.683783850861992025"
+    },
+    {
+      "address": "0x4331a800cb0b8a6c8838458b692d263bf2c62271",
+      "balance": "9132316.890534857713351006",
+      "percentage": 0.9132,
+      "tier": "silver",
+      "firstSeen": 61722331,
+      "holdingDays": 0,
+      "hasSold": false,
+      "airdropAmount": 70.39,
+      "boostPercentage": 0,
+      "totalWithBoost": 70.39,
+      "totalReceived": "9132316.890534857713351006"
     },
     {
       "address": "0x364711325767c86c78169519ca7eb4157edfda33",
@@ -404,11 +476,12 @@
       "percentage": 0.894,
       "tier": "silver",
       "firstSeen": 61499753,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 70.39,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 70.39,
+      "totalReceived": "7447482.273870554245537701"
     },
     {
       "address": "0x9a62ddf4d3860780182ec79e0c97eb62a98a94f1",
@@ -416,35 +489,25 @@
       "percentage": 0.7908,
       "tier": "silver",
       "firstSeen": 61499786,
+      "holdingDays": 2,
+      "hasSold": false,
+      "airdropAmount": 70.39,
+      "boostPercentage": 0,
+      "totalWithBoost": 70.39,
+      "totalReceived": "6459510.899564063510164102"
+    },
+    {
+      "address": "0x19610fd5779a1661d1f6d63d5095fb115aa4da20",
+      "balance": "6126254.0",
+      "percentage": 0.6126,
+      "tier": "silver",
+      "firstSeen": 61697874,
       "holdingDays": 1,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 70.39,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
-    },
-    {
-      "address": "0x1f168a365bb70ed7ea8a8ac704de33a9c827fef3",
-      "balance": "5687821.476292498160839001",
-      "percentage": 0.5688,
-      "tier": "jeeter",
-      "firstSeen": 61527922,
-      "holdingDays": 0,
-      "hasSold": true,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
-    },
-    {
-      "address": "0x87664c30cfba8fe860439bbf94e3521686dec0de",
-      "balance": "5322851.94375",
-      "percentage": 0.5323,
-      "tier": "jeeter",
-      "firstSeen": 61502177,
-      "holdingDays": 1,
-      "hasSold": true,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 70.39,
+      "totalReceived": "6126254.0"
     },
     {
       "address": "0xf8ed3a12832b106b0edc947b007c64439ad74402",
@@ -452,11 +515,12 @@
       "percentage": 0.5182,
       "tier": "silver",
       "firstSeen": 61525053,
-      "holdingDays": 0,
+      "holdingDays": 2,
       "hasSold": false,
-      "airdropAmount": 88.56,
+      "airdropAmount": 70.39,
       "boostPercentage": 0,
-      "totalWithBoost": 88.56
+      "totalWithBoost": 70.39,
+      "totalReceived": "5181521.171955286178965389"
     },
     {
       "address": "0x7f6b62f8c9becdd0ce3ea1128913bff3fc10964e",
@@ -464,11 +528,12 @@
       "percentage": 0.4885,
       "tier": "jeeter",
       "firstSeen": 61501131,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": true,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "0.0"
     },
     {
       "address": "0xe010ac8ad2ee906afe285621a2b80824d1ad732c",
@@ -476,23 +541,12 @@
       "percentage": 0.4676,
       "tier": "bronze",
       "firstSeen": 61582951,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
-    },
-    {
-      "address": "0x783501b95b8da6916115a45704b7f69825152aa9",
-      "balance": "4376513.654447224076943637",
-      "percentage": 0.4377,
-      "tier": "jeeter",
-      "firstSeen": 61499863,
-      "holdingDays": 1,
-      "hasSold": true,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "4675660.624793272775281299"
     },
     {
       "address": "0x0220159b31f41cd6f38034f2a9804e5c091ed5bc",
@@ -500,11 +554,25 @@
       "percentage": 0.406,
       "tier": "bronze",
       "firstSeen": 61549646,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "4059583.615700822556441293"
+    },
+    {
+      "address": "0x87664c30cfba8fe860439bbf94e3521686dec0de",
+      "balance": "3992138.957812",
+      "percentage": 0.3992,
+      "tier": "jeeter",
+      "firstSeen": 61502177,
+      "holdingDays": 2,
+      "hasSold": true,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0xb0174be79fa0ecd84ad1cce059914695079d8505",
@@ -512,11 +580,12 @@
       "percentage": 0.2844,
       "tier": "bronze",
       "firstSeen": 61685745,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "2844379.267636403785912304"
     },
     {
       "address": "0x57b87fc8332256b0cf47426e44fbb66223c4a12b",
@@ -524,23 +593,12 @@
       "percentage": 0.2509,
       "tier": "bronze",
       "firstSeen": 61625472,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
-    },
-    {
-      "address": "0x7614a361217fcfe9a7f5cb8d950b40514d7b45aa",
-      "balance": "2307365.995550618457123357",
-      "percentage": 0.2307,
-      "tier": "bronze",
-      "firstSeen": 61524972,
-      "holdingDays": 0,
-      "hasSold": false,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "2509408.808179466443003297"
     },
     {
       "address": "0xe6e7284ddc793fdc15c8cdfbde49a2b7e2b234ed",
@@ -548,11 +606,12 @@
       "percentage": 0.2017,
       "tier": "jeeter",
       "firstSeen": 61506765,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": true,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "2689972.518736101620262093"
     },
     {
       "address": "0xd11c45d5acc519a0bdf469c93f8818d9ef44b8da",
@@ -560,23 +619,12 @@
       "percentage": 0.1907,
       "tier": "bronze",
       "firstSeen": 61504587,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
-    },
-    {
-      "address": "0xe231cec2acd8721e3d8b2c0fc2d981bad100f5de",
-      "balance": "1889527.500022282718885391",
-      "percentage": 0.189,
-      "tier": "bronze",
-      "firstSeen": 61624301,
-      "holdingDays": 0,
-      "hasSold": false,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "1907253.941744112821728663"
     },
     {
       "address": "0xadbf525ce598d5d306f347a6f49b3bf08e09cd69",
@@ -584,11 +632,12 @@
       "percentage": 0.1312,
       "tier": "bronze",
       "firstSeen": 61544198,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "1312051.193270294898641789"
     },
     {
       "address": "0x782bdee22753ea3e5a4c16cbf8887a098d13b432",
@@ -596,11 +645,12 @@
       "percentage": 0.1114,
       "tier": "jeeter",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": true,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0xdfb2e6486507a90c820a634f59483470e621ac4b",
@@ -608,11 +658,12 @@
       "percentage": 0.1114,
       "tier": "jeeter",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": true,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "12252509.1"
     },
     {
       "address": "0x05b5e20e567e37c073d822707034da0f88694354",
@@ -620,11 +671,12 @@
       "percentage": 0.1028,
       "tier": "bronze",
       "firstSeen": 61508560,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "1028349.768408082631749313"
     },
     {
       "address": "0x20e18e1e9894a79437f3ca683b28b8fa2f2cdbd6",
@@ -632,11 +684,25 @@
       "percentage": 0.0814,
       "tier": "bronze",
       "firstSeen": 61531216,
+      "holdingDays": 2,
+      "hasSold": false,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "814051.974056986425597794"
+    },
+    {
+      "address": "0x8afa420adf9a881aad7d7e1341074709a822820d",
+      "balance": "808158.865274693513965112",
+      "percentage": 0.0808,
+      "tier": "bronze",
+      "firstSeen": 61706744,
       "holdingDays": 0,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "808158.865274693513965112"
     },
     {
       "address": "0x7886acebc8401bd6b1cf397d84b85d01416e4c06",
@@ -644,11 +710,25 @@
       "percentage": 0.0619,
       "tier": "bronze",
       "firstSeen": 61508818,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "619097.95184659521057895"
+    },
+    {
+      "address": "0x441e84474c138ee19a5f31d1453b354b69d91a3f",
+      "balance": "568125.883455942048824035",
+      "percentage": 0.0568,
+      "tier": "bronze",
+      "firstSeen": 61748068,
+      "holdingDays": 0,
+      "hasSold": false,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "568125.883455942048824035"
     },
     {
       "address": "0x93ca20c5cce9cd3ff6b1341f5ebbcb862b21f7f0",
@@ -656,35 +736,38 @@
       "percentage": 0.0534,
       "tier": "bronze",
       "firstSeen": 61499978,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
-    },
-    {
-      "address": "0x580837bf30d5e3ec24c409887e809ffd11ef4bed",
-      "balance": "518485.22670897184312581",
-      "percentage": 0.0518,
-      "tier": "bronze",
-      "firstSeen": 61499786,
-      "holdingDays": 1,
-      "hasSold": false,
-      "airdropAmount": 0,
-      "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "533975.55230788722007294"
     },
     {
       "address": "0x7cf4b7ca3da9627cbb0366884a2c3eca2426f8e8",
-      "balance": "387862.728808502078281302",
-      "percentage": 0.0388,
+      "balance": "489546.637768452995353126",
+      "percentage": 0.049,
       "tier": "bronze",
       "firstSeen": 61499631,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "489546.637768452995353126"
+    },
+    {
+      "address": "0xfb72945dd4693a4ac24dbf1410baccb8e9a87337",
+      "balance": "320841.177656192377724653",
+      "percentage": 0.0321,
+      "tier": "bronze",
+      "firstSeen": 61747033,
+      "holdingDays": 0,
+      "hasSold": false,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "320841.177656192377724653"
     },
     {
       "address": "0x50001e67d44460f0d4eb725dc25a603b5e077940",
@@ -692,11 +775,12 @@
       "percentage": 0.0156,
       "tier": "bronze",
       "firstSeen": 61666962,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "155969.365342421207907408"
     },
     {
       "address": "0x7a45d397d4328f853bf6b3f6d4fdf9ff4e90ab02",
@@ -704,11 +788,12 @@
       "percentage": 0.0113,
       "tier": "bronze",
       "firstSeen": 61515511,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "112584.924461909688937046"
     },
     {
       "address": "0xaf87e4df58d735ec2971d2d8db663b02ca60175d",
@@ -716,11 +801,12 @@
       "percentage": 0.0076,
       "tier": "bronze",
       "firstSeen": 61502177,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "0.0"
     },
     {
       "address": "0xdcc70fcf5554df9375675027e7bbcdd0605820db",
@@ -728,11 +814,25 @@
       "percentage": 0.0073,
       "tier": "bronze",
       "firstSeen": 61635258,
-      "holdingDays": 0,
+      "holdingDays": 1,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "73418.136296948478171202"
+    },
+    {
+      "address": "0x580837bf30d5e3ec24c409887e809ffd11ef4bed",
+      "balance": "59716.801223633308831936",
+      "percentage": 0.006,
+      "tier": "jeeter",
+      "firstSeen": 61499786,
+      "holdingDays": 2,
+      "hasSold": true,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "531165.602999536104787984"
     },
     {
       "address": "0xbf6eb14f4d885dc2d94049f3d6064617d01b993f",
@@ -740,17 +840,31 @@
       "percentage": 0.0047,
       "tier": "bronze",
       "firstSeen": 61499843,
-      "holdingDays": 1,
+      "holdingDays": 2,
       "hasSold": false,
       "airdropAmount": 0,
       "boostPercentage": 0,
-      "totalWithBoost": 0
+      "totalWithBoost": 0,
+      "totalReceived": "47291.782484312276712879"
+    },
+    {
+      "address": "0xc416064b7ba3bb670e41a94901df928710026fe3",
+      "balance": "4189.6284962421964345",
+      "percentage": 0.0004,
+      "tier": "bronze",
+      "firstSeen": 61729877,
+      "holdingDays": 0,
+      "hasSold": false,
+      "airdropAmount": 0,
+      "boostPercentage": 0,
+      "totalWithBoost": 0,
+      "totalReceived": "4189.6284962421964345"
     }
   ],
   "totals": {
-    "totalCro": "11807.5483",
-    "totalToken": "121079334.5827",
-    "airdropCro": "2361.5097",
-    "airdropToken": "24215866.9165"
+    "totalCro": "16423.3153",
+    "totalToken": "108393860.9831",
+    "airdropCro": "3284.6631",
+    "airdropToken": "21678772.1966"
   }
 }

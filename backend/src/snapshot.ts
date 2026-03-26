@@ -30,6 +30,7 @@ interface HolderRecord {
   airdropAmount: number;
   boostPercentage: number;
   totalWithBoost: number;
+  totalReceived: string;
 }
 
 interface Snapshot {
@@ -143,7 +144,7 @@ export async function takeSnapshot() {
   // Scan Transfer events to find all holders
   console.log('Scanning transfer events...');
   const filter = token.filters.Transfer();
-  const holders = new Map<string, { balance: bigint; firstSeen: number }>();
+  const holders = new Map<string, { balance: bigint; firstSeen: number; totalReceived: bigint }>();
   const sellers = loadSellers();
 
   // Exclude buyback wallet addresses and DEX pair from seller tracking
@@ -168,7 +169,8 @@ export async function takeSnapshot() {
       const events = await token.queryFilter(filter, from, to);
       for (const event of events) {
         const log = event as ethers.EventLog;
-        const [fromAddr, toAddr] = log.args;
+        const [fromAddr, toAddr, value] = log.args;
+        const amount = BigInt(value || 0n);
         const fromLower = fromAddr.toLowerCase();
         const toLower = toAddr.toLowerCase();
 
@@ -187,11 +189,14 @@ export async function takeSnapshot() {
 
         // Track first seen
         if (!holders.has(toLower)) {
-          holders.set(toLower, { balance: 0n, firstSeen: log.blockNumber });
+          holders.set(toLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n });
         }
         if (!holders.has(fromLower)) {
-          holders.set(fromLower, { balance: 0n, firstSeen: log.blockNumber });
+          holders.set(fromLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n });
         }
+        // Accumulate total received
+        const toInfo = holders.get(toLower)!;
+        toInfo.totalReceived += amount;
       }
     } catch (err) {
       console.error(`Error scanning blocks ${from}-${to}:`, err);
@@ -238,6 +243,7 @@ export async function takeSnapshot() {
         airdropAmount: 0,
         boostPercentage: boost,
         totalWithBoost: 0,
+        totalReceived: ethers.formatUnits(info.totalReceived, decimals),
       });
     } catch {
       // Skip failed balance checks

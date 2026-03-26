@@ -11,6 +11,7 @@ interface HolderData {
   hasSold: boolean;
   tier: string;
   balance: string;
+  totalReceived?: string;
   airdropAmount: number;
   boostPercentage: number;
   totalWithBoost: number;
@@ -230,6 +231,32 @@ export default function TradersJeetersPage() {
                           </span>
                         )}
                       </div>
+                      {/* Dump progress bar */}
+                      {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
+                        const received = parseFloat(h.totalReceived!);
+                        const remaining = balanceNum;
+                        const soldAmount = received - remaining;
+                        const soldPct = Math.min(100, Math.max(0, (soldAmount / received) * 100));
+                        const remainPct = 100 - soldPct;
+                        const fmt = (n: number) => n >= 1e6 ? `${(n/1e6).toFixed(1)}M` : n >= 1e3 ? `${(n/1e3).toFixed(0)}K` : Math.round(n).toLocaleString();
+                        return (
+                          <div className="mt-3">
+                            <div className="flex justify-between text-[10px] text-gray-500 mb-1">
+                              <span>Received: <span className="text-gray-400">{fmt(received)}</span></span>
+                              <span>Sold: <span className="text-red-400">{fmt(soldAmount > 0 ? soldAmount : 0)}</span> ({soldPct.toFixed(0)}%)</span>
+                            </div>
+                            <div className="h-2 rounded-full overflow-hidden bg-black/40 border border-white/5">
+                              <div className="h-full flex">
+                                <div className="bg-red-500/60 transition-all" style={{ width: `${soldPct}%` }} />
+                                <div className="bg-green-500/40 transition-all" style={{ width: `${remainPct}%` }} />
+                              </div>
+                            </div>
+                            <div className="text-[10px] text-gray-600 mt-0.5">
+                              Still holding <span className="text-green-400">{fmt(remaining)}</span> ({remainPct.toFixed(0)}%)
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                     {/* Value column for traders */}
                     {isTrader && hodlUsd > 0 && balanceNum > 0 && (

@@ -58,6 +58,10 @@ function LaunchCountdown() {
           Sell $HODL
           <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
+        <a href="https://obsidian.finance/crommunities/DOAihlJE4hZzculY6ct6/contests/1" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-black font-bold text-lg hover:from-green-400 hover:to-green-500 transition-all hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] hover:scale-105 animate-pulse">
+          TRADING CONTEST LIVE $$$
+          <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </a>
       </div>
     );
   }
@@ -100,7 +104,6 @@ interface WalletBalance {
 const WALLET_DEFAULTS = [
   { label: '35% airdropped back to hodlers', pct: '35%', address: '0x36148b668edc1d380671467579ee851a72b9455c', color: 'text-gold-400', border: 'border-gold-400/30', bg: 'bg-gold-400/5', gradient: 'from-gold-400 to-gold-600', tokenName: '$HODL' },
   { label: '$CLG', pct: '33%', address: '0x04407f3cc344df8c271b56bd42f9a169659266fc', color: 'text-diamond-400', border: 'border-diamond-400/30', bg: 'bg-diamond-400/5', gradient: 'from-diamond-400 to-diamond-600', tokenName: '$CLG' },
-  { label: 'Rotating', pct: '32%', address: '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', color: 'text-pink-400', border: 'border-pink-400/30', bg: 'bg-pink-400/5', gradient: 'from-pink-400 to-pink-600', tokenName: 'Community Vote' },
 ];
 
 function formatBalance(val: string): string {
@@ -254,7 +257,7 @@ export default function Hero() {
               );
             })()}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto">
               {WALLET_DEFAULTS.map((w) => {
                 const live = walletBalances.find(b => b.address.toLowerCase() === w.address.toLowerCase());
                 const croVal = live ? formatBalance(live.croBalance) : '0';
