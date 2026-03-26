@@ -74,11 +74,12 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   );
 }
 
-export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0, lastUpdated = null }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number; lastUpdated?: string | null }) {
+export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0, treasuryClg = 0, lastUpdated = null }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number; treasuryClg?: number; lastUpdated?: string | null }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [croUsd, setCroUsd] = useState(0);
   const [hodlUsd, setHodlUsd] = useState(0);
+  const [clgUsd, setClgUsd] = useState(0);
 
   useEffect(() => {
     fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
@@ -88,6 +89,10 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
     fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
       .then(res => res.json())
       .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
+      .catch(() => {});
+    fetch('https://api.dexscreener.com/latest/dex/tokens/0x08d9cb5100C306C2909B63415d7ff05268633b41')
+      .then(res => res.json())
+      .then(data => { if (data.pairs?.[0]?.priceUsd) setClgUsd(parseFloat(data.pairs[0].priceUsd)); })
       .catch(() => {});
   }, []);
 
@@ -188,7 +193,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       const tierHolders = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
-                      const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
+                      const clgPerPerson = tierHolders.length > 0 ? (treasuryClg * 0.2 * tierPct) / tierHolders.length : 0;
+                      const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd) + (clgPerPerson * clgUsd);
                       return <div className="text-sm font-bold text-gold-400">{totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
                     })() : <div className="text-sm font-bold text-gold-400">{holder.eligible && holder.airdropAmount > 0 ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>}
                   </div>
@@ -202,7 +208,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       const tierHolders = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
-                      const baseUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
+                      const clgPerPerson = tierHolders.length > 0 ? (treasuryClg * 0.2 * tierPct) / tierHolders.length : 0;
+                      const baseUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd) + (clgPerPerson * clgUsd);
                       let total = 0;
                       for (let cycle = 0; cycle < 6; cycle++) {
                         const boost = 1 + (Math.min(cycle, 5) * 0.03);
@@ -247,7 +254,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           const th = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                           const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                           const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
-                          return `$${((holder.airdropAmount * croUsd) + (hp * hodlUsd)).toFixed(2)}`;
+                          const cp = th.length > 0 ? (treasuryClg * 0.2 * tp) / th.length : 0;
+                          return `$${((holder.airdropAmount * croUsd) + (hp * hodlUsd) + (cp * clgUsd)).toFixed(2)}`;
                         })() : '-'}</div>
                       </div>
                       <div>
@@ -260,7 +268,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           const th = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                           const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                           const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
-                          const base = (holder.airdropAmount * croUsd) + (hp * hodlUsd);
+                          const cp = th.length > 0 ? (treasuryClg * 0.2 * tp) / th.length : 0;
+                          const base = (holder.airdropAmount * croUsd) + (hp * hodlUsd) + (cp * clgUsd);
                           let t = 0; for (let c = 0; c < 6; c++) t += base * (1 + Math.min(c, 5) * 0.03);
                           return `$${t.toFixed(2)}`;
                         })() : '-'}</div>
