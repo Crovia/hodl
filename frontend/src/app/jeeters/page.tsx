@@ -100,7 +100,7 @@ export default function TradersJeetersPage() {
             <img
               src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyb3Z5OHgydDRrbTB0anl4YXFuNXVvdXQxc2sxZHJ4MjFiYnUzMnFvdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vX9WcCiWwUF7G/source.gif"
               alt="Shame"
-              className="w-72 h-72 object-contain rounded-xl"
+              className="w-[36rem] h-[36rem] object-contain rounded-xl"
             />
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4">
