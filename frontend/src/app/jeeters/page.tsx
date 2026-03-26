@@ -12,6 +12,8 @@ interface HolderData {
   tier: string;
   balance: string;
   totalReceived?: string;
+  firstBuyTime?: string;
+  lastSellTime?: string;
   airdropAmount: number;
   boostPercentage: number;
   totalWithBoost: number;
@@ -23,6 +25,16 @@ const cryImages = [
 ];
 
 const TRADER_THRESHOLD = 0.2; // >0.2% = trader, <=0.2% = jeeter
+
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
 
 const OG_ADDRESSES = new Set([
   '0xaf87e4df58d735ec2971d2d8db663b02ca60175d', '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3',
@@ -205,7 +217,7 @@ export default function TradersJeetersPage() {
                           <span className="text-purple-400 font-bold text-sm">{cronosId}</span>
                         )}
                         <span className="text-xs text-gray-600">
-                          Held {h.holdingDays}d before selling
+                          {h.lastSellTime ? `Last sold ${timeAgo(h.lastSellTime)}` : `Held ${h.holdingDays}d before selling`}
                         </span>
                       </div>
                       <a

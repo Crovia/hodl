@@ -25,6 +25,8 @@ interface HolderRecord {
   percentage: number;
   tier: 'diamond' | 'gold' | 'silver' | 'bronze' | 'jeeter';
   firstSeen: number; // block number
+  firstBuyTime: string; // ISO timestamp
+  lastSellTime?: string; // ISO timestamp
   holdingDays: number;
   hasSold: boolean;
   airdropAmount: number;
@@ -144,7 +146,7 @@ export async function takeSnapshot() {
   // Scan Transfer events to find all holders
   console.log('Scanning transfer events...');
   const filter = token.filters.Transfer();
-  const holders = new Map<string, { balance: bigint; firstSeen: number; totalReceived: bigint }>();
+  const holders = new Map<string, { balance: bigint; firstSeen: number; totalReceived: bigint; lastSellBlock: number }>();
   const sellers = loadSellers();
 
   // Exclude buyback wallet addresses and DEX pair from seller tracking
@@ -185,14 +187,19 @@ export async function takeSnapshot() {
           toLower !== CONFIG.TOKEN_ADDRESS.toLowerCase()
         ) {
           sellers.add(fromLower);
+          // Track last sell block
+          const fromInfo = holders.get(fromLower);
+          if (fromInfo) {
+            fromInfo.lastSellBlock = log.blockNumber;
+          }
         }
 
         // Track first seen
         if (!holders.has(toLower)) {
-          holders.set(toLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n });
+          holders.set(toLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n, lastSellBlock: 0 });
         }
         if (!holders.has(fromLower)) {
-          holders.set(fromLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n });
+          holders.set(fromLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n, lastSellBlock: 0 });
         }
         // Accumulate total received
         const toInfo = holders.get(toLower)!;
@@ -227,10 +234,20 @@ export async function takeSnapshot() {
 
       const blocksDiff = blockNumber - info.firstSeen;
       const holdingDays = Math.floor(blocksDiff / 172800);
+      const secondsDiff = blocksDiff * 0.5;
+      const firstBuyTimestamp = (block?.timestamp || Math.floor(Date.now() / 1000)) - secondsDiff;
+      const firstBuyTime = new Date(firstBuyTimestamp * 1000).toISOString();
 
       const hasSold = sellers.has(address);
       const boost = hasSold ? 0 : getBoost(holdingDays);
       const finalTier = hasSold ? 'jeeter' as const : tier;
+
+      let lastSellTime: string | undefined;
+      if (hasSold && info.lastSellBlock > 0) {
+        const sellSecondsDiff = (blockNumber - info.lastSellBlock) * 0.5;
+        const sellTimestamp = (block?.timestamp || Math.floor(Date.now() / 1000)) - sellSecondsDiff;
+        lastSellTime = new Date(sellTimestamp * 1000).toISOString();
+      }
 
       holderRecords.push({
         address,
@@ -238,6 +255,8 @@ export async function takeSnapshot() {
         percentage: Math.round(percentage * 10000) / 10000,
         tier: finalTier,
         firstSeen: info.firstSeen,
+        firstBuyTime,
+        lastSellTime,
         holdingDays,
         hasSold,
         airdropAmount: 0,

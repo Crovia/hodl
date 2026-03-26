@@ -82,9 +82,13 @@ export default function HoldersPage() {
         .then(res => res.json())
         .then(data => {
           if (data.holders?.length > 0) {
+            const EXCLUDED_FROM_AIRDROP = new Set([
+              '0xb4c50913f70b870f68e6143126163ba0e9186ad7', // Liquidity Pool
+              '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3', // Obsidian Finance
+            ]);
             const liveHolders: Holder[] = data.holders.map((h: Holder) => ({
               ...h,
-              eligible: !h.hasSold && h.tier !== 'jeeter' && h.tier !== 'bronze' && h.airdropAmount > 0,
+              eligible: !h.hasSold && h.tier !== 'jeeter' && h.tier !== 'bronze' && !EXCLUDED_FROM_AIRDROP.has(h.address.toLowerCase()),
             }));
             setHolders(liveHolders);
           }
