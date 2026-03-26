@@ -69,11 +69,15 @@ export default function TaxAllocation() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/holders')
-      .then(res => res.json())
-      .then(setData)
-      .catch(err => console.error('Failed to fetch wallets:', err))
-      .finally(() => setLoading(false));
+    const load = () => {
+      fetch('/api/holders')
+        .then(res => res.json())
+        .then(d => { setData(d); setLoading(false); })
+        .catch(err => { console.error('Failed to fetch wallets:', err); setLoading(false); });
+    };
+    load();
+    const interval = setInterval(load, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const wallets = data?.wallets || [];
@@ -117,10 +121,10 @@ export default function TaxAllocation() {
         </div>
 
         {/* Wallet Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
           {loading ? (
-            <div className="md:col-span-2 text-center py-12 text-gray-500">Loading wallet balances...</div>
-          ) : wallets.filter(w => w.token !== 'Rotating').map((wallet) => {
+            <div className="md:col-span-3 text-center py-12 text-gray-500">Loading wallet balances...</div>
+          ) : wallets.map((wallet) => {
             const colors: Record<string, { gradient: string; bg: string; border: string; glow: string }> = {
               '$HODL': {
                 gradient: 'from-gold-400 to-gold-600',
@@ -134,8 +138,14 @@ export default function TaxAllocation() {
                 border: 'border-diamond-400/30',
                 glow: 'hover:shadow-[0_0_30px_rgba(54,191,250,0.15)]',
               },
+              'Rotating': {
+                gradient: 'from-pink-400 to-pink-600',
+                bg: 'bg-pink-400/5',
+                border: 'border-pink-400/30',
+                glow: 'hover:shadow-[0_0_30px_rgba(236,72,153,0.15)]',
+              },
             };
-            const c = colors[wallet.token] || colors['$HODL'];
+            const c = colors[wallet.token] || colors['Rotating'];
             const croBalance = Number(wallet.croBalance);
             const airdropAmount = croBalance * 0.20;
 
