@@ -47,23 +47,34 @@ export default function AirdropPool({
   const [loading, setLoading] = useState(true);
   const [croUsd, setCroUsd] = useState(0);
   const [hodlUsd, setHodlUsd] = useState(0);
+  const [clgUsd, setClgUsd] = useState(0);
 
   useEffect(() => {
-    fetch('/api/holders')
-      .then(res => res.json())
-      .then(setWalletData)
-      .catch(err => console.error('Failed to fetch wallets:', err))
-      .finally(() => setLoading(false));
-
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
-      .then(res => res.json())
-      .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
-      .catch(() => {});
-
-    fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
-      .then(res => res.json())
-      .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
-      .catch(() => {});
+    const loadWallets = () => {
+      fetch('/api/wallets')
+        .then(res => res.json())
+        .then(d => { setWalletData(d); setLoading(false); })
+        .catch(() => setLoading(false));
+    };
+    const loadPrices = () => {
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+        .then(res => res.json())
+        .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+        .catch(() => {});
+      fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
+        .then(res => res.json())
+        .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
+        .catch(() => {});
+      fetch('https://api.dexscreener.com/latest/dex/tokens/0x08d9cb5100C306C2909B63415d7ff05268633b41')
+        .then(res => res.json())
+        .then(data => { if (data.pairs?.[0]?.priceUsd) setClgUsd(parseFloat(data.pairs[0].priceUsd)); })
+        .catch(() => {});
+    };
+    loadWallets();
+    loadPrices();
+    const walletInterval = setInterval(loadWallets, 60000);
+    const priceInterval = setInterval(loadPrices, 120000);
+    return () => { clearInterval(walletInterval); clearInterval(priceInterval); };
   }, []);
 
   const totalCro = Number(walletData?.totals?.totalCro || 0);
@@ -74,9 +85,11 @@ export default function AirdropPool({
   // Total $HODL across all wallets
   const totalHodl = Number(walletData?.totals?.totalToken || 0);
   const totalHodlUsd = totalHodl * hodlUsd;
+  const totalClg = wallets.reduce((s, w) => s + Number(w.clgBalance || 0), 0);
+  const totalClgUsd = totalClg * clgUsd;
 
-  // Total treasury in USD = CRO value + $HODL token value
-  const totalUsd = (totalCro * croUsd) + totalHodlUsd;
+  // Total treasury in USD = CRO + $HODL + $CLG
+  const totalUsd = (totalCro * croUsd) + totalHodlUsd + totalClgUsd;
   const airdropUsd = (totalUsd * distributionPct) / 100;
   const pricesReady = croUsd > 0;
 
@@ -140,7 +153,7 @@ export default function AirdropPool({
                 {loading ? '...' : pricesReady && totalUsd > 0 ? `$${formatCro(totalUsd)}` : 'TBA'}
               </div>
               {pricesReady && totalCro > 0 && (
-                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL</div>
+                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg)} $CLG`}</div>
               )}
             </div>
             <div className="p-6 text-center">
@@ -205,10 +218,11 @@ export default function AirdropPool({
                 const isRotating = wallet.id === 'ROTATING';
                 const isDhand = wallet.id === 'DHAND';
 
-                // Total wallet value in USD (CRO + tokens)
+                // Total wallet value in USD (CRO + $HODL + $CLG)
                 const croValueUsd = croBalance * croUsd;
-                const tokenValueUsd = isDhand ? tokenBalance * hodlUsd : 0;
-                const walletTotalUsd = croValueUsd + tokenValueUsd;
+                const hodlValueUsd = tokenBalance * hodlUsd;
+                const clgValueUsd = clgBalance * clgUsd;
+                const walletTotalUsd = croValueUsd + hodlValueUsd + clgValueUsd;
                 const walletAirdropUsd = walletTotalUsd * (distributionPct / 100);
 
                 return (
@@ -257,19 +271,22 @@ export default function AirdropPool({
                             {croUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(croValueUsd)}</div>}
                           </div>
                         </div>
-                        {isDhand && tokenBalance > 0 && (
+                        {tokenBalance > 0 && (
                           <div className="flex items-center justify-between p-3 rounded-lg bg-black/40">
                             <span className="text-xs text-gray-500 uppercase">$HODL</span>
                             <div className="text-right">
-                              <div className="text-sm font-bold text-white">{formatCro(tokenBalance)}</div>
-                              {hodlUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(tokenValueUsd)}</div>}
+                              <div className="text-sm font-bold text-gold-400">{formatCro(tokenBalance)}</div>
+                              {hodlUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(hodlValueUsd)}</div>}
                             </div>
                           </div>
                         )}
-                        {wallet.id === 'CLG' && clgBalance > 0 && (
+                        {clgBalance > 0 && (
                           <div className="flex items-center justify-between p-3 rounded-lg bg-black/40">
                             <span className="text-xs text-gray-500 uppercase">$CLG</span>
-                            <div className="text-sm font-bold text-diamond-400">{formatCro(clgBalance)}</div>
+                            <div className="text-right">
+                              <div className="text-sm font-bold text-diamond-400">{formatCro(clgBalance)}</div>
+                              {clgUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(clgValueUsd)}</div>}
+                            </div>
                           </div>
                         )}
                       </div>

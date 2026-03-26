@@ -226,7 +226,8 @@ export async function takeSnapshot() {
 
     try {
       const balance = await token.balanceOf(address);
-      if (balance === 0n) continue;
+      const isSeller = sellers.has(address);
+      if (balance === 0n && !isSeller) continue;
 
       const balanceNum = Number(ethers.formatUnits(balance, decimals));
       const percentage = (balanceNum / totalSupplyNum) * 100;
