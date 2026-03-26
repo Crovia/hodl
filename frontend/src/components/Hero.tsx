@@ -115,6 +115,7 @@ export default function Hero() {
   const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
   const [croUsd, setCroUsd] = useState(0);
   const [hodlUsd, setHodlUsd] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     const loadWallets = () => {
@@ -123,6 +124,7 @@ export default function Hero() {
         .then(data => {
           if (data.wallets) setWalletBalances(data.wallets);
           else if (Array.isArray(data)) setWalletBalances(data);
+          if (data.timestamp) setLastUpdated(data.timestamp);
         })
         .catch(() => {});
     };
@@ -263,7 +265,10 @@ export default function Hero() {
           {/* Tax Treasury */}
           <div className="mt-12">
             <h3 className="text-3xl md:text-4xl font-black diamond-text mb-2">Tax Treasury</h3>
-            <p className="text-gray-400 mb-8">100% of taxes are used for buybacks and airdrops. Fully transparent on-chain.</p>
+            <p className="text-gray-400 mb-2">100% of taxes are used for buybacks and airdrops. Fully transparent on-chain.</p>
+            {lastUpdated && (
+              <p className="text-gray-600 text-sm mb-6">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
+            )}
 
             {/* Total collected */}
             {(() => {

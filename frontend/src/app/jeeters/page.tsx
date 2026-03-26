@@ -21,12 +21,13 @@ const cryImages = [
   '/cry18.png', '/cry23.png', '/cry25.png',
 ];
 
-const TRADER_THRESHOLD = 0.1; // >0.1% = trader, <=0.1% = jeeter
+const TRADER_THRESHOLD = 0.2; // >0.2% = trader, <=0.2% = jeeter
 
 export default function TradersJeetersPage() {
   const [allHolders, setAllHolders] = useState<HolderData[]>([]);
   const [hodlUsd, setHodlUsd] = useState(0);
   const [tab, setTab] = useState<'traders' | 'jeeters'>('traders');
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     const load = () => {
@@ -34,6 +35,7 @@ export default function TradersJeetersPage() {
         .then(res => res.json())
         .then(data => {
           if (data.holders) setAllHolders(data.holders);
+          if (data.timestamp) setLastUpdated(data.timestamp);
         })
         .catch(() => {});
     };
@@ -89,8 +91,13 @@ export default function TradersJeetersPage() {
             These wallets sold or transferred $HODL tokens. Disqualified from airdrops.
           </p>
           <p className="text-gray-600 text-sm">
-            Traders still hold &gt;0.1% of supply. Jeeters dumped almost everything.
+            Traders still hold &gt;0.2% of supply. Jeeters dumped almost everything.
           </p>
+          {lastUpdated && (
+            <p className="text-gray-600 text-xs mt-3">
+              Last updated: {new Date(lastUpdated).toLocaleString()}
+            </p>
+          )}
         </div>
 
         {/* Tab switcher */}
@@ -126,7 +133,7 @@ export default function TradersJeetersPage() {
           </span>
           <span className="text-gray-500 text-sm ml-2">
             {tab === 'traders'
-              ? `${current.length === 1 ? 'wallet' : 'wallets'} sold but still holding >0.1%`
+              ? `${current.length === 1 ? 'wallet' : 'wallets'} sold but still holding >0.2%`
               : `${current.length === 1 ? 'wallet has' : 'wallets have'} been fully disqualified`
             }
           </span>
@@ -230,7 +237,7 @@ export default function TradersJeetersPage() {
             </div>
             <div className="text-sm text-gray-600">
               {tab === 'traders'
-                ? 'No one has sold while holding >0.1%. Good.'
+                ? 'No one has sold while holding >0.2%. Good.'
                 : 'No full dumpers yet. Everyone still has skin in the game.'
               }
             </div>

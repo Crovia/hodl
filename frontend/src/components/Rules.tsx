@@ -153,160 +153,6 @@ export default function Rules() {
           </div>
         </div>
 
-        {/* Minimum hold period */}
-        <div className="glass-card rounded-2xl p-6 border border-gold-400/20 mt-6">
-          <div className="flex items-start gap-4">
-            <span className="text-3xl">&#9203;</span>
-            <div>
-              <h4 className="text-gold-400 font-bold text-lg mb-1">10-Day Minimum Hold</h4>
-              <p className="text-gray-400">
-                To be eligible for airdrops you must hold for at least 10 days. You can&apos;t buy 1 day before an airdrop and collect — the chain tracks when you bought.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Rotating Token Phases */}
-        <div className="glass-card rounded-2xl overflow-hidden mt-6">
-          <div className="p-6 border-b border-gold-400/10">
-            <h3 className="text-xl font-bold text-white text-center">Rotating Token Phases</h3>
-          </div>
-          <div className="p-6 space-y-3">
-            {[
-              { phase: 'Phase 1', desc: 'Voted by community', color: 'border-pink-400/30', phaseColor: 'text-pink-400' },
-              { phase: 'Phase 2', desc: 'Decided by founder', color: 'border-gray-600', phaseColor: 'text-gray-400' },
-              { phase: 'Phase 3', desc: 'Voted by community', color: 'border-pink-400/30', phaseColor: 'text-pink-400' },
-              { phase: 'Phase 4', desc: 'Decided by founder', color: 'border-gray-600', phaseColor: 'text-gray-400' },
-            ].map((p) => (
-              <div key={p.phase} className={`flex items-center gap-4 p-3 rounded-lg bg-black/40 border-l-2 ${p.color}`}>
-                <span className={`font-bold text-sm w-16 ${p.phaseColor}`}>{p.phase}</span>
-                <span className="text-sm text-gray-400">{p.desc}</span>
-              </div>
-            ))}
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-black/40 border-l-2 border-gray-700">
-              <span className="font-bold text-sm w-16 text-gray-500">Phase 5+</span>
-              <span className="text-sm text-gray-500">Pattern continues — alternating every 2 weeks between community vote and founder</span>
-            </div>
-          </div>
-          <div className="p-4 mx-6 mb-6 rounded-lg bg-gold-400/5 border border-gold-400/20">
-            <p className="text-sm text-gray-400">
-              <span className="text-gold-400 font-bold">Voting: </span>
-              Rotating token is voted by the community. Each person can suggest one token to be voted on. Previously bought tokens cannot be suggested again.
-              Diamond Hands get <span className="text-diamond-400 font-bold">3 votes</span>,
-              Gold Hands get <span className="text-gold-400 font-bold">2 votes</span>,
-              Silver Hands get <span className="text-white font-bold">1 vote</span>.
-            </p>
-          </div>
-        </div>
-
-        {/* Treasury Example */}
-        <div className="glass-card rounded-2xl overflow-hidden mt-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
-            {[
-              { label: 'Total Treasury', value: '300 CRO', color: 'text-white' },
-              { label: 'Next Airdrop (20%)', value: '60 CRO', color: 'text-gold-400' },
-              { label: 'Stays in Treasury', value: '240 CRO', color: 'text-gray-300' },
-              { label: 'Distribution', value: 'Every ~10d', color: 'text-diamond-400' },
-            ].map((stat) => (
-              <div key={stat.label} className="p-5 text-center">
-                <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-1">{stat.label}</div>
-                <div className={`text-xl md:text-2xl font-black ${stat.color}`}>{stat.value}</div>
-              </div>
-            ))}
-          </div>
-          <div className="p-6 space-y-4 border-t border-white/5">
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-black/40">
-              <span className="text-yellow-400 text-lg mt-0.5">&#9889;</span>
-              <p className="text-sm text-gray-400">
-                <span className="text-yellow-400 font-bold">No funds are burned: </span>
-                You will receive them back. If you just hold? Simple. All taxes go to buybacks and airdrops — nothing is wasted.
-              </p>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-black/40">
-              <span className="text-diamond-400 text-lg mt-0.5">&#128142;</span>
-              <p className="text-sm text-gray-400">
-                <span className="text-diamond-400 font-bold">Diamond Path: </span>
-                $HODL holders who still hold after 30 days get a 10% boost every month, up to 100%. Who&apos;s the real Diamond Hand?
-              </p>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-black/40">
-              <span className="text-green-400 text-lg mt-0.5">&#9989;</span>
-              <p className="text-sm text-gray-400">
-                <span className="text-green-400 font-bold">Tax Reduction Schedule: </span>
-                Launch tax starts at 10%. Drops 1% every 10 days down to 5%. Further reductions decided by majority of Diamond Hand holders.
-              </p>
-            </div>
-            <div className="flex items-start gap-3 p-4 rounded-lg bg-black/40">
-              <span className="text-gray-400 text-lg mt-0.5">&#128172;</span>
-              <p className="text-sm text-gray-400">
-                <span className="text-purple-400 font-bold">Community-Driven: </span>
-                Tax adjustments, phase token selection, and project direction are decided among Diamond Hand holders. Your voice matters — join the conversation and help shape what comes next.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Tokenomics */}
-        <div className="mt-16 glass-card rounded-2xl overflow-hidden p-8">
-          <h3 className="text-2xl font-black mb-8">
-            <span className="text-gold-400">Tokenomics</span>
-          </h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="text-lg font-bold text-white mb-4">Tax Distribution</h4>
-              <div className="space-y-3">
-                {[
-                  { label: 'Launch Tax', value: '10%', dot: 'bg-gold-400' },
-                  { label: 'Tax Reduction', value: '-1% every 10 days', dot: 'bg-diamond-400' },
-                  { label: 'Minimum Tax', value: '5%', dot: 'bg-green-400' },
-                  { label: 'Burned', value: 'ZERO', dot: 'bg-gray-500' },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
-                      <span className="text-sm text-gray-300">{item.label}</span>
-                    </div>
-                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-              <h4 className="text-lg font-bold text-white mt-6 mb-4">Buyback Split</h4>
-              <div className="space-y-3">
-                {[
-                  { label: '$HODL buyback', value: '35%', dot: 'bg-gold-400' },
-                  { label: '$CLG', value: '33%', dot: 'bg-purple-400' },
-                  { label: 'Rotating tokens', value: '32%', dot: 'bg-pink-400' },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
-                      <span className="text-sm text-gray-300">{item.label}</span>
-                    </div>
-                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="text-lg font-bold text-white mb-4">How It Works</h4>
-              <div className="space-y-3">
-                {[
-                  { title: '100% Airdropped', desc: 'All taxes are used to buy tokens and airdrop them to holders. No funds are burned — you will receive them back. Exception: Dexscreener is paid with taxes, and any other possible costs are agreed with the Diamond holders first. If you just hold? Simple.', color: 'text-gold-400' },
-                  { title: '~10 Day Cycles', desc: 'Every ~10 days, buybacks are executed and tokens airdropped. Equal amounts distributed to holders based on their tier (Diamond, Gold, Silver).', color: 'text-diamond-400' },
-                  { title: 'Diamond Path', desc: '$HODL holders who still hold after 30 days get a 10% boost every month, up to 100%. Who\'s the real Diamond Hand?', color: 'text-purple-400' },
-                  { title: 'Rotating 32%', desc: '32% of buybacks go to rotating tokens. Each phase is voted by the community — one suggestion per person, no repeats from previous phases.', color: 'text-pink-400' },
-                  { title: 'Sell = Permanent Ban', desc: 'If you sell or transfer any tokens, you are permanently disqualified from all future airdrops. The chain sees everything.', color: 'text-red-400' },
-                ].map((item) => (
-                  <div key={item.title} className="p-4 rounded-lg bg-black/40">
-                    <div className={`font-bold text-sm mb-1 ${item.color}`}>{item.title}</div>
-                    <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Tier System */}
         <div className="mt-16">
           <div className="text-center mb-12">
@@ -375,6 +221,100 @@ export default function Rules() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rotating Token Phases */}
+        <div className="glass-card rounded-2xl overflow-hidden mt-6">
+          <div className="p-6 border-b border-gold-400/10">
+            <h3 className="text-xl font-bold text-white text-center">Rotating Token Phases</h3>
+          </div>
+          <div className="p-6 space-y-3">
+            {[
+              { phase: 'Phase 1', desc: 'Voted by community', color: 'border-pink-400/30', phaseColor: 'text-pink-400' },
+              { phase: 'Phase 2', desc: 'Decided by founder', color: 'border-gray-600', phaseColor: 'text-gray-400' },
+              { phase: 'Phase 3', desc: 'Voted by community', color: 'border-pink-400/30', phaseColor: 'text-pink-400' },
+              { phase: 'Phase 4', desc: 'Decided by founder', color: 'border-gray-600', phaseColor: 'text-gray-400' },
+            ].map((p) => (
+              <div key={p.phase} className={`flex items-center gap-4 p-3 rounded-lg bg-black/40 border-l-2 ${p.color}`}>
+                <span className={`font-bold text-sm w-16 ${p.phaseColor}`}>{p.phase}</span>
+                <span className="text-sm text-gray-400">{p.desc}</span>
+              </div>
+            ))}
+            <div className="flex items-center gap-4 p-3 rounded-lg bg-black/40 border-l-2 border-gray-700">
+              <span className="font-bold text-sm w-16 text-gray-500">Phase 5+</span>
+              <span className="text-sm text-gray-500">Pattern continues — alternating every 2 weeks between community vote and founder</span>
+            </div>
+          </div>
+          <div className="p-4 mx-6 mb-6 rounded-lg bg-gold-400/5 border border-gold-400/20">
+            <p className="text-sm text-gray-400">
+              <span className="text-gold-400 font-bold">Voting: </span>
+              Rotating token is voted by the community. Each person can suggest one token to be voted on. Previously bought tokens cannot be suggested again.
+              Diamond Hands get <span className="text-diamond-400 font-bold">3 votes</span>,
+              Gold Hands get <span className="text-gold-400 font-bold">2 votes</span>,
+              Silver Hands get <span className="text-white font-bold">1 vote</span>.
+            </p>
+          </div>
+        </div>
+
+        {/* Tokenomics */}
+        <div className="mt-16 glass-card rounded-2xl overflow-hidden p-8">
+          <h3 className="text-2xl font-black mb-8">
+            <span className="text-gold-400">Tokenomics</span>
+          </h3>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="text-lg font-bold text-white mb-4">Tax Distribution</h4>
+              <div className="space-y-3">
+                {[
+                  { label: 'Launch Tax', value: '10%', dot: 'bg-gold-400' },
+                  { label: 'Tax Reduction', value: '-1% every 10 days', dot: 'bg-diamond-400' },
+                  { label: 'Minimum Tax', value: '5%', dot: 'bg-green-400' },
+                  { label: 'Burned', value: 'ZERO', dot: 'bg-gray-500' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
+                      <span className="text-sm text-gray-300">{item.label}</span>
+                    </div>
+                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-lg font-bold text-white mt-6 mb-4">Buyback Split</h4>
+              <div className="space-y-3">
+                {[
+                  { label: '$HODL buyback', value: '35%', dot: 'bg-gold-400' },
+                  { label: '$CLG', value: '33%', dot: 'bg-purple-400' },
+                  { label: 'Rotating tokens', value: '32%', dot: 'bg-pink-400' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-black/40">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2.5 h-2.5 rounded-full ${item.dot}`} />
+                      <span className="text-sm text-gray-300">{item.label}</span>
+                    </div>
+                    <span className="text-sm font-bold text-gold-400">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-white mb-4">How It Works</h4>
+              <div className="space-y-3">
+                {[
+                  { title: '100% Airdropped', desc: 'All taxes are used to buy tokens and airdrop them to holders. No funds are burned — you will receive them back. Exception: Dexscreener is paid with taxes, and any other possible costs are agreed with the Diamond holders first. If you just hold? Simple.', color: 'text-gold-400' },
+                  { title: '~10 Day Cycles', desc: 'Every ~10 days, buybacks are executed and tokens airdropped. Equal amounts distributed to holders based on their tier (Diamond, Gold, Silver).', color: 'text-diamond-400' },
+                  { title: 'Diamond Path', desc: '$HODL holders get a +3% boost every 10 days they hold. 10d = +3%, 20d = +6%, 30d = +9%, and so on. The longer you hold, the more you earn.', color: 'text-purple-400' },
+                  { title: 'Rotating 32%', desc: '32% of buybacks go to rotating tokens. Each phase is voted by the community — one suggestion per person, no repeats from previous phases.', color: 'text-pink-400' },
+                  { title: 'Sell = Permanent Ban', desc: 'If you sell or transfer any tokens, you are permanently disqualified from all future airdrops. The chain sees everything.', color: 'text-red-400' },
+                ].map((item) => (
+                  <div key={item.title} className="p-4 rounded-lg bg-black/40">
+                    <div className={`font-bold text-sm mb-1 ${item.color}`}>{item.title}</div>
+                    <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

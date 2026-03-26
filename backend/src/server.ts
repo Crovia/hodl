@@ -301,6 +301,7 @@ async function runAutoSnapshot() {
     };
 
     const walletsLive = {
+      timestamp: new Date().toISOString(),
       wallets: snapshot.walletBalances,
       totals: {
         totalCro: snapshot.totalWalletsCro,

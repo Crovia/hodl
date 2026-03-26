@@ -13,6 +13,7 @@ interface WalletData {
 
 interface WalletsResponse {
   wallets: WalletData[];
+  timestamp?: string;
   totals: {
     totalCro: string;
     totalToken: string;
@@ -91,6 +92,11 @@ export default function TaxAllocation() {
             Diamond Hands get 55%, Gold Hands get 30%, Silver Hands get 15% of the airdrop pool.
             Exception: Dexscreener is paid with taxes, and any other possible costs are agreed with the Diamond holders first.
           </p>
+          {data?.timestamp && (
+            <p className="text-gray-600 text-sm mt-3">
+              Last updated: {new Date(data.timestamp).toLocaleString()}
+            </p>
+          )}
         </div>
 
         {/* Distribution bar */}

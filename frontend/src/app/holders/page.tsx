@@ -83,7 +83,7 @@ export default function HoldersPage() {
           if (data.holders?.length > 0) {
             const liveHolders: Holder[] = data.holders.map((h: Holder) => ({
               ...h,
-              eligible: !h.hasSold && h.tier !== 'jeeter',
+              eligible: !h.hasSold && h.tier !== 'jeeter' && h.tier !== 'bronze' && h.airdropAmount > 0,
             }));
             setHolders(liveHolders);
           }

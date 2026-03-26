@@ -70,13 +70,12 @@ export default function AirdropPool({
   const distributionPct = walletData?.totals?.distributionPct || 20;
   const wallets = walletData?.wallets || [];
 
-  // Get $HODL token balance from the DHAND wallet (0x3614...)
-  const dhandWallet = wallets.find(w => w.id === 'DHAND');
-  const hodlTokenBalance = Number(dhandWallet?.tokenBalance || 0);
-  const hodlTokenUsd = hodlTokenBalance * hodlUsd;
+  // Total $HODL across all wallets
+  const totalHodl = Number(walletData?.totals?.totalToken || 0);
+  const totalHodlUsd = totalHodl * hodlUsd;
 
   // Total treasury in USD = CRO value + $HODL token value
-  const totalUsd = (totalCro * croUsd) + hodlTokenUsd;
+  const totalUsd = (totalCro * croUsd) + totalHodlUsd;
   const airdropUsd = (totalUsd * distributionPct) / 100;
   const pricesReady = croUsd > 0;
 
@@ -137,7 +136,7 @@ export default function AirdropPool({
                 {loading ? '...' : pricesReady && totalUsd > 0 ? `$${formatCro(totalUsd)}` : 'TBA'}
               </div>
               {pricesReady && totalCro > 0 && (
-                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(hodlTokenBalance)} $HODL</div>
+                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL</div>
               )}
             </div>
             <div className="p-6 text-center">

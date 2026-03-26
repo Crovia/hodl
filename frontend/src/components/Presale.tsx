@@ -394,7 +394,7 @@ export default function Presale() {
                   </div>
                   <div className="p-4 rounded-lg bg-black/40 border border-diamond-400/10">
                     <div className="text-diamond-400 font-bold text-sm mb-1">Diamond Path</div>
-                    <p className="text-sm text-gray-400">$HODL holders who still hold after 30 days get a 10% boost every month, up to 100%. Who&apos;s the real Diamond Hand?</p>
+                    <p className="text-sm text-gray-400">$HODL holders get a +3% boost every 10 days they hold. 10d = +3%, 20d = +6%, 30d = +9%, and so on.</p>
                   </div>
                   <div className="p-4 rounded-lg bg-black/40 border border-pink-400/10">
                     <div className="text-pink-400 font-bold text-sm mb-1">Rotating 32%</div>
