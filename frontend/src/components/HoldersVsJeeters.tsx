@@ -44,9 +44,20 @@ interface HolderData {
   percentage: number;
   balance: string;
   totalReceived?: string;
+  firstBuyTime?: string;
   tier: string;
   holdingDays: number;
   hasSold: boolean;
+}
+
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
 }
 
 function fmtTokens(n: number): string {
@@ -153,10 +164,11 @@ export default function HoldersVsJeeters() {
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-bold text-white truncate">{getName(h.address)}</div>
                       <div className="text-xs text-gray-500">
-                        {h.holdingDays}d holding &middot; {h.percentage}%
+                        {h.firstBuyTime ? `Bought ${timeAgo(h.firstBuyTime)}` : `${h.holdingDays}d holding`}
                         {h.totalReceived && parseFloat(h.totalReceived) > 0 && (
-                          <span> &middot; Bought {fmtTokens(parseFloat(h.totalReceived))}</span>
+                          <span className="text-gold-400"> &middot; {fmtTokens(parseFloat(h.totalReceived))} tokens</span>
                         )}
+                        <span> &middot; {h.percentage}%</span>
                       </div>
                     </div>
                     <span className={`${cfg.css} px-2 py-0.5 rounded-full text-[10px] font-bold text-white`}>
@@ -193,13 +205,14 @@ export default function HoldersVsJeeters() {
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
                     <div className="text-xs text-gray-600">
-                      Held {h.holdingDays}d &middot; Was {h.percentage}%
+                      {h.firstBuyTime ? `Bought ${timeAgo(h.firstBuyTime)}` : `Held ${h.holdingDays}d`}
                       {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
                         const received = parseFloat(h.totalReceived!);
                         const remaining = parseFloat(h.balance || '0');
                         const sold = received - remaining;
                         return (
                           <>
+                            <span className="text-gray-500"> &middot; Bought {fmtTokens(received)}</span>
                             <span className="text-red-400"> &middot; Sold {fmtTokens(sold > 0 ? sold : 0)}</span>
                             {remaining > 0 && <span className="text-green-400"> &middot; Left {fmtTokens(remaining)}</span>}
                           </>

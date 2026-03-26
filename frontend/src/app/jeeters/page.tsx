@@ -78,12 +78,12 @@ export default function TradersJeetersPage() {
   );
 
   const traders = useMemo(
-    () => sold.filter(h => h.percentage > TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
+    () => sold.filter(h => h.percentage >= TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
     [sold]
   );
 
   const jeeters = useMemo(
-    () => sold.filter(h => h.percentage <= TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
+    () => sold.filter(h => h.percentage < TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
     [sold]
   );
 
@@ -93,14 +93,14 @@ export default function TradersJeetersPage() {
   const { cronosIds } = useCronosIds(allAddresses);
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-8 px-6">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
             <img
               src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyb3Z5OHgydDRrbTB0anl4YXFuNXVvdXQxc2sxZHJ4MjFiYnUzMnFvdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vX9WcCiWwUF7G/source.gif"
               alt="Shame"
-              className="w-[36rem] h-[36rem] object-contain rounded-xl"
+              className="w-[36rem] h-auto object-contain rounded-xl"
             />
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4">
@@ -154,7 +154,7 @@ export default function TradersJeetersPage() {
           </span>
           <span className="text-gray-500 text-sm ml-2">
             {tab === 'traders'
-              ? `${current.length === 1 ? 'wallet' : 'wallets'} sold but still holding >0.2%`
+              ? `${current.length === 1 ? 'wallet' : 'wallets'} sold tokens — still holding ≥0.2%`
               : `${current.length === 1 ? 'wallet has' : 'wallets have'} been fully disqualified`
             }
           </span>
