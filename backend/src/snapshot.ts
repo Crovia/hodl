@@ -201,9 +201,15 @@ export async function takeSnapshot() {
         if (!holders.has(fromLower)) {
           holders.set(fromLower, { balance: 0n, firstSeen: log.blockNumber, totalReceived: 0n, lastSellBlock: 0 });
         }
-        // Accumulate total received
-        const toInfo = holders.get(toLower)!;
-        toInfo.totalReceived += amount;
+        // Accumulate total received — only count real transfers (not tax/contract internal)
+        if (
+          fromAddr !== ethers.ZeroAddress &&
+          fromLower !== CONFIG.TOKEN_ADDRESS.toLowerCase() &&
+          fromLower !== CONFIG.TAX_WALLET.toLowerCase()
+        ) {
+          const toInfo = holders.get(toLower)!;
+          toInfo.totalReceived += amount;
+        }
       }
     } catch (err) {
       console.error(`Error scanning blocks ${from}-${to}:`, err);
