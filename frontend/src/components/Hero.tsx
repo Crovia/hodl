@@ -219,49 +219,8 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Contract info */}
-        <div className="mt-8 space-y-3">
-          <div className="flex items-center justify-center gap-2 text-sm">
-            <span className="text-gray-500">Ticker:</span>
-            <span className="text-gold-400 font-bold text-lg">$HODL</span>
-          </div>
-          <div className="flex items-center justify-center gap-2 text-sm">
-            <span className="text-gray-500">Contract:</span>
-            <a
-              href="https://cronoscan.com/address/0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-gold-400 hover:text-gold-300 transition-colors pointer-events-auto break-all"
-            >
-              0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A
-            </a>
-            <button
-              onClick={() => navigator.clipboard.writeText('0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A')}
-              className="text-gray-600 hover:text-gold-400 transition-colors pointer-events-auto"
-              title="Copy CA"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-            </button>
-          </div>
-          <div className="flex items-center justify-center gap-2 text-sm">
-            <span className="text-gray-500">Creator:</span>
-            <a
-              href="https://cronoscan.com/address/0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-gray-400 hover:text-gold-400 transition-colors pointer-events-auto break-all"
-            >
-              0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D
-            </a>
-          </div>
-          <div className="flex items-center justify-center gap-4 text-sm pt-2">
-            <a href="https://dexscreener.com/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-bold transition-colors pointer-events-auto">DexScreener</a>
-            <span className="text-gray-600">|</span>
-            <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold transition-colors pointer-events-auto">Buy on CRO.trade</a>
-          </div>
-
+        {/* Tax Treasury */}
+        <div className="mt-8">
           {/* Tax Treasury */}
           <div className="mt-12">
             <h3 className="text-3xl md:text-4xl font-black diamond-text mb-2">Tax Treasury</h3>

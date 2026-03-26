@@ -116,10 +116,10 @@ export default function TaxAllocation() {
           <p className="text-center text-sm text-gray-500">32% goes to rotating tokens — rotates every phase</p>
         </div>
 
-        {/* 3 Wallet Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        {/* Wallet Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-3xl mx-auto">
           {loading ? (
-            <div className="md:col-span-3 text-center py-12 text-gray-500">Loading wallet balances...</div>
+            <div className="md:col-span-2 text-center py-12 text-gray-500">Loading wallet balances...</div>
           ) : wallets.filter(w => w.token !== 'Rotating').map((wallet) => {
             const colors: Record<string, { gradient: string; bg: string; border: string; glow: string }> = {
               '$HODL': {
@@ -192,63 +192,6 @@ export default function TaxAllocation() {
               </div>
             );
           })}
-          {/* Rotating community-voted token card */}
-          {(() => {
-            const rotatingWallet = wallets.find(w => w.token === 'Rotating');
-            const croBalance = rotatingWallet ? Number(rotatingWallet.croBalance) : 0;
-            const airdropAmount = croBalance * 0.20;
-            return (
-              <div className="glass-card rounded-2xl p-6 bg-pink-400/5 border-pink-400/30 transition-all duration-300">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-black bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">
-                    Rotating
-                  </span>
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-pink-400 to-pink-600 text-black">
-                    32%
-                  </span>
-                </div>
-
-                {rotatingWallet && (
-                  <div className="mb-4">
-                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Wallet</div>
-                    <div className="flex items-center gap-1.5">
-                      <a
-                        href={`https://cronoscan.com/address/${rotatingWallet.address}#tokentxns`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-sm text-white hover:text-gold-400 transition-colors underline decoration-gray-500 hover:decoration-gold-400"
-                        title="View on Cronoscan"
-                      >
-                        {truncateAddress(rotatingWallet.address)}
-                      </a>
-                      <CopyButton address={rotatingWallet.address} />
-                    </div>
-                  </div>
-                )}
-
-                <div className="p-4 rounded-xl bg-black/30 mb-3">
-                  <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">CRO Balance</div>
-                  <div className="text-2xl font-black text-white">
-                    {rotatingWallet ? `${formatCro(croBalance)} CRO` : 'TBA'}
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-black/30 border border-gold-400/10 mb-3">
-                  <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">Next Airdrop (20%)</div>
-                  <div className="text-xl font-bold text-gold-400">
-                    {rotatingWallet ? `${formatCro(airdropAmount)} CRO` : 'TBA'}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Remaining 80% stays &amp; accumulates
-                  </div>
-                </div>
-
-                <div className="text-center text-sm text-pink-400 font-medium">
-                  Token decided by community vote
-                </div>
-              </div>
-            );
-          })()}
         </div>
       </div>
     </section>

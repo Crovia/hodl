@@ -160,6 +160,16 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       ? <span className="text-sm font-medium text-white truncate" title={holder.address}>{name}</span>
                       : <span className="font-mono text-sm text-gray-400">{truncateAddress(holder.address)}</span>
                     }
+                    <button
+                      onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(holder.address); }}
+                      className="p-0.5 rounded hover:bg-white/10 transition-colors text-gray-600 hover:text-gold-400 flex-shrink-0"
+                      title="Copy address"
+                    >
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                      </svg>
+                    </button>
                     {isOg && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30 flex-shrink-0">OG</span>}
                     {holder.hasSold && <span className="text-xs text-red-400 font-bold flex-shrink-0">SOLD</span>}
                   </div>
