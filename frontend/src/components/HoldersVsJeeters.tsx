@@ -11,6 +11,7 @@ interface HolderData {
   balance: string;
   totalReceived?: string;
   firstBuyTime?: string;
+  lastSellTime?: string;
   tier: string;
   holdingDays: number;
   hasSold: boolean;
@@ -88,8 +89,14 @@ export default function HoldersVsJeeters() {
     .slice(0, 5);
 
   // Latest 5 jeeters
-  const latestJeeters = holders
+  const latestJeeters = [...holders]
     .filter(h => h.hasSold || h.tier === 'jeeter')
+    .sort((a, b) => {
+      if (a.lastSellTime && b.lastSellTime) return new Date(b.lastSellTime).getTime() - new Date(a.lastSellTime).getTime();
+      if (a.lastSellTime) return -1;
+      if (b.lastSellTime) return 1;
+      return 0;
+    })
     .slice(0, 5);
 
   return (
@@ -171,22 +178,19 @@ export default function HoldersVsJeeters() {
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
                     <div className="text-xs text-gray-600">
-                      {h.firstBuyTime ? `Bought ${timeAgo(h.firstBuyTime)}` : `Held ${h.holdingDays}d`}
+                      {h.lastSellTime ? <span className="text-red-400">Sold {timeAgo(h.lastSellTime)}</span> : 'Sold'}
                       {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
                         const received = parseFloat(h.totalReceived!);
                         const remaining = parseFloat(h.balance || '0');
                         const sold = received - remaining;
                         return (
                           <>
-                            <span className="text-gray-500"> &middot; Bought {fmtTokens(received)}</span>
-                            <span className="text-red-400"> &middot; Sold {fmtTokens(sold > 0 ? sold : 0)}</span>
-                            {remaining > 0 && <span className="text-green-400"> &middot; Left {fmtTokens(remaining)}</span>}
+                            <span className="text-red-400"> &middot; {fmtTokens(sold > 0 ? sold : 0)} dumped</span>
+                            {remaining > 0 && <span className="text-green-400"> &middot; {fmtTokens(remaining)} left</span>}
                           </>
                         );
                       })()}
-                      {!h.totalReceived && h.balance && parseFloat(h.balance) > 0 && (
-                        <span className="text-gray-500"> &middot; Holds {fmtTokens(parseFloat(h.balance))}</span>
-                      )}
+                      {h.firstBuyTime && <span className="text-gray-500"> &middot; Bought {timeAgo(h.firstBuyTime)}</span>}
                     </div>
                   </div>
                   <span className="tier-jeeter px-2 py-0.5 rounded-full text-[10px] font-bold text-white">
