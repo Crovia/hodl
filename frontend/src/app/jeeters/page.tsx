@@ -259,8 +259,8 @@ export default function TradersJeetersPage() {
                             </div>
                             <div className="h-2 rounded-full overflow-hidden bg-black/40 border border-white/5">
                               <div className="h-full flex">
+                                <div className="bg-green-500/60 transition-all" style={{ width: `${remainPct}%` }} />
                                 <div className="bg-red-500/60 transition-all" style={{ width: `${soldPct}%` }} />
-                                <div className="bg-green-500/40 transition-all" style={{ width: `${remainPct}%` }} />
                               </div>
                             </div>
                             <div className="text-[10px] text-gray-600 mt-0.5">
