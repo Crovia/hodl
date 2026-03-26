@@ -210,6 +210,19 @@ export async function takeSnapshot() {
     }
   }
 
+  // Load previous snapshot for fallback data
+  const prevDir = ensureDataDir().snapshotsDir;
+  const prevFiles = fs.readdirSync(prevDir).filter(f => f.endsWith('.json')).sort().reverse();
+  const prevHolders = new Map<string, HolderRecord>();
+  if (prevFiles.length > 0) {
+    try {
+      const prev = JSON.parse(fs.readFileSync(path.join(prevDir, prevFiles[0]), 'utf-8'));
+      for (const h of prev.holders || []) {
+        prevHolders.set(h.address.toLowerCase(), h);
+      }
+    } catch {}
+  }
+
   // Get current balances for all holders
   console.log(`Fetching balances for ${holders.size} addresses...`);
   const holderRecords: HolderRecord[] = [];
@@ -225,7 +238,26 @@ export async function takeSnapshot() {
     if (excludeAddresses.has(address)) continue;
 
     try {
-      const balance = await token.balanceOf(address);
+      // Retry balance fetch up to 3 times
+      let balance = 0n;
+      let fetchSuccess = false;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          balance = await token.balanceOf(address);
+          fetchSuccess = true;
+          break;
+        } catch {
+          if (attempt < 2) await new Promise(r => setTimeout(r, 500));
+        }
+      }
+      if (!fetchSuccess) {
+        // Use previous snapshot data if available
+        const prev = prevHolders.get(address);
+        if (prev) {
+          holderRecords.push(prev);
+        }
+        continue;
+      }
       const isSeller = sellers.has(address);
       if (balance === 0n && !isSeller) continue;
 
@@ -266,7 +298,11 @@ export async function takeSnapshot() {
         totalReceived: ethers.formatUnits(info.totalReceived, decimals),
       });
     } catch {
-      // Skip failed balance checks
+      // Fall back to previous snapshot data
+      const prev = prevHolders.get(address);
+      if (prev) {
+        holderRecords.push(prev);
+      }
     }
   }
 
