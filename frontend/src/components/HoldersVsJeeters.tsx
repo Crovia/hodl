@@ -186,7 +186,7 @@ export default function HoldersVsJeeters() {
                         return (
                           <>
                             <span className="text-red-400"> &middot; {fmtTokens(sold > 0 ? sold : 0)} dumped</span>
-                            {remaining > 0 && <span className="text-green-400"> &middot; {fmtTokens(remaining)} left</span>}
+                            <span className={remaining > 0 ? 'text-green-400' : 'text-gray-500'}> &middot; {remaining > 0 ? fmtTokens(remaining) : '0'} left</span>
                           </>
                         );
                       })()}
