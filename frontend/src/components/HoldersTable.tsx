@@ -171,13 +171,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    {holder.eligible && croUsd > 0 ? (() => {
-                      const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                    {holder.eligible && holder.airdropAmount > 0 && croUsd > 0 ? (() => {
+                      const tierHolders = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
                       const totalUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
                       return <div className="text-sm font-bold text-gold-400">{totalUsd >= 1000 ? `$${(totalUsd/1000).toFixed(1)}K` : `$${totalUsd.toFixed(2)}`}</div>;
-                    })() : <div className="text-sm font-bold text-gold-400">{holder.eligible ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>}
+                    })() : <div className="text-sm font-bold text-gold-400">{holder.eligible && holder.airdropAmount > 0 ? `${holder.airdropAmount.toLocaleString()} CRO` : '-'}</div>}
                   </div>
                   <div className="text-right">
                     <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
@@ -185,8 +185,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    {holder.eligible && croUsd > 0 ? (() => {
-                      const tierHolders = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                    {holder.eligible && holder.airdropAmount > 0 && croUsd > 0 ? (() => {
+                      const tierHolders = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                       const tierPct = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                       const hodlPerPerson = tierHolders.length > 0 ? (treasuryHodl * 0.2 * tierPct) / tierHolders.length : 0;
                       const baseUsd = (holder.airdropAmount * croUsd) + (hodlPerPerson * hodlUsd);
@@ -230,8 +230,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
-                        <div className="font-bold text-gold-400">{holder.eligible && croUsd > 0 ? (() => {
-                          const th = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                        <div className="font-bold text-gold-400">{holder.eligible && holder.airdropAmount > 0 && croUsd > 0 ? (() => {
+                          const th = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                           const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                           const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
                           return `$${((holder.airdropAmount * croUsd) + (hp * hodlUsd)).toFixed(2)}`;
@@ -243,8 +243,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
-                        <div className="font-bold text-green-400">{holder.eligible && croUsd > 0 ? (() => {
-                          const th = holders.filter(h => h.tier === holder.tier && !h.hasSold);
+                        <div className="font-bold text-green-400">{holder.eligible && holder.airdropAmount > 0 && croUsd > 0 ? (() => {
+                          const th = holders.filter(h => h.tier === holder.tier && h.eligible && h.airdropAmount > 0);
                           const tp = holder.tier === 'diamond' ? 0.55 : holder.tier === 'gold' ? 0.30 : holder.tier === 'silver' ? 0.15 : 0;
                           const hp = th.length > 0 ? (treasuryHodl * 0.2 * tp) / th.length : 0;
                           const base = (holder.airdropAmount * croUsd) + (hp * hodlUsd);

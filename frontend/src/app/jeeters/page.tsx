@@ -23,6 +23,26 @@ const cryImages = [
 
 const TRADER_THRESHOLD = 0.2; // >0.2% = trader, <=0.2% = jeeter
 
+const OG_ADDRESSES = new Set([
+  '0xaf87e4df58d735ec2971d2d8db663b02ca60175d', '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3',
+  '0x7e3e91b6912042f8fc446385299785ac2f12c0d0', '0x52076d4f01440225e5a8babb77b3eb1391c617e6',
+  '0x32df940edbf734971af4707fe35f3ade91660358', '0xc3f1087176485ec5518cbc88169205ff26f75702',
+  '0x36d21fd7eafa01abc35578ea940c545dce8ac10c', '0x4e730ac6a1a9d53aef0239331d90e0da4642fbb5',
+  '0x8ad01ed7fc839e9523447ae7d00fba695ef9875f', '0x5148e8932a8f9e7bedb04303a12187e56446956c',
+  '0x5034e11bd0e61f2811396324b685cd58d2f6c206', '0x2270cbad5072b7685357ec83ddc959ffde535b27',
+  '0x1d9b981b7aba1a747883833fb8a1b5072eac5d8f', '0x3b428943ef1c49bf81ddb00f9a11e55811fc7b3c',
+  '0x499e30aea1540fda665412c779f00c6dd8a6d27d', '0xd45b551473f1819ef9fc9efa2c654b98eab21850',
+  '0x3868150e5ff9ec5b052a36f2d8a5d8bc348b4967', '0xf085359db5df9dfa01ef31a269d5cdf99685bd4a',
+  '0xece1b63218a249708b521e22bbaa7bac35f6f20f', '0x172b4e1e7c0772c4dbe152914cef9e9f427c7585',
+  '0x87664c30cfba8fe860439bbf94e3521686dec0de', '0xe375805d3fb202d028939bb39d2ba9385ffffde6',
+  '0x5237454dac7d259dd88b34ceb17e195dca0a3f4d', '0x0e4eacc2887a58d157a4a9f036f7499ffcc68831',
+  '0x89c132e654699c953c6ddb4e27e7cbcd19b13e8a', '0x3283b4937d1bbfda4b24d9f110c5731ce209244e',
+  '0x782bdee22753ea3e5a4c16cbf8887a098d13b432', '0x584b5505de4a4e7393e915b2e44593934d528d63',
+  '0xfb28a731959997bf41e57397209bab78cd2a0406', '0x212246c1bb44c4d70ecc1f6fe64c1fe68638624f',
+  '0xdfb2e6486507a90c820a634f59483470e621ac4b', '0x08c2ceeca0e01066b4e46081acc621a34e8e21f1',
+  '0x38eb9a99ea4d612f7c516368242fb7dabffd1a75',
+]);
+
 export default function TradersJeetersPage() {
   const [allHolders, setAllHolders] = useState<HolderData[]>([]);
   const [hodlUsd, setHodlUsd] = useState(0);
@@ -145,6 +165,7 @@ export default function TradersJeetersPage() {
               const hardcodedName = NAME_MAP[h.address.toLowerCase()];
               const cronosId = cronosIds[h.address.toLowerCase()];
               const isTrader = h.percentage > TRADER_THRESHOLD;
+              const isOg = OG_ADDRESSES.has(h.address.toLowerCase());
               const balanceNum = parseFloat(h.balance);
               const holdingUsd = balanceNum * hodlUsd;
 
@@ -173,6 +194,9 @@ export default function TradersJeetersPage() {
                         }`}>
                           {isTrader ? 'Trader' : 'Jeeter'}
                         </span>
+                        {isOg && (
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>
+                        )}
                         {hardcodedName && (
                           <span className="text-white font-bold text-sm">{hardcodedName}</span>
                         )}

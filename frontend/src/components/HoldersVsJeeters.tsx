@@ -42,6 +42,7 @@ const NAME_MAP: Record<string, string> = {
 interface HolderData {
   address: string;
   percentage: number;
+  balance: string;
   tier: string;
   holdingDays: number;
   hasSold: boolean;
@@ -222,7 +223,12 @@ export default function HoldersVsJeeters() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
-                    <div className="text-xs text-gray-600">Held {h.holdingDays}d &middot; Was {h.percentage}%</div>
+                    <div className="text-xs text-gray-600">
+                      Held {h.holdingDays}d &middot; Was {h.percentage}%
+                      {h.balance && parseFloat(h.balance) > 0 && (
+                        <span className="text-gray-500"> &middot; Holds {parseFloat(h.balance) >= 1e6 ? `${(parseFloat(h.balance)/1e6).toFixed(1)}M` : parseFloat(h.balance) >= 1e3 ? `${(parseFloat(h.balance)/1e3).toFixed(1)}K` : Math.round(parseFloat(h.balance)).toLocaleString()}</span>
+                      )}
+                    </div>
                   </div>
                   <span className="tier-jeeter px-2 py-0.5 rounded-full text-[10px] font-bold text-white">
                     Jeeter

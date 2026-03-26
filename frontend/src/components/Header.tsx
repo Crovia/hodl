@@ -46,7 +46,7 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="hidden sm:block px-5 py-2 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] no-underline">
+          <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="hidden sm:block px-5 py-2 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] no-underline">
             Buy $HODL
           </a>
 
@@ -81,7 +81,7 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="mt-2 w-full px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm text-center no-underline">
+            <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="mt-2 w-full px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm text-center no-underline">
               Buy $HODL
             </a>
           </div>

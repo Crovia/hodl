@@ -50,7 +50,7 @@ function LaunchCountdown() {
   if (launched) {
     return (
       <div className="flex justify-center gap-4 mb-12">
-        <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
+        <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] hover:scale-105">
           Buy $HODL
           <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
@@ -259,7 +259,7 @@ export default function Hero() {
           <div className="flex items-center justify-center gap-4 text-sm pt-2">
             <a href="https://dexscreener.com/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-bold transition-colors pointer-events-auto">DexScreener</a>
             <span className="text-gray-600">|</span>
-            <a href="https://obsidian.finance/swap?outputCurrency=0xF12D9cbd36738344b5D2281b21C323c8f1a07B1A" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold transition-colors pointer-events-auto">Buy on Obsidian</a>
+            <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold transition-colors pointer-events-auto">Buy on CRO.trade</a>
           </div>
 
           {/* Tax Treasury */}
