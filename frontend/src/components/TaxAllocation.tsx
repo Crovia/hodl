@@ -94,7 +94,6 @@ export default function TaxAllocation() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             All taxes are used to buyback tokens and airdrop them to holders.
             Diamond Hands get 55%, Gold Hands get 30%, Silver Hands get 15% of the airdrop pool.
-            Exception: Dexscreener is paid with taxes, and any other possible costs are agreed with the Diamond holders first.
           </p>
           {data?.timestamp && (
             <p className="text-gray-600 text-sm mt-3">
