@@ -97,7 +97,7 @@ export default function TaxAllocation() {
         .then(res => res.json())
         .then(d => { if (d.pair?.priceUsd) setHodlUsd(parseFloat(d.pair.priceUsd)); })
         .catch(() => {});
-      fetch(`https://api.dexscreener.com/latest/dex/tokens/${CLG_TOKEN}`)
+      fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xa40764b6878e6eb86fac5de4f1f1a80aa6fc67fe')
         .then(res => res.json())
         .then(d => { if (d.pairs?.[0]?.priceUsd) setClgUsd(parseFloat(d.pairs[0].priceUsd)); })
         .catch(() => {});

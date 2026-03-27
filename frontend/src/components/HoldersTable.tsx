@@ -101,7 +101,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
       .then(res => res.json())
       .then(data => { if (data.pair?.priceUsd) setHodlUsd(parseFloat(data.pair.priceUsd)); })
       .catch(() => {});
-    fetch('https://api.dexscreener.com/latest/dex/tokens/0x08d9cb5100C306C2909B63415d7ff05268633b41')
+    fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xa40764b6878e6eb86fac5de4f1f1a80aa6fc67fe')
       .then(res => res.json())
       .then(data => { if (data.pairs?.[0]?.priceUsd) setClgUsd(parseFloat(data.pairs[0].priceUsd)); })
       .catch(() => {});
