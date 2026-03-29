@@ -201,12 +201,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const cro = holder.airdropAmount;
-                      if (cro <= 0) return <div className="text-sm font-bold text-gold-400">-</div>;
                       if (croUsd > 0) {
-                        const usd = cro * croUsd;
+                        const usd = getAirdropPerPerson(holder.tier);
+                        if (usd <= 0) return <div className="text-sm font-bold text-gold-400">-</div>;
                         return <div className="text-sm font-bold text-gold-400">{usd >= 1000 ? `$${(usd/1000).toFixed(1)}K` : `$${usd.toFixed(2)}`}</div>;
                       }
+                      const cro = holder.airdropAmount;
+                      if (cro <= 0) return <div className="text-sm font-bold text-gold-400">-</div>;
                       return <div className="text-sm font-bold text-gold-400">{cro.toFixed(1)} CRO</div>;
                     })() : <div className="text-sm font-bold text-gold-400">-</div>}
                   </div>
@@ -217,14 +218,17 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
+                      if (croUsd > 0) {
+                        const perCycle = getAirdropPerPerson(holder.tier);
+                        if (perCycle <= 0) return <div className="text-sm font-bold text-green-400">-</div>;
+                        let total = 0;
+                        for (let cycle = 0; cycle < 6; cycle++) total += perCycle * (1 + Math.min(cycle, 5) * 0.03);
+                        return <div className="text-sm font-bold text-green-400">{total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
+                      }
                       const cro = holder.airdropAmount;
                       if (cro <= 0) return <div className="text-sm font-bold text-green-400">-</div>;
                       let totalCro = 0;
                       for (let cycle = 0; cycle < 6; cycle++) totalCro += cro * (1 + Math.min(cycle, 5) * 0.03);
-                      if (croUsd > 0) {
-                        const total = totalCro * croUsd;
-                        return <div className="text-sm font-bold text-green-400">{total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
-                      }
                       return <div className="text-sm font-bold text-green-400">{totalCro.toFixed(1)} CRO</div>;
                     })() : <div className="text-sm font-bold text-green-400">-</div>}
                   </div>
@@ -261,10 +265,12 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
                         <div className="font-bold text-gold-400">{holder.eligible ? (() => {
+                          if (croUsd > 0) {
+                            const usd = getAirdropPerPerson(holder.tier);
+                            return usd > 0 ? `$${usd.toFixed(2)}` : '-';
+                          }
                           const cro = holder.airdropAmount;
-                          if (cro <= 0) return '-';
-                          if (croUsd > 0) return `$${(cro * croUsd).toFixed(2)}`;
-                          return `${cro.toFixed(1)} CRO`;
+                          return cro > 0 ? `${cro.toFixed(1)} CRO` : '-';
                         })() : '-'}</div>
                       </div>
                       <div>
@@ -274,10 +280,15 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
                         <div className="font-bold text-green-400">{holder.eligible ? (() => {
+                          if (croUsd > 0) {
+                            const pp = getAirdropPerPerson(holder.tier);
+                            if (pp <= 0) return '-';
+                            let t = 0; for (let c = 0; c < 6; c++) t += pp * (1 + Math.min(c, 5) * 0.03);
+                            return `$${t.toFixed(2)}`;
+                          }
                           const cro = holder.airdropAmount;
                           if (cro <= 0) return '-';
                           let totalCro = 0; for (let c = 0; c < 6; c++) totalCro += cro * (1 + Math.min(c, 5) * 0.03);
-                          if (croUsd > 0) return `$${(totalCro * croUsd).toFixed(2)}`;
                           return `${totalCro.toFixed(1)} CRO`;
                         })() : '-'}</div>
                       </div>
