@@ -13,25 +13,29 @@ const BATCH_SIZE = 50
 async function flushBatch() {
   if (pendingAddresses.size === 0) return
 
-  const addresses = Array.from(pendingAddresses).slice(0, BATCH_SIZE)
+  const addresses = Array.from(pendingAddresses)
   pendingAddresses.clear()
   batchTimer = null
 
-  try {
-    const res = await fetch('/api/cronos-ids', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ addresses }),
-    })
+  // Process all addresses in chunks of BATCH_SIZE
+  for (let i = 0; i < addresses.length; i += BATCH_SIZE) {
+    const chunk = addresses.slice(i, i + BATCH_SIZE)
+    try {
+      const res = await fetch('/api/cronos-ids', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addresses: chunk }),
+      })
 
-    if (res.ok) {
-      const data: Record<string, string | null> = await res.json()
-      for (const [addr, name] of Object.entries(data)) {
-        globalCache.set(addr.toLowerCase(), name)
+      if (res.ok) {
+        const data: Record<string, string | null> = await res.json()
+        for (const [addr, name] of Object.entries(data)) {
+          globalCache.set(addr.toLowerCase(), name)
+        }
       }
+    } catch {
+      // Silent fail
     }
-  } catch {
-    // Silent fail
   }
 
   const cbs = [...batchCallbacks]
