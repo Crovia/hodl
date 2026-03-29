@@ -59,7 +59,6 @@ const OG_ADDRESSES = new Set([
 export default function TradersJeetersPage() {
   const [allHolders, setAllHolders] = useState<HolderData[]>([]);
   const [hodlUsd, setHodlUsd] = useState(0);
-  const [tab, setTab] = useState<'traders' | 'jeeters'>('traders');
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   useEffect(() => {
@@ -85,21 +84,14 @@ export default function TradersJeetersPage() {
   }, []);
 
   const sold = useMemo(
-    () => allHolders.filter(h => h.hasSold || h.tier === 'jeeter'),
+    () => allHolders
+      .filter(h => h.hasSold || h.tier === 'jeeter')
+      .sort((a, b) => b.percentage - a.percentage),
     [allHolders]
   );
 
-  const traders = useMemo(
-    () => sold.filter(h => h.percentage >= TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
-    [sold]
-  );
-
-  const jeeters = useMemo(
-    () => sold.filter(h => h.percentage < TRADER_THRESHOLD).sort((a, b) => b.percentage - a.percentage),
-    [sold]
-  );
-
-  const current = tab === 'traders' ? traders : jeeters;
+  const traders = useMemo(() => sold.filter(h => h.percentage >= TRADER_THRESHOLD), [sold]);
+  const jeeters = useMemo(() => sold.filter(h => h.percentage < TRADER_THRESHOLD), [sold]);
 
   const allAddresses = useMemo(() => sold.map(j => j.address), [sold]);
   const { cronosIds } = useCronosIds(allAddresses);
@@ -133,48 +125,21 @@ export default function TradersJeetersPage() {
           )}
         </div>
 
-        {/* Tab switcher */}
-        <div className="flex justify-center gap-4 mb-8">
-          <button
-            onClick={() => setTab('traders')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
-              tab === 'traders'
-                ? 'bg-amber-400/20 text-amber-400 border border-amber-400/40'
-                : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'
-            }`}
-          >
-            Traders ({traders.length})
-          </button>
-          <button
-            onClick={() => setTab('jeeters')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
-              tab === 'jeeters'
-                ? 'bg-red-500/20 text-red-400 border border-red-500/40'
-                : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'
-            }`}
-          >
-            Jeeters ({jeeters.length})
-          </button>
-        </div>
-
         {/* Stats bar */}
-        <div className={`glass-card rounded-xl p-4 mb-8 border text-center ${
-          tab === 'traders' ? 'border-amber-400/20 bg-amber-400/5' : 'border-red-500/20 bg-red-500/5'
-        }`}>
-          <span className={`font-black text-3xl ${tab === 'traders' ? 'text-amber-400' : 'text-red-400'}`}>
-            {current.length}
-          </span>
-          <span className="text-gray-500 text-sm ml-2">
-            {tab === 'traders'
-              ? `${current.length === 1 ? 'wallet' : 'wallets'} sold tokens — still holding ≥0.2%`
-              : `${current.length === 1 ? 'wallet has' : 'wallets have'} been fully disqualified`
-            }
-          </span>
+        <div className="flex justify-center gap-4 mb-8">
+          <div className="glass-card rounded-xl px-6 py-3 border border-amber-400/20 bg-amber-400/5 text-center">
+            <span className="font-black text-2xl text-amber-400">{traders.length}</span>
+            <span className="text-gray-500 text-sm ml-2">Traders — still holding ≥0.2%</span>
+          </div>
+          <div className="glass-card rounded-xl px-6 py-3 border border-red-500/20 bg-red-500/5 text-center">
+            <span className="font-black text-2xl text-red-400">{jeeters.length}</span>
+            <span className="text-gray-500 text-sm ml-2">Jeeters — fully dumped</span>
+          </div>
         </div>
 
-        {current.length > 0 ? (
+        {sold.length > 0 ? (
           <div className="space-y-4">
-            {current.map((h, i) => {
+            {sold.map((h, i) => {
               const hardcodedName = NAME_MAP[h.address.toLowerCase()];
               const cronosId = cronosIds[h.address.toLowerCase()];
               const isTrader = h.percentage > TRADER_THRESHOLD;
@@ -295,15 +260,8 @@ export default function TradersJeetersPage() {
           </div>
         ) : (
           <div className="glass-card rounded-2xl p-12 text-center border border-white/10">
-            <div className="text-xl font-bold text-gray-400 mb-2">
-              {tab === 'traders' ? 'No traders yet' : 'No jeeters yet'}
-            </div>
-            <div className="text-sm text-gray-400">
-              {tab === 'traders'
-                ? 'No one has sold while holding >0.2%. Good.'
-                : 'No full dumpers yet. Everyone still has skin in the game.'
-              }
-            </div>
+            <div className="text-xl font-bold text-gray-400 mb-2">No sellers yet</div>
+            <div className="text-sm text-gray-400">Everyone still has skin in the game.</div>
           </div>
         )}
       </div>
