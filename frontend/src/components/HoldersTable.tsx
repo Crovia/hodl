@@ -93,9 +93,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
   };
 
   useEffect(() => {
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+    fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xe61db569e231b3f5530168aa2c9d50246525b6d6')
       .then(res => res.json())
-      .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+      .then(data => { if (data.pair?.priceUsd) setCroUsd(parseFloat(data.pair.priceUsd)); })
       .catch(() => {});
     fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
       .then(res => res.json())
