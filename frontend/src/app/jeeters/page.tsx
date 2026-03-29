@@ -117,17 +117,17 @@ export default function TradersJeetersPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4">
             <span className="text-amber-400">Traders</span>
-            <span className="text-gray-600 mx-3">&amp;</span>
+            <span className="text-gray-400 mx-3">&amp;</span>
             <span className="text-red-400">Jeeters</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-xl mx-auto mb-2">
             These wallets sold or transferred $HODL tokens. Disqualified from airdrops.
           </p>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-400 text-sm">
             Traders still hold &gt;0.2% of supply. Jeeters dumped almost everything.
           </p>
           {lastUpdated && (
-            <p className="text-gray-600 text-xs mt-3">
+            <p className="text-gray-400 text-xs mt-3">
               Last updated: {new Date(lastUpdated).toLocaleString()}
             </p>
           )}
@@ -216,7 +216,7 @@ export default function TradersJeetersPage() {
                         {!hardcodedName && cronosId && (
                           <span className="text-purple-400 font-bold text-sm">{cronosId}</span>
                         )}
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-gray-400">
                           {h.lastSellTime ? `Last sold ${timeAgo(h.lastSellTime)}` : `Held ${h.holdingDays}d before selling`}
                         </span>
                       </div>
@@ -263,7 +263,7 @@ export default function TradersJeetersPage() {
                                 <div className="bg-red-500/60 transition-all" style={{ width: `${soldPct}%` }} />
                               </div>
                             </div>
-                            <div className="text-[10px] text-gray-600 mt-0.5">
+                            <div className="text-[10px] text-gray-400 mt-0.5">
                               Still holding <span className="text-green-400">{fmt(remaining)}</span> ({remainPct.toFixed(0)}%)
                             </div>
                           </div>
@@ -276,7 +276,7 @@ export default function TradersJeetersPage() {
                         <div className="text-amber-400 font-black text-lg">
                           {holdingUsd >= 1000 ? `$${(holdingUsd/1000).toFixed(1)}K` : `$${holdingUsd.toFixed(2)}`}
                         </div>
-                        <div className="text-gray-600 text-[10px] uppercase">Position Value</div>
+                        <div className="text-gray-400 text-[10px] uppercase">Position Value</div>
                       </div>
                     )}
                   </div>
@@ -298,7 +298,7 @@ export default function TradersJeetersPage() {
             <div className="text-xl font-bold text-gray-400 mb-2">
               {tab === 'traders' ? 'No traders yet' : 'No jeeters yet'}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-400">
               {tab === 'traders'
                 ? 'No one has sold while holding >0.2%. Good.'
                 : 'No full dumpers yet. Everyone still has skin in the game.'

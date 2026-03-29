@@ -111,7 +111,7 @@ export default function HoldersVsJeeters() {
             <span className="text-red-400 font-bold text-2xl">{counts.jeeter}</span> jeeters
           </p>
           {lastUpdated && (
-            <p className="text-gray-600 text-sm mt-2">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
+            <p className="text-gray-400 text-sm mt-2">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
           )}
         </div>
 
@@ -177,7 +177,7 @@ export default function HoldersVsJeeters() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
-                    <div className="text-xs text-gray-600">
+                    <div className="text-xs text-gray-400">
                       {h.lastSellTime ? <span className="text-red-400">Sold {timeAgo(h.lastSellTime)}</span> : 'Sold'}
                       {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
                         const received = parseFloat(h.totalReceived!);

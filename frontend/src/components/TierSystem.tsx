@@ -214,7 +214,7 @@ export default function TierSystem() {
                       style={{ animationDelay: `${i * 0.3}s` }}
                     />
                     <div className={`text-lg font-bold ${milestone.color} mt-3`}>{milestone.boost}</div>
-                    <div className="text-xs text-gray-600 mt-0.5">{milestone.day}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{milestone.day}</div>
                   </div>
                 ))}
               </div>
@@ -252,7 +252,7 @@ export default function TierSystem() {
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-400 uppercase">
                           Jeeter
                         </span>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-gray-400">
                           Held {seller.holdingDays}d before selling
                         </span>
                       </div>
@@ -279,7 +279,7 @@ export default function TierSystem() {
             <div className="glass-card rounded-xl p-8 border border-red-500/10 text-center">
               <img src="/jeeter.png" alt="Jeeter" className="w-16 h-16 mx-auto mb-4 opacity-30" />
               <p className="text-gray-500 text-sm">No jeeters yet.</p>
-              <p className="text-gray-600 text-xs mt-1">Sellers will appear here automatically.</p>
+              <p className="text-gray-400 text-xs mt-1">Sellers will appear here automatically.</p>
             </div>
           )}
         </div>

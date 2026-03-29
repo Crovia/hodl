@@ -217,7 +217,7 @@ export default function Rules() {
                         style={{ animationDelay: `${i * 0.3}s` }}
                       />
                       <div className={`text-lg font-bold ${milestone.color} mt-3`}>{milestone.boost}</div>
-                      <div className="text-xs text-gray-600 mt-0.5">{milestone.day}</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{milestone.day}</div>
                     </div>
                   ))}
                 </div>

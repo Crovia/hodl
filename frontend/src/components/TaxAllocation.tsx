@@ -127,7 +127,7 @@ export default function TaxAllocation() {
             Diamond Hands get 55%, Gold Hands get 30%, Silver Hands get 15% of the airdrop pool.
           </p>
           {data?.timestamp && (
-            <p className="text-gray-600 text-sm mt-3">
+            <p className="text-gray-400 text-sm mt-3">
               Last updated: {new Date(data.timestamp).toLocaleString()}
             </p>
           )}
@@ -239,7 +239,7 @@ export default function TaxAllocation() {
 
                 {/* CRO Balance */}
                 <div className="p-4 rounded-xl bg-black/30 mb-3">
-                  <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">CRO Balance</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">CRO Balance</div>
                   <div className="text-2xl font-black text-white">{formatCro(croBalance)}</div>
                   {croUsd > 0 && <div className="text-xs text-gray-500">{fmtUsd(croBalance * croUsd)}</div>}
                 </div>
@@ -247,7 +247,7 @@ export default function TaxAllocation() {
                 {/* $HODL Balance (for DHAND wallet) */}
                 {hodlBalance > 0 && (
                   <div className="p-4 rounded-xl bg-gold-400/5 border border-gold-400/20 mb-3">
-                    <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">$HODL Balance</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">$HODL Balance</div>
                     <div className="text-xl font-bold text-gold-400">{formatCro(hodlBalance)}</div>
                     {hodlUsd > 0 && <div className="text-xs text-gray-500">{fmtUsd(hodlBalance * hodlUsd)}</div>}
                   </div>
@@ -256,7 +256,7 @@ export default function TaxAllocation() {
                 {/* $CLG Balance (for CLG wallet) */}
                 {clgBalance > 0 && (
                   <div className="p-4 rounded-xl bg-diamond-400/5 border border-diamond-400/20 mb-3">
-                    <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">$CLG Balance</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">$CLG Balance</div>
                     <div className="text-xl font-bold text-diamond-400">{formatCro(clgBalance)}</div>
                     {clgUsd > 0 && <div className="text-xs text-gray-500">{fmtUsd(clgBalance * clgUsd)}</div>}
                   </div>
@@ -264,7 +264,7 @@ export default function TaxAllocation() {
 
                 {/* Airdrop amount (20%) */}
                 <div className="p-4 rounded-xl bg-black/30 border border-gold-400/10">
-                  <div className="text-xs text-gray-600 uppercase tracking-wider mb-1">Next Airdrop (20%)</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Next Airdrop (20%)</div>
                   <div className="text-xl font-bold text-gold-400">
                     {fmtUsd(walletUsd * 0.2)}
                   </div>

@@ -249,7 +249,7 @@ export default function FloatingCryImages({ count = 8 }: { count?: number }) {
             YOU WON
           </div>
           <p className="text-gray-400 text-lg">All wojaks have been eliminated. You are the true Diamond Hand.</p>
-          <p className="text-gray-600 text-sm mt-2">(...refresh to bring them back)</p>
+          <p className="text-gray-400 text-sm mt-2">(...refresh to bring them back)</p>
         </div>
       </div>
     );

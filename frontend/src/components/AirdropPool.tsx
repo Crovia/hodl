@@ -135,12 +135,12 @@ export default function AirdropPool({
               <span className="text-white font-bold">April 3, 2026</span>
               <span className="text-gray-500 ml-1">(~10 days from launch)</span>
             </p>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className="text-xs text-gray-400 mt-1">
               Exact timing may vary — airdrops are processed manually and there can be some delay.
             </p>
           </div>
           {walletData?.timestamp && (
-            <p className="text-gray-600 text-sm mt-3">Last updated: {new Date(walletData.timestamp).toLocaleString()}</p>
+            <p className="text-gray-400 text-sm mt-3">Last updated: {new Date(walletData.timestamp).toLocaleString()}</p>
           )}
         </div>
 
@@ -153,7 +153,7 @@ export default function AirdropPool({
                 {loading ? '...' : pricesReady && totalUsd > 0 ? `$${formatCro(totalUsd)}` : 'TBA'}
               </div>
               {pricesReady && totalCro > 0 && (
-                <div className="text-xs text-gray-600 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg)} $CLG`}</div>
+                <div className="text-xs text-gray-400 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg)} $CLG`}</div>
               )}
             </div>
             <div className="p-6 text-center">
@@ -162,7 +162,7 @@ export default function AirdropPool({
                 {loading ? '...' : pricesReady && airdropUsd > 0 ? `$${formatCro(airdropUsd)}` : 'TBA'}
               </div>
               {pricesReady && airdropUsd > 0 && (
-                <div className="text-xs text-gray-600 mt-1">CRO + $HODL buybacks</div>
+                <div className="text-xs text-gray-400 mt-1">CRO + $HODL buybacks</div>
               )}
             </div>
             <div className="p-6 text-center">
@@ -243,7 +243,7 @@ export default function AirdropPool({
                               href={`https://cronoscan.com/address/${wallet.address}#tokentxns`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-mono text-[10px] text-gray-600 hover:text-white transition-colors"
+                              className="font-mono text-[10px] text-gray-400 hover:text-white transition-colors"
                             >
                               {truncateAddress(wallet.address)}
                             </a>
@@ -268,7 +268,7 @@ export default function AirdropPool({
                           <span className="text-xs text-gray-500 uppercase">CRO</span>
                           <div className="text-right">
                             <div className="text-sm font-bold text-white">{formatCro(croBalance)}</div>
-                            {croUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(croValueUsd)}</div>}
+                            {croUsd > 0 && <div className="text-[10px] text-gray-400">${formatCro(croValueUsd)}</div>}
                           </div>
                         </div>
                         {tokenBalance > 0 && (
@@ -276,7 +276,7 @@ export default function AirdropPool({
                             <span className="text-xs text-gray-500 uppercase">$HODL</span>
                             <div className="text-right">
                               <div className="text-sm font-bold text-gold-400">{formatCro(tokenBalance)}</div>
-                              {hodlUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(hodlValueUsd)}</div>}
+                              {hodlUsd > 0 && <div className="text-[10px] text-gray-400">${formatCro(hodlValueUsd)}</div>}
                             </div>
                           </div>
                         )}
@@ -285,7 +285,7 @@ export default function AirdropPool({
                             <span className="text-xs text-gray-500 uppercase">$CLG</span>
                             <div className="text-right">
                               <div className="text-sm font-bold text-diamond-400">{formatCro(clgBalance)}</div>
-                              {clgUsd > 0 && <div className="text-[10px] text-gray-600">${formatCro(clgValueUsd)}</div>}
+                              {clgUsd > 0 && <div className="text-[10px] text-gray-400">${formatCro(clgValueUsd)}</div>}
                             </div>
                           </div>
                         )}

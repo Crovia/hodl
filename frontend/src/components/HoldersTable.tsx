@@ -48,7 +48,7 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
           <div key={day} className="flex items-center">
             <div
               className={`relative group cursor-default ${
-                reached ? 'text-gold-400' : 'text-gray-700'
+                reached ? 'text-gold-400' : 'text-gray-500'
               }`}
             >
               <div className="flex flex-col items-center">
@@ -56,12 +56,12 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border-2 transition-all ${
                     reached
                       ? 'border-gold-400 bg-gold-400/20 text-gold-400'
-                      : 'border-gray-700 bg-gray-800 text-gray-600'
+                      : 'border-gray-700 bg-gray-800 text-gray-400'
                   }`}
                 >
                   {day}d
                 </div>
-                <div className={`text-[8px] mt-0.5 font-bold ${reached ? 'text-green-400' : 'text-gray-600'}`}>+{boost}%</div>
+                <div className={`text-[8px] mt-0.5 font-bold ${reached ? 'text-green-400' : 'text-gray-400'}`}>+{boost}%</div>
               </div>
             </div>
             {day < 50 && (
@@ -118,7 +118,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             Every wallet. Every position. Transparent. The chain doesn&apos;t lie.
           </p>
           {lastUpdated && (
-            <p className="text-gray-600 text-sm mt-3">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
+            <p className="text-gray-400 text-sm mt-3">Last updated: {new Date(lastUpdated).toLocaleString()}</p>
           )}
         </div>
 
@@ -181,7 +181,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     }
                     <button
                       onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(holder.address); }}
-                      className="p-0.5 rounded hover:bg-white/10 transition-colors text-gray-600 hover:text-gold-400 flex-shrink-0"
+                      className="p-0.5 rounded hover:bg-white/10 transition-colors text-gray-400 hover:text-gold-400 flex-shrink-0"
                       title="Copy address"
                     >
                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -206,7 +206,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     })() : <div className="text-sm font-bold text-gold-400">-</div>}
                   </div>
                   <div className="text-right">
-                    <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-600'}`}>
+                    <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-400'}`}>
                       {holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   }`}
                   onClick={() => setExpandedRow(isExpanded ? null : i)}
                 >
-                  <div className="text-gray-600 font-mono text-[10px]">{i + 1}</div>
+                  <div className="text-gray-400 font-mono text-[10px]">{i + 1}</div>
                   <div className="flex items-center gap-1.5 min-w-0">
                     {name ? <span className="text-[11px] font-medium text-white truncate">{name}</span> : <span className="font-mono text-[11px] text-gray-300">{truncateAddress(holder.address)}</span>}
                     {isOg && <span className="px-1 py-0.5 rounded text-[7px] font-bold bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>}
@@ -258,7 +258,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Boost</div>
-                        <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-600'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
+                        <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-400'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">60d Total</div>

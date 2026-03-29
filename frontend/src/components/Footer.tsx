@@ -16,7 +16,7 @@ export default function Footer() {
           <p className="text-gray-500 text-sm max-w-md mb-2">
             The strongest survive. The chain doesn&apos;t lie.
           </p>
-          <p className="text-gray-600 text-xs mb-8">Launched by Awerghx</p>
+          <p className="text-gray-400 text-xs mb-8">Launched by Awerghx</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <a href="https://x.com/Awerghx" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">X</a>
             <a href="https://discord.gg/cronoslegends" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">Discord</a>
@@ -29,7 +29,7 @@ export default function Footer() {
           >
             Toggle Meme Images
           </button>
-          <div className="mt-4 text-xs text-gray-700">
+          <div className="mt-4 text-xs text-gray-500">
             &copy; 2026 DiamondHands. Not financial advice. DYOR.
           </div>
         </div>
