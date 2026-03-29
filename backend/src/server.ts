@@ -116,8 +116,11 @@ app.get('/api/wallets', async () => {
 app.get('/api/snapshots', async () => {
   const files = fs.readdirSync(SNAPSHOTS_DIR)
     .filter(f => f.endsWith('.json'))
-    .sort()
-    .reverse();
+    .sort((a, b) => {
+      const ea = parseInt(a.match(/epoch-(\d+)-/)?.[1] || '0');
+      const eb = parseInt(b.match(/epoch-(\d+)-/)?.[1] || '0');
+      return eb - ea;
+    });
 
   return files.map(f => {
     const data = JSON.parse(fs.readFileSync(path.join(SNAPSHOTS_DIR, f), 'utf-8'));
@@ -150,8 +153,11 @@ app.get<{ Params: { epoch: string } }>('/api/snapshots/:epoch', async (req, repl
 app.get('/api/holders', async () => {
   const files = fs.readdirSync(SNAPSHOTS_DIR)
     .filter(f => f.endsWith('.json'))
-    .sort()
-    .reverse();
+    .sort((a, b) => {
+      const ea = parseInt(a.match(/epoch-(\d+)-/)?.[1] || '0');
+      const eb = parseInt(b.match(/epoch-(\d+)-/)?.[1] || '0');
+      return eb - ea;
+    });
 
   if (files.length === 0) {
     return { holders: [], message: 'No snapshots yet' };
@@ -178,8 +184,11 @@ app.get<{ Params: { address: string } }>('/api/holder/:address', async (req, rep
   const address = req.params.address.toLowerCase();
   const files = fs.readdirSync(SNAPSHOTS_DIR)
     .filter(f => f.endsWith('.json'))
-    .sort()
-    .reverse();
+    .sort((a, b) => {
+      const ea = parseInt(a.match(/epoch-(\d+)-/)?.[1] || '0');
+      const eb = parseInt(b.match(/epoch-(\d+)-/)?.[1] || '0');
+      return eb - ea;
+    });
 
   if (files.length === 0) {
     reply.status(404);
@@ -217,8 +226,11 @@ app.get('/api/sellers', async () => {
 app.get('/api/pool', async () => {
   const files = fs.readdirSync(SNAPSHOTS_DIR)
     .filter(f => f.endsWith('.json'))
-    .sort()
-    .reverse();
+    .sort((a, b) => {
+      const ea = parseInt(a.match(/epoch-(\d+)-/)?.[1] || '0');
+      const eb = parseInt(b.match(/epoch-(\d+)-/)?.[1] || '0');
+      return eb - ea;
+    });
 
   const currentEpoch = files.length + 1;
   const lastSnapshot = files.length > 0

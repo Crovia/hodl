@@ -218,7 +218,11 @@ export async function takeSnapshot() {
 
   // Load previous snapshot for fallback data
   const prevDir = ensureDataDir().snapshotsDir;
-  const prevFiles = fs.readdirSync(prevDir).filter(f => f.endsWith('.json')).sort().reverse();
+  const prevFiles = fs.readdirSync(prevDir).filter(f => f.endsWith('.json')).sort((a, b) => {
+    const ea = parseInt(a.match(/epoch-(\d+)-/)?.[1] || '0');
+    const eb = parseInt(b.match(/epoch-(\d+)-/)?.[1] || '0');
+    return eb - ea;
+  });
   const prevHolders = new Map<string, HolderRecord>();
   if (prevFiles.length > 0) {
     try {
