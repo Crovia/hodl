@@ -37,8 +37,9 @@ function truncAddr(addr: string) {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
-function getName(addr: string) {
-  return NAME_MAP[addr.toLowerCase()] || truncAddr(addr);
+function getName(addr: string, cronosIds?: Record<string, string | null>) {
+  const lower = addr.toLowerCase();
+  return NAME_MAP[lower] || (cronosIds && cronosIds[lower]) || truncAddr(addr);
 }
 
 const tierConfig: Record<string, { label: string; css: string; emoji: string }> = {
@@ -71,6 +72,15 @@ export default function HoldersVsJeeters() {
     const interval = setInterval(load, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  // Collect all addresses shown in both panels for Cronos ID resolution
+  const shownAddresses = useMemo(() => {
+    const newest = [...holders].filter(h => !h.hasSold && h.tier !== 'jeeter').sort((a, b) => a.holdingDays - b.holdingDays).slice(0, 5);
+    const jeeters = [...holders].filter(h => h.hasSold || h.tier === 'jeeter').slice(0, 5);
+    return [...newest, ...jeeters].map(h => h.address);
+  }, [holders]);
+
+  const { cronosIds } = useCronosIds(shownAddresses);
 
   if (holders.length === 0) return null;
 
@@ -135,7 +145,7 @@ export default function HoldersVsJeeters() {
                   <div key={h.address} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors">
                     <div className="text-lg w-8 text-center">{cfg.emoji}</div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-bold text-white truncate">{getName(h.address)}</div>
+                      <div className="text-sm font-bold text-white truncate">{getName(h.address, cronosIds)}</div>
                       <div className="text-xs text-gray-500">
                         {h.firstBuyTime ? `Bought ${timeAgo(h.firstBuyTime)}` : `${h.holdingDays}d holding`}
                         {h.totalReceived && parseFloat(h.totalReceived) > 0 && (
@@ -176,7 +186,7 @@ export default function HoldersVsJeeters() {
                     className="w-8 h-8 rounded-full object-cover bg-black/30 flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address)}</div>
+                    <div className="text-sm font-bold text-gray-400 truncate">{getName(h.address, cronosIds)}</div>
                     <div className="text-xs text-gray-400">
                       {h.lastSellTime ? <span className="text-red-400">Sold {timeAgo(h.lastSellTime)}</span> : 'Sold'}
                       {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
