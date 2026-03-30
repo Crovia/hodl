@@ -61,6 +61,7 @@ export default function TradersJeetersPage() {
   const [hodlUsd, setHodlUsd] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'holdings' | 'latest' | 'biggest'>('holdings');
+  const [filterNotable, setFilterNotable] = useState(false);
 
   useEffect(() => {
     const load = () => {
@@ -109,6 +110,14 @@ export default function TradersJeetersPage() {
   const allAddresses = useMemo(() => sold.map(j => j.address), [sold]);
   const { cronosIds } = useCronosIds(allAddresses);
 
+  const displayList = useMemo(() => {
+    if (!filterNotable) return sold;
+    return sold.filter(h => {
+      const lower = h.address.toLowerCase();
+      return OG_ADDRESSES.has(lower) || !!cronosIds[lower];
+    });
+  }, [sold, filterNotable, cronosIds]);
+
   return (
     <section className="py-8 px-6">
       <div className="max-w-5xl mx-auto">
@@ -150,8 +159,8 @@ export default function TradersJeetersPage() {
           </div>
         </div>
 
-        {/* Sort buttons */}
-        <div className="flex justify-center gap-2 mb-8">
+        {/* Sort + filter buttons */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
           <button
             onClick={() => setSortBy('holdings')}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${sortBy === 'holdings' ? 'bg-white/20 text-white border border-white/30' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
@@ -170,11 +179,17 @@ export default function TradersJeetersPage() {
           >
             Biggest Dump
           </button>
+          <button
+            onClick={() => setFilterNotable(f => !f)}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${filterNotable ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+          >
+            CronosID + OG Only
+          </button>
         </div>
 
         {sold.length > 0 ? (
-          <div className="space-y-4">
-            {sold.map((h, i) => {
+          <div className="space-y-2">
+            {displayList.map((h, i) => {
               const hardcodedName = NAME_MAP[h.address.toLowerCase()];
               const cronosId = cronosIds[h.address.toLowerCase()];
               const isTrader = h.percentage > TRADER_THRESHOLD;
@@ -185,7 +200,7 @@ export default function TradersJeetersPage() {
               return (
                 <div
                   key={h.address}
-                  className={`glass-card rounded-xl overflow-hidden border transition-all ${
+                  className={`glass-card rounded-lg overflow-hidden border transition-all ${
                     isTrader
                       ? 'border-amber-400/20 hover:border-amber-400/40'
                       : 'border-red-500/20 hover:border-red-500/40'
@@ -194,15 +209,15 @@ export default function TradersJeetersPage() {
                   <div className={`h-0.5 bg-gradient-to-r ${
                     isTrader ? 'from-amber-400 to-amber-600' : 'from-red-500 to-red-700'
                   }`} />
-                  <div className="p-5 flex items-center gap-4">
+                  <div className="px-4 py-2.5 flex items-center gap-3">
                     <img
                       src={cryImages[i % cryImages.length]}
                       alt={isTrader ? 'Trader' : 'Jeeter'}
-                      className="w-14 h-14 rounded-full object-cover bg-black/30 flex-shrink-0"
+                      className="w-9 h-9 rounded-full object-cover bg-black/30 flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white uppercase ${
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase ${
                           isTrader ? 'bg-amber-500/40' : 'tier-jeeter'
                         }`}>
                           {isTrader ? 'Trader' : 'Jeeter'}
@@ -211,36 +226,32 @@ export default function TradersJeetersPage() {
                           <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>
                         )}
                         {hardcodedName && (
-                          <span className="text-white font-bold text-sm">{hardcodedName}</span>
+                          <span className="text-white font-bold text-xs">{hardcodedName}</span>
                         )}
                         {!hardcodedName && cronosId && (
-                          <span className="text-purple-400 font-bold text-sm">{cronosId}</span>
+                          <span className="text-purple-400 font-bold text-xs">{cronosId}</span>
                         )}
-                        <span className="text-xs text-gray-400">
-                          {h.lastSellTime ? `Last sold ${timeAgo(h.lastSellTime)}` : `Held ${h.holdingDays}d before selling`}
+                        <a
+                          href={`https://cronoscan.com/address/${h.address}#tokentxns`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-[10px] text-gray-500 hover:text-amber-400 transition-colors"
+                        >
+                          {h.address.slice(0, 6)}…{h.address.slice(-4)}
+                        </a>
+                        <span className="text-[10px] text-gray-500 ml-auto">
+                          {h.lastSellTime ? `sold ${timeAgo(h.lastSellTime)}` : `held ${h.holdingDays}d`}
                         </span>
                       </div>
-                      <a
-                        href={`https://cronoscan.com/address/${h.address}#tokentxns`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-xs text-gray-500 hover:text-amber-400 transition-colors"
-                      >
-                        {h.address}
-                      </a>
-                      <div className="flex flex-wrap gap-4 mt-2 text-xs text-gray-500">
-                        <span>Holding <span className="text-white font-medium">{h.percentage}%</span> of supply</span>
+                      <div className="flex flex-wrap gap-3 mt-1 text-[11px] text-gray-500">
+                        <span>Holding <span className="text-white font-medium">{h.percentage}%</span></span>
                         {balanceNum > 0 && (
-                          <span>
-                            <span className="text-gray-400 font-medium">{balanceNum.toLocaleString()}</span> tokens
-                          </span>
+                          <span><span className="text-gray-400 font-medium">{balanceNum >= 1e6 ? `${(balanceNum/1e6).toFixed(1)}M` : balanceNum >= 1e3 ? `${(balanceNum/1e3).toFixed(0)}K` : Math.round(balanceNum).toLocaleString()}</span> tokens</span>
                         )}
                         {isTrader && hodlUsd > 0 && balanceNum > 0 && (
-                          <span>
-                            Worth <span className="text-amber-400 font-bold">
-                              {holdingUsd >= 1000 ? `$${(holdingUsd/1000).toFixed(1)}K` : `$${holdingUsd.toFixed(2)}`}
-                            </span>
-                          </span>
+                          <span>Worth <span className="text-amber-400 font-bold">
+                            {holdingUsd >= 1000 ? `$${(holdingUsd/1000).toFixed(1)}K` : `$${holdingUsd.toFixed(2)}`}
+                          </span></span>
                         )}
                       </div>
                       {/* Dump progress bar */}
@@ -252,19 +263,15 @@ export default function TradersJeetersPage() {
                         const remainPct = 100 - soldPct;
                         const fmt = (n: number) => n >= 1e6 ? `${(n/1e6).toFixed(1)}M` : n >= 1e3 ? `${(n/1e3).toFixed(0)}K` : Math.round(n).toLocaleString();
                         return (
-                          <div className="mt-3">
-                            <div className="flex justify-between text-[10px] text-gray-500 mb-1">
-                              <span>Received: <span className="text-gray-400">{fmt(received)}</span></span>
-                              <span>Sold: <span className="text-red-400">{fmt(soldAmount > 0 ? soldAmount : 0)}</span> ({soldPct.toFixed(0)}%)</span>
-                            </div>
-                            <div className="h-2 rounded-full overflow-hidden bg-black/40 border border-white/5">
+                          <div className="mt-1.5">
+                            <div className="h-1.5 rounded-full overflow-hidden bg-black/40 border border-white/5">
                               <div className="h-full flex">
                                 <div className="bg-green-500/60 transition-all" style={{ width: `${remainPct}%` }} />
                                 <div className="bg-red-500/60 transition-all" style={{ width: `${soldPct}%` }} />
                               </div>
                             </div>
-                            <div className="text-[10px] text-gray-400 mt-0.5">
-                              Still holding <span className="text-green-400">{fmt(remaining)}</span> ({remainPct.toFixed(0)}%)
+                            <div className="text-[10px] text-gray-500 mt-0.5">
+                              Sold <span className="text-red-400">{fmt(soldAmount > 0 ? soldAmount : 0)}</span> ({soldPct.toFixed(0)}%) · Left <span className="text-green-400">{fmt(remaining)}</span> ({remainPct.toFixed(0)}%)
                             </div>
                           </div>
                         );
@@ -273,19 +280,19 @@ export default function TradersJeetersPage() {
                     {/* Value column for traders */}
                     {isTrader && hodlUsd > 0 && balanceNum > 0 && (
                       <div className="hidden md:flex flex-col items-end flex-shrink-0">
-                        <div className="text-amber-400 font-black text-lg">
+                        <div className="text-amber-400 font-black text-base">
                           {holdingUsd >= 1000 ? `$${(holdingUsd/1000).toFixed(1)}K` : `$${holdingUsd.toFixed(2)}`}
                         </div>
                         <div className="text-gray-400 text-[10px] uppercase">Position Value</div>
                       </div>
                     )}
                   </div>
-                  <div className={`px-5 py-2 border-t text-center ${
+                  <div className={`px-4 py-1 border-t text-center ${
                     isTrader
                       ? 'bg-amber-400/5 border-amber-400/10'
                       : 'bg-red-500/5 border-red-500/10'
                   }`}>
-                    <span className={`text-xs font-bold ${isTrader ? 'text-amber-400' : 'text-red-400'}`}>
+                    <span className={`text-[10px] font-bold ${isTrader ? 'text-amber-400' : 'text-red-400'}`}>
                       {isTrader ? 'Sold tokens — disqualified from airdrops' : 'Forfeited all future airdrops permanently'}
                     </span>
                   </div>
