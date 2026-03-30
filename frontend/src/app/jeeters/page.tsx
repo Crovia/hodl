@@ -60,6 +60,7 @@ export default function TradersJeetersPage() {
   const [allHolders, setAllHolders] = useState<HolderData[]>([]);
   const [hodlUsd, setHodlUsd] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'holdings' | 'latest' | 'biggest'>('holdings');
 
   useEffect(() => {
     const load = () => {
@@ -86,8 +87,20 @@ export default function TradersJeetersPage() {
   const sold = useMemo(
     () => allHolders
       .filter(h => h.hasSold || h.tier === 'jeeter')
-      .sort((a, b) => b.percentage - a.percentage),
-    [allHolders]
+      .sort((a, b) => {
+        if (sortBy === 'latest') {
+          if (a.lastSellTime && b.lastSellTime) return new Date(b.lastSellTime).getTime() - new Date(a.lastSellTime).getTime();
+          if (a.lastSellTime) return -1;
+          if (b.lastSellTime) return 1;
+        }
+        if (sortBy === 'biggest') {
+          const soldA = parseFloat(a.totalReceived || '0') - parseFloat(a.balance || '0');
+          const soldB = parseFloat(b.totalReceived || '0') - parseFloat(b.balance || '0');
+          return soldB - soldA;
+        }
+        return b.percentage - a.percentage;
+      }),
+    [allHolders, sortBy]
   );
 
   const traders = useMemo(() => sold.filter(h => h.percentage >= TRADER_THRESHOLD), [sold]);
@@ -126,7 +139,7 @@ export default function TradersJeetersPage() {
         </div>
 
         {/* Stats bar */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex flex-wrap justify-center gap-4 mb-4">
           <div className="glass-card rounded-xl px-6 py-3 border border-amber-400/20 bg-amber-400/5 text-center">
             <span className="font-black text-2xl text-amber-400">{traders.length}</span>
             <span className="text-gray-500 text-sm ml-2">Traders — still holding ≥0.2%</span>
@@ -135,6 +148,28 @@ export default function TradersJeetersPage() {
             <span className="font-black text-2xl text-red-400">{jeeters.length}</span>
             <span className="text-gray-500 text-sm ml-2">Jeeters — fully dumped</span>
           </div>
+        </div>
+
+        {/* Sort buttons */}
+        <div className="flex justify-center gap-2 mb-8">
+          <button
+            onClick={() => setSortBy('holdings')}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${sortBy === 'holdings' ? 'bg-white/20 text-white border border-white/30' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+          >
+            By Holdings
+          </button>
+          <button
+            onClick={() => setSortBy('latest')}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${sortBy === 'latest' ? 'bg-red-500/30 text-red-300 border border-red-500/50' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+          >
+            Latest Jeeters
+          </button>
+          <button
+            onClick={() => setSortBy('biggest')}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${sortBy === 'biggest' ? 'bg-red-500/30 text-red-300 border border-red-500/50' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+          >
+            Biggest Dump
+          </button>
         </div>
 
         {sold.length > 0 ? (
