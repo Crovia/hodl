@@ -57,6 +57,7 @@ const cryImages = [
 export default function HoldersVsJeeters() {
   const [holders, setHolders] = useState<HolderData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [jeeterSort, setJeeterSort] = useState<'latest' | 'biggest'>('latest');
 
   useEffect(() => {
     const load = () => {
@@ -77,7 +78,8 @@ export default function HoldersVsJeeters() {
   const shownAddresses = useMemo(() => {
     const newest = [...holders].filter(h => !h.hasSold && h.tier !== 'jeeter').sort((a, b) => a.holdingDays - b.holdingDays).slice(0, 5);
     const jeeters = [...holders].filter(h => h.hasSold || h.tier === 'jeeter').slice(0, 5);
-    return [...newest, ...jeeters].map(h => h.address);
+    const biggest = [...holders].filter(h => h.hasSold || h.tier === 'jeeter').sort((a, b) => (parseFloat(b.totalReceived||'0') - parseFloat(b.balance||'0')) - (parseFloat(a.totalReceived||'0') - parseFloat(a.balance||'0'))).slice(0, 5);
+    return [...newest, ...jeeters, ...biggest].map(h => h.address);
   }, [holders]);
 
   const { cronosIds } = useCronosIds(shownAddresses);
@@ -98,10 +100,15 @@ export default function HoldersVsJeeters() {
     .sort((a, b) => new Date(b.firstBuyTime!).getTime() - new Date(a.firstBuyTime!).getTime())
     .slice(0, 5);
 
-  // Latest 5 jeeters
+  // Jeeters — sorted by latest sell or biggest dump
   const latestJeeters = [...holders]
     .filter(h => h.hasSold || h.tier === 'jeeter')
     .sort((a, b) => {
+      if (jeeterSort === 'biggest') {
+        const soldA = parseFloat(a.totalReceived || '0') - parseFloat(a.balance || '0');
+        const soldB = parseFloat(b.totalReceived || '0') - parseFloat(b.balance || '0');
+        return soldB - soldA;
+      }
       if (a.lastSellTime && b.lastSellTime) return new Date(b.lastSellTime).getTime() - new Date(a.lastSellTime).getTime();
       if (a.lastSellTime) return -1;
       if (b.lastSellTime) return 1;
@@ -169,11 +176,27 @@ export default function HoldersVsJeeters() {
           {/* Latest Jeeters */}
           <div className="glass-card rounded-2xl overflow-hidden border border-red-500/20">
             <div className="p-4 bg-gradient-to-r from-red-500/10 to-transparent border-b border-red-500/10">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">💀</span>
-                <div>
-                  <h3 className="text-lg font-black text-red-400">Recent Jeeters</h3>
-                  <p className="text-xs text-gray-500">Paper hands who couldn&apos;t take the heat</p>
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">💀</span>
+                  <div>
+                    <h3 className="text-lg font-black text-red-400">Recent Jeeters</h3>
+                    <p className="text-xs text-gray-500">Paper hands who couldn&apos;t take the heat</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setJeeterSort('latest')}
+                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${jeeterSort === 'latest' ? 'bg-red-500/30 text-red-300 border border-red-500/50' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+                  >
+                    Latest
+                  </button>
+                  <button
+                    onClick={() => setJeeterSort('biggest')}
+                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${jeeterSort === 'biggest' ? 'bg-red-500/30 text-red-300 border border-red-500/50' : 'bg-white/5 text-gray-500 border border-white/10 hover:text-gray-300'}`}
+                  >
+                    Biggest
+                  </button>
                 </div>
               </div>
             </div>
