@@ -94,8 +94,8 @@ export default function HoldersVsJeeters() {
 
   // Latest 5 holders (sorted by fewest holdingDays = newest, non-sellers)
   const latestHolders = [...holders]
-    .filter(h => !h.hasSold && h.tier !== 'jeeter')
-    .sort((a, b) => a.holdingDays - b.holdingDays)
+    .filter(h => !h.hasSold && h.tier !== 'jeeter' && h.firstBuyTime)
+    .sort((a, b) => new Date(b.firstBuyTime!).getTime() - new Date(a.firstBuyTime!).getTime())
     .slice(0, 5);
 
   // Latest 5 jeeters
