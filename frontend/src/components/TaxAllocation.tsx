@@ -89,9 +89,9 @@ export default function TaxAllocation() {
         .catch(() => setLoading(false));
     };
     const loadPrices = () => {
-      fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+      fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xe61db569e231b3f5530168aa2c9d50246525b6d6')
         .then(res => res.json())
-        .then(d => { if (d['crypto-com-chain']?.usd) setCroUsd(d['crypto-com-chain'].usd); })
+        .then(d => { if (d.pair?.priceUsd) setCroUsd(parseFloat(d.pair.priceUsd)); })
         .catch(() => {});
       fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
         .then(res => res.json())
