@@ -183,13 +183,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    {holder.eligible && holder.airdropAmount > 0 ? (() => {
+                    {holder.eligible ? (() => {
                       const usdPerCycle = getAirdropPerPerson(holder.tier);
                       if (usdPerCycle > 0) {
                         return <div className="text-sm font-bold text-gold-400">{usdPerCycle >= 1000 ? `$${(usdPerCycle/1000).toFixed(1)}K` : `$${usdPerCycle.toFixed(2)}`}</div>;
                       }
-                      return <div className="text-sm font-bold text-gold-400">{holder.airdropAmount.toFixed(1)} CRO</div>;
-                    })() : <div className="text-sm font-bold text-gold-400">-</div>}
+                      return <div className="text-sm font-bold text-gray-500">-</div>;
+                    })() : <div className="text-sm font-bold text-gray-500">-</div>}
                   </div>
                   <div className="text-right">
                     <div className={`text-sm font-bold ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-400'}`}>
@@ -197,17 +197,15 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     </div>
                   </div>
                   <div className="text-right">
-                    {holder.eligible && holder.airdropAmount > 0 ? (() => {
+                    {holder.eligible ? (() => {
                       const usdPerCycle = getAirdropPerPerson(holder.tier);
                       if (usdPerCycle > 0) {
                         let total = 0;
                         for (let cycle = 0; cycle < 6; cycle++) total += usdPerCycle * (1 + Math.min(cycle, 5) * 0.03);
                         return <div className="text-sm font-bold text-green-400">{total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
                       }
-                      let totalCro = 0;
-                      for (let cycle = 0; cycle < 6; cycle++) totalCro += holder.airdropAmount * (1 + Math.min(cycle, 5) * 0.03);
-                      return <div className="text-sm font-bold text-green-400">{totalCro.toFixed(1)} CRO</div>;
-                    })() : <div className="text-sm font-bold text-green-400">-</div>}
+                      return <div className="text-sm font-bold text-gray-500">-</div>;
+                    })() : <div className="text-sm font-bold text-gray-500">-</div>}
                   </div>
                   <div className="flex justify-center">
                     <BoostTimeline holdingDays={holder.holdingDays} />
@@ -241,9 +239,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
-                        <div className="font-bold text-gold-400">{holder.eligible && holder.airdropAmount > 0 ? (() => {
+                        <div className="font-bold text-gold-400">{holder.eligible ? (() => {
                           const usd = getAirdropPerPerson(holder.tier);
-                          return usd > 0 ? `$${usd.toFixed(2)}` : `${holder.airdropAmount.toFixed(1)} CRO`;
+                          return usd > 0 ? `$${usd.toFixed(2)}` : '-';
                         })() : '-'}</div>
                       </div>
                       <div>
@@ -252,11 +250,10 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       </div>
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
-                        <div className="font-bold text-green-400">{holder.eligible && holder.airdropAmount > 0 ? (() => {
+                        <div className="font-bold text-green-400">{holder.eligible ? (() => {
                           const pp = getAirdropPerPerson(holder.tier);
                           if (pp > 0) { let t = 0; for (let c = 0; c < 6; c++) t += pp * (1 + Math.min(c, 5) * 0.03); return `$${t.toFixed(2)}`; }
-                          let totalCro = 0; for (let c = 0; c < 6; c++) totalCro += holder.airdropAmount * (1 + Math.min(c, 5) * 0.03);
-                          return `${totalCro.toFixed(1)} CRO`;
+                          return '-';
                         })() : '-'}</div>
                       </div>
                     </div>
