@@ -278,19 +278,19 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                               <div className="flex gap-4 flex-wrap">
                                 {dhand > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">$HODL wallet</span>
+                                    <span className="text-[10px] text-gray-400">$HODL airdrop</span>
                                     <span className="text-xs font-bold text-gold-400">${dhand.toFixed(2)}</span>
                                   </div>
                                 )}
                                 {clgAmt > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">$CLG wallet</span>
+                                    <span className="text-[10px] text-gray-400">$CLG airdrop</span>
                                     <span className="text-xs font-bold text-gold-400">${clgAmt.toFixed(2)}</span>
                                   </div>
                                 )}
                                 {rotating > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">Partner wallet</span>
+                                    <span className="text-[10px] text-gray-400">Voted airdrop</span>
                                     <span className="text-xs font-bold text-gold-400">${rotating.toFixed(2)}</span>
                                   </div>
                                 )}
@@ -362,19 +362,19 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                         <div className="flex gap-2 flex-wrap mb-3">
                           {dhand > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">$HODL wallet</span>
+                              <span className="text-[9px] text-gray-400">$HODL airdrop</span>
                               <span className="text-[10px] font-bold text-gold-400">${dhand.toFixed(2)}</span>
                             </div>
                           )}
                           {clgAmt > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">$CLG wallet</span>
+                              <span className="text-[9px] text-gray-400">$CLG airdrop</span>
                               <span className="text-[10px] font-bold text-gold-400">${clgAmt.toFixed(2)}</span>
                             </div>
                           )}
                           {rotating > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">Partner wallet</span>
+                              <span className="text-[9px] text-gray-400">Voted airdrop</span>
                               <span className="text-[10px] font-bold text-gold-400">${rotating.toFixed(2)}</span>
                             </div>
                           )}
