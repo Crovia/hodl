@@ -279,7 +279,7 @@ async function getProviderWithFallback(): Promise<ethers.JsonRpcProvider> {
 }
 
 // --- Auto-snapshot scheduler ---
-const SNAPSHOT_INTERVAL_MS = 1 * 60 * 60 * 1000; // 1 hour
+const SNAPSHOT_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 const FRONTEND_PUBLIC = path.resolve(__dirname, '../../frontend/public');
 let snapshotRunning = false;
 

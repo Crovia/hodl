@@ -176,15 +176,12 @@ export async function takeSnapshot() {
         const fromLower = fromAddr.toLowerCase();
         const toLower = toAddr.toLowerCase();
 
-        // Track sellers — only count as sell if transferring to DEX pair (actual sell)
-        // or to another regular wallet (p2p transfer).
-        // Exclude: transfers TO tax wallet or token contract (automatic tax deductions on buy/transfer)
+        // Track sellers — only count as sell if transferring TO the DEX pair (actual DEX sell).
+        // Tax deductions, p2p transfers, and contract-internal moves are NOT counted as sells.
         if (
           fromAddr !== ethers.ZeroAddress &&
-          fromLower !== CONFIG.TAX_WALLET.toLowerCase() &&
           !excludeFromSellers.has(fromLower) &&
-          toLower !== CONFIG.TAX_WALLET.toLowerCase() &&
-          toLower !== CONFIG.TOKEN_ADDRESS.toLowerCase()
+          toLower === CONFIG.DEX_PAIR.toLowerCase()
         ) {
           sellers.add(fromLower);
           // Track last sell block
