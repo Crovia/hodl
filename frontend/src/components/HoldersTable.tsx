@@ -132,7 +132,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             <div className="text-right">Days Held</div>
             <div className="text-right">Next Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right">If You HODL</div>
+            <div className="text-right group relative cursor-help">
+              If You HODL
+              <div className="absolute right-0 top-5 z-20 hidden group-hover:block w-56 bg-gray-900 border border-gold-400/30 rounded-lg p-3 text-[10px] font-normal normal-case text-gray-300 shadow-xl">
+                <span className="text-gold-400 font-bold block mb-1">60-day projection</span>
+                Estimated total CRO you&apos;d earn over the next 6 airdrop cycles (~60 days) if you keep holding and the treasury stays at its current level. Each cycle your boost grows +3%.
+              </div>
+            </div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
@@ -152,9 +158,10 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
               <div key={holder.address}>
                 {/* Desktop row */}
                 <div
-                  className={`hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors ${
+                  className={`hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer ${
                     holder.hasSold ? 'opacity-40 line-through' : ''
-                  } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''}`}
+                  } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''} ${isExpanded ? 'bg-white/5 border-gold-400/20' : ''}`}
+                  onClick={() => setExpandedRow(isExpanded ? null : i)}
                 >
                   <div className="text-gray-500 font-mono text-sm">{i + 1}</div>
                   <div className="flex items-center gap-2 min-w-0">
@@ -223,6 +230,74 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                 </div>
 
+                {/* Desktop expanded panel */}
+                {isExpanded && (() => {
+                  const { cro, usd } = getAirdropPerPerson(holder.tier);
+                  let totalCro = 0;
+                  const cycles = [0,1,2,3,4,5].map(c => {
+                    const boost = 1 + Math.min(holder.holdingDays > 0 ? c : c, 5) * 0.03;
+                    const amt = cro * boost;
+                    totalCro += amt;
+                    return amt;
+                  });
+                  const tierPct = holder.tier === 'diamond' ? 55 : holder.tier === 'gold' ? 30 : holder.tier === 'silver' ? 15 : 0;
+                  const eligibleInTier = holders.filter(h => h.tier === holder.tier && h.eligible).length;
+                  return (
+                    <div className="hidden md:block border-b border-gold-400/20 bg-gold-400/5 px-6 py-4">
+                      <div className="flex items-start gap-8">
+                        {/* Airdrop summary */}
+                        <div className="flex-1">
+                          <div className="text-xs text-gray-500 uppercase font-bold mb-3">Airdrop Breakdown</div>
+                          <div className="flex gap-6 flex-wrap">
+                            <div>
+                              <div className="text-[10px] text-gray-500 mb-0.5">Next airdrop</div>
+                              <div className="text-xl font-black text-gold-400">{cro > 0 ? `${cro.toFixed(2)} CRO` : '-'}</div>
+                              {usd > 0 && <div className="text-xs text-gray-500">${usd.toFixed(2)}</div>}
+                            </div>
+                            <div>
+                              <div className="text-[10px] text-gray-500 mb-0.5">60-day total (if you keep holding)</div>
+                              <div className="text-xl font-black text-green-400">{totalCro > 0 ? `${totalCro.toFixed(2)} CRO` : '-'}</div>
+                              {totalCro > 0 && croUsd > 0 && <div className="text-xs text-gray-500">${(totalCro * croUsd).toFixed(2)}</div>}
+                            </div>
+                            <div>
+                              <div className="text-[10px] text-gray-500 mb-0.5">Current boost</div>
+                              <div className={`text-xl font-black ${holder.boostPercentage > 0 ? 'text-green-400' : 'text-gray-400'}`}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : 'None yet'}</div>
+                              <div className="text-[10px] text-gray-500">Hold 10d+ to unlock</div>
+                            </div>
+                            {tierPct > 0 && (
+                              <div>
+                                <div className="text-[10px] text-gray-500 mb-0.5">Tier pool share</div>
+                                <div className="text-xl font-black text-white">{tierPct}%</div>
+                                <div className="text-[10px] text-gray-500">Split {eligibleInTier > 0 ? `÷ ${eligibleInTier} ${holder.tier} holders` : 'evenly'}</div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Cycle projection */}
+                        {cro > 0 && (
+                          <div>
+                            <div className="text-xs text-gray-500 uppercase font-bold mb-3">Cycle-by-cycle projection</div>
+                            <div className="flex gap-2">
+                              {cycles.map((amt, c) => (
+                                <div key={c} className="text-center">
+                                  <div className="text-[9px] text-gray-500 mb-1">C{c+1}</div>
+                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>{amt.toFixed(1)}</div>
+                                  <div className="text-[9px] text-gray-600">CRO</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      {!holder.eligible && (
+                        <div className="mt-3 text-xs text-red-400 font-medium">
+                          {holder.hasSold ? '⚠ Disqualified — this wallet sold $HODL tokens.' : '⚠ Not eligible for airdrops (insufficient tier or excluded address).'}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
                 {/* Mobile row - tap to expand */}
                 <div
                   className={`md:hidden grid grid-cols-[1.5rem_1fr_auto_2.5rem] gap-2 py-2.5 px-3 items-center border-b border-white/5 active:bg-white/10 cursor-pointer ${
@@ -241,38 +316,55 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 </div>
 
                 {/* Mobile expanded */}
-                {isExpanded && (
-                  <div className="md:hidden px-3 py-2 bg-white/5 border-b border-white/5">
-                    <div className="grid grid-cols-4 gap-2 text-[10px] mb-2">
-                      <div>
-                        <div className="text-gray-500 uppercase mb-0.5">Days</div>
-                        <div className={holder.holdingDays >= 10 ? 'text-gold-400 font-bold' : 'text-gray-400'}>{holder.holdingDays}d</div>
+                {isExpanded && (() => {
+                  const { cro, usd } = getAirdropPerPerson(holder.tier);
+                  let totalCro = 0;
+                  for (let c = 0; c < 6; c++) totalCro += cro * (1 + Math.min(c, 5) * 0.03);
+                  return (
+                    <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
+                      {/* Main airdrop numbers */}
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div className="bg-black/30 rounded-lg p-2.5 text-center">
+                          <div className="text-[9px] text-gray-500 uppercase mb-1">Next Airdrop</div>
+                          <div className="text-base font-black text-gold-400">{holder.eligible && cro > 0 ? `${cro.toFixed(2)} CRO` : '-'}</div>
+                          {holder.eligible && usd > 0 && <div className="text-[9px] text-gray-500">${usd.toFixed(2)}</div>}
+                        </div>
+                        <div className="bg-black/30 rounded-lg p-2.5 text-center">
+                          <div className="text-[9px] text-gray-500 uppercase mb-1">60d Total (if you HODL)</div>
+                          <div className="text-base font-black text-green-400">{holder.eligible && totalCro > 0 ? `${totalCro.toFixed(2)} CRO` : '-'}</div>
+                          {holder.eligible && totalCro > 0 && croUsd > 0 && <div className="text-[9px] text-gray-500">${(totalCro * croUsd).toFixed(2)}</div>}
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
-                        <div className="font-bold text-gold-400">{holder.eligible ? (() => {
-                          const { cro } = getAirdropPerPerson(holder.tier);
-                          return cro > 0 ? `${cro.toFixed(1)} CRO` : '-';
-                        })() : '-'}</div>
+                      {/* Secondary stats */}
+                      <div className="grid grid-cols-3 gap-2 text-[10px] mb-3">
+                        <div className="text-center">
+                          <div className="text-gray-500 uppercase mb-0.5">Days held</div>
+                          <div className={holder.holdingDays >= 10 ? 'text-gold-400 font-bold' : 'text-gray-400'}>{holder.holdingDays}d</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-gray-500 uppercase mb-0.5">Boost</div>
+                          <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-400'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : 'None yet'}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-gray-500 uppercase mb-0.5">Tier</div>
+                          <div className="font-bold text-white">{holder.tier.charAt(0).toUpperCase() + holder.tier.slice(1)}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-gray-500 uppercase mb-0.5">Boost</div>
-                        <div className={holder.boostPercentage > 0 ? 'text-green-400 font-bold' : 'text-gray-400'}>{holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}</div>
+                      {/* 60d explanation */}
+                      <div className="text-[9px] text-gray-500 text-center mb-2 px-2">
+                        60d total = 6 cycles with growing boost (+3% per cycle). Estimated if treasury stays at current level.
                       </div>
-                      <div>
-                        <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
-                        <div className="font-bold text-green-400">{holder.eligible ? (() => {
-                          const { cro: pp } = getAirdropPerPerson(holder.tier);
-                          if (pp > 0) { let t = 0; for (let c = 0; c < 6; c++) t += pp * (1 + Math.min(c, 5) * 0.03); return `${t.toFixed(1)} CRO`; }
-                          return '-';
-                        })() : '-'}</div>
+                      <div className="flex justify-center py-1">
+                        <BoostTimeline holdingDays={holder.holdingDays} />
                       </div>
+                      {!holder.eligible && (
+                        <div className="mt-2 text-[10px] text-red-400 font-medium text-center">
+                          {holder.hasSold ? '⚠ Disqualified — sold $HODL tokens.' : '⚠ Not eligible for airdrops.'}
+                        </div>
+                      )}
                     </div>
-                    <div className="flex justify-center py-1">
-                      <BoostTimeline holdingDays={holder.holdingDays} />
-                    </div>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             );
           })}
