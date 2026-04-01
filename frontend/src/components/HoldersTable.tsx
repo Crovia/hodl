@@ -81,15 +81,17 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
   const [hodlUsd, setHodlUsd] = useState(0);
   const [clgUsd, setClgUsd] = useState(0);
 
-  // Calculate airdrop per person in CRO (no USD price dependency — shows immediately when treasury loads)
-  const airdropPoolCro = treasuryCro * 0.2; // 20% of CRO treasury distributed
-  const getAirdropPerPerson = (tier: string): { cro: number; usd: number } => {
+  // Per-person airdrop for each token source (20% of each token pool, split by tier)
+  const getAirdropPerPerson = (tier: string): { cro: number; hodl: number; clg: number; totalUsd: number } => {
     const tierPct = tier === 'diamond' ? 0.55 : tier === 'gold' ? 0.30 : tier === 'silver' ? 0.15 : 0;
-    if (tierPct === 0) return { cro: 0, usd: 0 };
-    const eligibleInTier = holders.filter(h => h.tier === tier && h.eligible).length;
-    if (eligibleInTier === 0) return { cro: 0, usd: 0 };
-    const cro = (airdropPoolCro * tierPct) / eligibleInTier;
-    return { cro, usd: cro * croUsd };
+    if (tierPct === 0) return { cro: 0, hodl: 0, clg: 0, totalUsd: 0 };
+    const eligible = holders.filter(h => h.tier === tier && h.eligible).length;
+    if (eligible === 0) return { cro: 0, hodl: 0, clg: 0, totalUsd: 0 };
+    const cro = (treasuryCro * 0.2 * tierPct) / eligible;
+    const hodl = (treasuryHodl * 0.2 * tierPct) / eligible;
+    const clg = (treasuryClg * 0.2 * tierPct) / eligible;
+    const totalUsd = (cro * croUsd) + (hodl * hodlUsd) + (clg * clgUsd);
+    return { cro, hodl, clg, totalUsd };
   };
 
   useEffect(() => {
@@ -191,9 +193,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const { cro, usd } = getAirdropPerPerson(holder.tier);
-                      if (cro > 0) {
-                        return <div className="text-sm font-bold text-gold-400">{usd > 0 ? `$${usd.toFixed(2)}` : `${cro.toFixed(1)} CRO`}</div>;
+                      const { cro, totalUsd } = getAirdropPerPerson(holder.tier);
+                      if (cro > 0 || totalUsd > 0) {
+                        return <div className="text-sm font-bold text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : `${cro.toFixed(1)} CRO`}</div>;
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
@@ -205,12 +207,11 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const { cro: croPerCycle } = getAirdropPerPerson(holder.tier);
-                      if (croPerCycle > 0) {
-                        let totalCro = 0;
-                        for (let cycle = 0; cycle < 6; cycle++) totalCro += croPerCycle * (1 + Math.min(cycle, 5) * 0.03);
-                        const totalUsd = totalCro * croUsd;
-                        return <div className="text-sm font-bold text-green-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : `${totalCro.toFixed(1)} CRO`}</div>;
+                      const { cro: croPerCycle, totalUsd: usdPerCycle } = getAirdropPerPerson(holder.tier);
+                      if (croPerCycle > 0 || usdPerCycle > 0) {
+                        let total60d = 0;
+                        for (let cycle = 0; cycle < 6; cycle++) total60d += (usdPerCycle > 0 ? usdPerCycle : croPerCycle) * (1 + Math.min(cycle, 5) * 0.03);
+                        return <div className="text-sm font-bold text-green-400">{usdPerCycle > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(1)} CRO`}</div>;
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
@@ -222,16 +223,20 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
                 {/* Desktop expanded panel */}
                 {isExpanded && (() => {
-                  const { cro, usd } = getAirdropPerPerson(holder.tier);
-                  let totalCro = 0;
+                  const { cro, hodl, clg, totalUsd } = getAirdropPerPerson(holder.tier);
+                  const usdPerCycle = totalUsd > 0 ? totalUsd : cro;
+                  let total60d = 0;
                   const cycles = [0,1,2,3,4,5].map(c => {
-                    const boost = 1 + Math.min(holder.holdingDays > 0 ? c : c, 5) * 0.03;
-                    const amt = cro * boost;
-                    totalCro += amt;
+                    const boost = 1 + Math.min(c, 5) * 0.03;
+                    const amt = usdPerCycle * boost;
+                    total60d += amt;
                     return amt;
                   });
                   const tierPct = holder.tier === 'diamond' ? 55 : holder.tier === 'gold' ? 30 : holder.tier === 'silver' ? 15 : 0;
                   const eligibleInTier = holders.filter(h => h.tier === holder.tier && h.eligible).length;
+                  const croUsdVal = cro * croUsd;
+                  const hodlUsdVal = hodl * hodlUsd;
+                  const clgUsdVal = clg * clgUsd;
                   return (
                     <div className="hidden md:block border-b border-gold-400/20 bg-gold-400/5 px-6 py-4">
                       <div className="flex items-start gap-8">
@@ -240,14 +245,12 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           <div className="text-xs text-gray-500 uppercase font-bold mb-3">Airdrop Breakdown</div>
                           <div className="flex gap-6 flex-wrap">
                             <div>
-                              <div className="text-[10px] text-gray-500 mb-0.5">Next airdrop</div>
-                              <div className="text-xl font-black text-gold-400">{cro > 0 ? (usd > 0 ? `$${usd.toFixed(2)}` : `${cro.toFixed(2)} CRO`) : '-'}</div>
-                              {cro > 0 && usd > 0 && <div className="text-xs text-gray-500">{cro.toFixed(2)} CRO</div>}
+                              <div className="text-[10px] text-gray-500 mb-0.5">Next airdrop (total)</div>
+                              <div className="text-xl font-black text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : cro > 0 ? `${cro.toFixed(2)} CRO` : '-'}</div>
                             </div>
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">60-day total (if you keep holding)</div>
-                              <div className="text-xl font-black text-green-400">{totalCro > 0 ? (croUsd > 0 ? `$${(totalCro * croUsd).toFixed(2)}` : `${totalCro.toFixed(2)} CRO`) : '-'}</div>
-                              {totalCro > 0 && croUsd > 0 && <div className="text-xs text-gray-500">{totalCro.toFixed(2)} CRO</div>}
+                              <div className="text-xl font-black text-green-400">{total60d > 0 ? (totalUsd > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(2)} CRO`) : '-'}</div>
                             </div>
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">Current boost</div>
@@ -262,17 +265,46 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                               </div>
                             )}
                           </div>
+                          {/* Per-token breakdown */}
+                          {(cro > 0 || hodl > 0 || clg > 0) && (
+                            <div className="mt-4 border-t border-white/10 pt-3">
+                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Per-token sources</div>
+                              <div className="flex gap-4 flex-wrap">
+                                {hodl > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">$HODL</span>
+                                    <span className="text-xs font-bold text-gold-400">{hodlUsdVal > 0 ? `$${hodlUsdVal.toFixed(2)}` : `${hodl.toFixed(1)}`}</span>
+                                    <span className="text-[9px] text-gray-600">{hodl.toFixed(0)} tokens</span>
+                                  </div>
+                                )}
+                                {clg > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">$CLG</span>
+                                    <span className="text-xs font-bold text-gold-400">{clgUsdVal > 0 ? `$${clgUsdVal.toFixed(2)}` : `${clg.toFixed(1)}`}</span>
+                                    <span className="text-[9px] text-gray-600">{clg.toFixed(0)} tokens</span>
+                                  </div>
+                                )}
+                                {cro > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">Partner/CRO</span>
+                                    <span className="text-xs font-bold text-gold-400">{croUsdVal > 0 ? `$${croUsdVal.toFixed(2)}` : `${cro.toFixed(2)} CRO`}</span>
+                                    <span className="text-[9px] text-gray-600">{cro.toFixed(2)} CRO</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         {/* Cycle projection */}
-                        {cro > 0 && (
+                        {usdPerCycle > 0 && (
                           <div>
                             <div className="text-xs text-gray-500 uppercase font-bold mb-3">Cycle-by-cycle projection</div>
                             <div className="flex gap-2">
                               {cycles.map((amt, c) => (
                                 <div key={c} className="text-center">
                                   <div className="text-[9px] text-gray-500 mb-1">C{c+1}</div>
-                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>{croUsd > 0 ? `$${(amt * croUsd).toFixed(2)}` : `${amt.toFixed(1)}`}</div>
-                                  <div className="text-[9px] text-gray-600">{croUsd > 0 ? '' : 'CRO'}</div>
+                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>{totalUsd > 0 ? `$${amt.toFixed(2)}` : `${amt.toFixed(1)}`}</div>
+                                  <div className="text-[9px] text-gray-600">{totalUsd > 0 ? '' : 'CRO'}</div>
                                 </div>
                               ))}
                             </div>
@@ -307,24 +339,49 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
                 {/* Mobile expanded */}
                 {isExpanded && (() => {
-                  const { cro, usd } = getAirdropPerPerson(holder.tier);
-                  let totalCro = 0;
-                  for (let c = 0; c < 6; c++) totalCro += cro * (1 + Math.min(c, 5) * 0.03);
+                  const { cro, hodl, clg, totalUsd } = getAirdropPerPerson(holder.tier);
+                  const usdPerCycle = totalUsd > 0 ? totalUsd : cro;
+                  let total60d = 0;
+                  for (let c = 0; c < 6; c++) total60d += usdPerCycle * (1 + Math.min(c, 5) * 0.03);
+                  const croUsdVal = cro * croUsd;
+                  const hodlUsdVal = hodl * hodlUsd;
+                  const clgUsdVal = clg * clgUsd;
                   return (
                     <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
                       {/* Main airdrop numbers */}
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
                           <div className="text-[9px] text-gray-500 uppercase mb-1">Next Airdrop</div>
-                          <div className="text-base font-black text-gold-400">{holder.eligible && cro > 0 ? (usd > 0 ? `$${usd.toFixed(2)}` : `${cro.toFixed(2)} CRO`) : '-'}</div>
-                          {holder.eligible && cro > 0 && usd > 0 && <div className="text-[9px] text-gray-500">{cro.toFixed(2)} CRO</div>}
+                          <div className="text-base font-black text-gold-400">{holder.eligible && (cro > 0 || totalUsd > 0) ? (totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : `${cro.toFixed(2)} CRO`) : '-'}</div>
                         </div>
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
                           <div className="text-[9px] text-gray-500 uppercase mb-1">60d Total (if you HODL)</div>
-                          <div className="text-base font-black text-green-400">{holder.eligible && totalCro > 0 ? (croUsd > 0 ? `$${(totalCro * croUsd).toFixed(2)}` : `${totalCro.toFixed(2)} CRO`) : '-'}</div>
-                          {holder.eligible && totalCro > 0 && croUsd > 0 && <div className="text-[9px] text-gray-500">{totalCro.toFixed(2)} CRO</div>}
+                          <div className="text-base font-black text-green-400">{holder.eligible && total60d > 0 ? (totalUsd > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(2)} CRO`) : '-'}</div>
                         </div>
                       </div>
+                      {/* Per-token breakdown */}
+                      {holder.eligible && (cro > 0 || hodl > 0 || clg > 0) && (
+                        <div className="flex gap-2 flex-wrap mb-3">
+                          {hodl > 0 && (
+                            <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
+                              <span className="text-[9px] text-gray-400">$HODL</span>
+                              <span className="text-[10px] font-bold text-gold-400">{hodlUsdVal > 0 ? `$${hodlUsdVal.toFixed(2)}` : `${hodl.toFixed(0)}`}</span>
+                            </div>
+                          )}
+                          {clg > 0 && (
+                            <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
+                              <span className="text-[9px] text-gray-400">$CLG</span>
+                              <span className="text-[10px] font-bold text-gold-400">{clgUsdVal > 0 ? `$${clgUsdVal.toFixed(2)}` : `${clg.toFixed(0)}`}</span>
+                            </div>
+                          )}
+                          {cro > 0 && (
+                            <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
+                              <span className="text-[9px] text-gray-400">Partner/CRO</span>
+                              <span className="text-[10px] font-bold text-gold-400">{croUsdVal > 0 ? `$${croUsdVal.toFixed(2)}` : `${cro.toFixed(2)} CRO`}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {/* Secondary stats */}
                       <div className="grid grid-cols-3 gap-2 text-[10px] mb-3">
                         <div className="text-center">
