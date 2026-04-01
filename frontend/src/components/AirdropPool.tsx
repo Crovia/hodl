@@ -48,6 +48,7 @@ export default function AirdropPool({
   const [croUsd, setCroUsd] = useState(0);
   const [hodlUsd, setHodlUsd] = useState(0);
   const [clgUsd, setClgUsd] = useState(0);
+  const [holderStats, setHolderStats] = useState<{ diamond: number; gold: number; silver: number } | null>(null);
 
   useEffect(() => {
     const loadWallets = () => {
@@ -55,6 +56,26 @@ export default function AirdropPool({
         .then(res => res.json())
         .then(d => { setWalletData(d); setLoading(false); })
         .catch(() => setLoading(false));
+    };
+    const loadHolders = () => {
+      fetch('/api/holders')
+        .then(res => res.json())
+        .then(data => {
+          if (!data.holders) return;
+          const EXCLUDED = new Set([
+            '0xb4c50913f70b870f68e6143126163ba0e9186ad7',
+            '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3',
+          ]);
+          const eligible = data.holders.filter((h: any) =>
+            !h.hasSold && h.tier !== 'jeeter' && h.tier !== 'bronze' && !EXCLUDED.has(h.address?.toLowerCase())
+          );
+          setHolderStats({
+            diamond: eligible.filter((h: any) => h.tier === 'diamond').length,
+            gold: eligible.filter((h: any) => h.tier === 'gold').length,
+            silver: eligible.filter((h: any) => h.tier === 'silver').length,
+          });
+        })
+        .catch(() => {});
     };
     const loadPrices = () => {
       fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
@@ -71,10 +92,12 @@ export default function AirdropPool({
         .catch(() => {});
     };
     loadWallets();
+    loadHolders();
     loadPrices();
     const walletInterval = setInterval(loadWallets, 60000);
+    const holdersInterval = setInterval(loadHolders, 60000);
     const priceInterval = setInterval(loadPrices, 120000);
-    return () => { clearInterval(walletInterval); clearInterval(priceInterval); };
+    return () => { clearInterval(walletInterval); clearInterval(holdersInterval); clearInterval(priceInterval); };
   }, []);
 
   const totalCro = Number(walletData?.totals?.totalCro || 0);
@@ -320,7 +343,7 @@ export default function AirdropPool({
         {/* Tier distribution */}
         <div className="glass-card rounded-2xl p-8 mb-12">
           <h3 className="text-lg font-bold text-white mb-6 text-center">Airdrop Distribution ({distributionPct}% of Treasury)</h3>
-          <div className="flex rounded-xl overflow-hidden h-12">
+          <div className="flex rounded-xl overflow-hidden h-12 mb-6">
             <div className="tier-diamond flex items-center justify-center text-sm font-bold text-white" style={{ width: '55%' }}>
               Diamond 55%
             </div>
@@ -331,8 +354,58 @@ export default function AirdropPool({
               Silver 15%
             </div>
           </div>
-          <div className="text-center mt-4 text-sm text-gray-500">
-            Jeeters &amp; Bronze: Not eligible for airdrops
+
+          {/* Per-tier stats */}
+          {(() => {
+            const tiers = [
+              { key: 'diamond', label: 'Diamond', pct: 0.55, colorClass: 'tier-diamond', textClass: 'text-diamond-400', borderClass: 'border-diamond-400/30', bgClass: 'bg-diamond-400/5' },
+              { key: 'gold',    label: 'Gold',    pct: 0.30, colorClass: 'tier-gold',    textClass: 'text-gold-400',    borderClass: 'border-gold-400/30',    bgClass: 'bg-gold-400/5'    },
+              { key: 'silver',  label: 'Silver',  pct: 0.15, colorClass: 'tier-silver',  textClass: 'text-gray-300',    borderClass: 'border-gray-400/30',    bgClass: 'bg-gray-400/5'    },
+            ] as const;
+            return (
+              <div className="grid md:grid-cols-3 gap-4">
+                {tiers.map(tier => {
+                  const count = holderStats?.[tier.key] ?? null;
+                  const poolCro = airdropCro * tier.pct;
+                  const perPerson = count && count > 0 ? poolCro / count : null;
+                  const perPersonUsd = perPerson && croUsd > 0 ? perPerson * croUsd : null;
+                  return (
+                    <div key={tier.key} className={`rounded-xl p-5 border ${tier.borderClass} ${tier.bgClass}`}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className={`w-3 h-3 rounded-full ${tier.colorClass}`} />
+                        <span className={`font-bold text-sm ${tier.textClass}`}>{tier.label}</span>
+                        <span className="text-gray-500 text-xs ml-auto">{Math.round(tier.pct * 100)}% of pool</span>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-500">Eligible holders</span>
+                          <span className="font-bold text-white">{count !== null ? count : '...'}</span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-500">Pool share</span>
+                          <span className="font-bold text-white">{airdropCro > 0 ? `${formatCro(poolCro)} CRO` : '...'}</span>
+                        </div>
+                        <div className={`flex justify-between text-xs pt-2 border-t ${tier.borderClass}`}>
+                          <span className="text-gray-400 font-medium">Per person (next)</span>
+                          <div className="text-right">
+                            <span className={`font-black text-sm ${tier.textClass}`}>
+                              {perPerson !== null ? `${formatCro(perPerson)} CRO` : airdropCro === 0 ? '...' : '—'}
+                            </span>
+                            {perPersonUsd !== null && (
+                              <div className="text-[10px] text-gray-500">${perPersonUsd.toFixed(2)}</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          <div className="text-center mt-4 text-xs text-gray-500">
+            Jeeters &amp; Bronze: Not eligible for airdrops · Per-person amounts shown without boost
           </div>
         </div>
 
