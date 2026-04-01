@@ -31,9 +31,9 @@ function truncateAddress(addr: string): string {
 }
 
 function formatCro(value: number): string {
-  if (value >= 1000) return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  if (value >= 1) return value.toLocaleString(undefined, { maximumFractionDigits: 4 });
-  return value.toLocaleString(undefined, { maximumFractionDigits: 6 });
+  if (value >= 1000) return Math.round(value).toLocaleString();
+  if (value >= 1) return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  return value.toLocaleString(undefined, { maximumFractionDigits: 4 });
 }
 
 export default function AirdropPool({
