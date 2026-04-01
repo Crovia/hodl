@@ -199,7 +199,7 @@ export default function Hero() {
         <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
           The chain doesn&apos;t lie.{' '}
           <span className="text-gold-400 font-medium">Diamond Hands</span>{' '}
-          drink the golden juice that is squeezed from jeeters.
+          Every jeeter funds the next Diamond Hands payday.
         </p>
 
         <p className="text-sm text-gray-500 mb-8">Launched by <a href="https://x.com/Awerghx" target="_blank" rel="noopener noreferrer" className="text-gold-400 font-semibold hover:text-gold-300 transition-colors">Awerghx</a></p>

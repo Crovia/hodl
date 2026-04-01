@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'DiamondHands | The Strongest Survive',
-  description: 'Who resists selling first? Diamond hands drink the golden juice squeezed from jeeters.',
+  description: 'Who resists selling first? Every jeeter funds the next Diamond Hands payday.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
