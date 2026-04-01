@@ -5,6 +5,7 @@
 export const NAME_MAP: Record<string, string> = {
   '0xb4c50913f70b870f68e6143126163ba0e9186ad7': 'Liquidity Pool',
   '0x1189331089b6ca8bea989c1f2ffd0efadcd33a69': 'Obsidian Finance Router',
+  '0xec68090566397dcc37e54b30cc264b2d68cf0489': 'Obsidian Finance Router',
   '0xaf87e4df58d735ec2971d2d8db663b02ca60175d': 'Cronos Legends',
   '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3': 'Obsidian Finance',
   '0x7e3e91b6912042f8fc446385299785ac2f12c0d0': 'haten.cro',
