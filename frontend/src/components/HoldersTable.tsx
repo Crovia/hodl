@@ -74,24 +74,36 @@ function BoostTimeline({ holdingDays }: { holdingDays: number }) {
   );
 }
 
-export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, treasuryCro = 0, treasuryHodl = 0, treasuryClg = 0, lastUpdated = null }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; treasuryCro?: number; treasuryHodl?: number; treasuryClg?: number; lastUpdated?: string | null }) {
+type WalletBalance = { id: string; croBalance: string; tokenBalance: string; clgBalance: string };
+
+export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, wallets = [], lastUpdated = null }: { holders: Holder[]; ogAddresses?: string[]; nameMap?: Record<string, string>; wallets?: WalletBalance[]; lastUpdated?: string | null }) {
   const ogSet = new Set(ogAddresses.map(a => a.toLowerCase()));
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [croUsd, setCroUsd] = useState(0);
   const [hodlUsd, setHodlUsd] = useState(0);
   const [clgUsd, setClgUsd] = useState(0);
 
-  // Per-person airdrop for each token source (20% of each token pool, split by tier)
-  const getAirdropPerPerson = (tier: string): { cro: number; hodl: number; clg: number; totalUsd: number } => {
+  // Compute total USD value for each named wallet
+  const walletUsd = (id: string) => {
+    const w = wallets.find(x => x.id === id);
+    if (!w) return 0;
+    return parseFloat(w.croBalance || '0') * croUsd
+      + parseFloat(w.tokenBalance || '0') * hodlUsd
+      + parseFloat(w.clgBalance || '0') * clgUsd;
+  };
+
+  // Per-person airdrop per wallet source: 20% of that wallet's total USD, split by tier
+  const getAirdropPerPerson = (tier: string): { dhand: number; clg: number; rotating: number; totalUsd: number } => {
     const tierPct = tier === 'diamond' ? 0.55 : tier === 'gold' ? 0.30 : tier === 'silver' ? 0.15 : 0;
-    if (tierPct === 0) return { cro: 0, hodl: 0, clg: 0, totalUsd: 0 };
+    if (tierPct === 0) return { dhand: 0, clg: 0, rotating: 0, totalUsd: 0 };
     const eligible = holders.filter(h => h.tier === tier && h.eligible).length;
-    if (eligible === 0) return { cro: 0, hodl: 0, clg: 0, totalUsd: 0 };
-    const cro = (treasuryCro * 0.2 * tierPct) / eligible;
-    const hodl = (treasuryHodl * 0.2 * tierPct) / eligible;
-    const clg = (treasuryClg * 0.2 * tierPct) / eligible;
-    const totalUsd = (cro * croUsd) + (hodl * hodlUsd) + (clg * clgUsd);
-    return { cro, hodl, clg, totalUsd };
+    if (eligible === 0) return { dhand: 0, clg: 0, rotating: 0, totalUsd: 0 };
+    const dhand = (walletUsd('DHAND') * 0.2 * tierPct) / eligible;
+    const clg = (walletUsd('CLG') * 0.2 * tierPct) / eligible;
+    const rotating = (walletUsd('ROTATING') * 0.2 * tierPct) / eligible;
+    // Fallback: if no wallet data, use sum of all wallet balances via token totals
+    const totalUsd = dhand + clg + rotating;
+    return { dhand, clg, rotating, totalUsd };
   };
 
   useEffect(() => {
@@ -193,11 +205,10 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const { cro, totalUsd } = getAirdropPerPerson(holder.tier);
-                      if (cro > 0 || totalUsd > 0) {
-                        return <div className="text-sm font-bold text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : `${cro.toFixed(1)} CRO`}</div>;
-                      }
-                      return <div className="text-sm font-bold text-gray-500">-</div>;
+                      const { totalUsd } = getAirdropPerPerson(holder.tier);
+                      return totalUsd > 0
+                        ? <div className="text-sm font-bold text-gold-400">${totalUsd.toFixed(2)}</div>
+                        : <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
                   </div>
                   <div className="text-right">
@@ -207,11 +218,11 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const { cro: croPerCycle, totalUsd: usdPerCycle } = getAirdropPerPerson(holder.tier);
-                      if (croPerCycle > 0 || usdPerCycle > 0) {
+                      const { totalUsd } = getAirdropPerPerson(holder.tier);
+                      if (totalUsd > 0) {
                         let total60d = 0;
-                        for (let cycle = 0; cycle < 6; cycle++) total60d += (usdPerCycle > 0 ? usdPerCycle : croPerCycle) * (1 + Math.min(cycle, 5) * 0.03);
-                        return <div className="text-sm font-bold text-green-400">{usdPerCycle > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(1)} CRO`}</div>;
+                        for (let cycle = 0; cycle < 6; cycle++) total60d += totalUsd * (1 + Math.min(cycle, 5) * 0.03);
+                        return <div className="text-sm font-bold text-green-400">${total60d.toFixed(2)}</div>;
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
@@ -223,20 +234,15 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
                 {/* Desktop expanded panel */}
                 {isExpanded && (() => {
-                  const { cro, hodl, clg, totalUsd } = getAirdropPerPerson(holder.tier);
-                  const usdPerCycle = totalUsd > 0 ? totalUsd : cro;
+                  const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
                   let total60d = 0;
                   const cycles = [0,1,2,3,4,5].map(c => {
-                    const boost = 1 + Math.min(c, 5) * 0.03;
-                    const amt = usdPerCycle * boost;
+                    const amt = totalUsd * (1 + Math.min(c, 5) * 0.03);
                     total60d += amt;
                     return amt;
                   });
                   const tierPct = holder.tier === 'diamond' ? 55 : holder.tier === 'gold' ? 30 : holder.tier === 'silver' ? 15 : 0;
                   const eligibleInTier = holders.filter(h => h.tier === holder.tier && h.eligible).length;
-                  const croUsdVal = cro * croUsd;
-                  const hodlUsdVal = hodl * hodlUsd;
-                  const clgUsdVal = clg * clgUsd;
                   return (
                     <div className="hidden md:block border-b border-gold-400/20 bg-gold-400/5 px-6 py-4">
                       <div className="flex items-start gap-8">
@@ -246,11 +252,11 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           <div className="flex gap-6 flex-wrap">
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">Next airdrop (total)</div>
-                              <div className="text-xl font-black text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : cro > 0 ? `${cro.toFixed(2)} CRO` : '-'}</div>
+                              <div className="text-xl font-black text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : '-'}</div>
                             </div>
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">60-day total (if you keep holding)</div>
-                              <div className="text-xl font-black text-green-400">{total60d > 0 ? (totalUsd > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(2)} CRO`) : '-'}</div>
+                              <div className="text-xl font-black text-green-400">{total60d > 0 ? `$${total60d.toFixed(2)}` : '-'}</div>
                             </div>
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">Current boost</div>
@@ -265,30 +271,27 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                               </div>
                             )}
                           </div>
-                          {/* Per-token breakdown */}
-                          {(cro > 0 || hodl > 0 || clg > 0) && (
+                          {/* Per-wallet source breakdown */}
+                          {totalUsd > 0 && (
                             <div className="mt-4 border-t border-white/10 pt-3">
-                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Per-token sources</div>
+                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Per-wallet sources (20% of each wallet&apos;s total value)</div>
                               <div className="flex gap-4 flex-wrap">
-                                {hodl > 0 && (
+                                {dhand > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">$HODL</span>
-                                    <span className="text-xs font-bold text-gold-400">{hodlUsdVal > 0 ? `$${hodlUsdVal.toFixed(2)}` : `${hodl.toFixed(1)}`}</span>
-                                    <span className="text-[9px] text-gray-600">{hodl.toFixed(0)} tokens</span>
+                                    <span className="text-[10px] text-gray-400">$HODL wallet</span>
+                                    <span className="text-xs font-bold text-gold-400">${dhand.toFixed(2)}</span>
                                   </div>
                                 )}
-                                {clg > 0 && (
+                                {clgAmt > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">$CLG</span>
-                                    <span className="text-xs font-bold text-gold-400">{clgUsdVal > 0 ? `$${clgUsdVal.toFixed(2)}` : `${clg.toFixed(1)}`}</span>
-                                    <span className="text-[9px] text-gray-600">{clg.toFixed(0)} tokens</span>
+                                    <span className="text-[10px] text-gray-400">$CLG wallet</span>
+                                    <span className="text-xs font-bold text-gold-400">${clgAmt.toFixed(2)}</span>
                                   </div>
                                 )}
-                                {cro > 0 && (
+                                {rotating > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] text-gray-400">Partner/CRO</span>
-                                    <span className="text-xs font-bold text-gold-400">{croUsdVal > 0 ? `$${croUsdVal.toFixed(2)}` : `${cro.toFixed(2)} CRO`}</span>
-                                    <span className="text-[9px] text-gray-600">{cro.toFixed(2)} CRO</span>
+                                    <span className="text-[10px] text-gray-400">Partner wallet</span>
+                                    <span className="text-xs font-bold text-gold-400">${rotating.toFixed(2)}</span>
                                   </div>
                                 )}
                               </div>
@@ -296,15 +299,14 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           )}
                         </div>
                         {/* Cycle projection */}
-                        {usdPerCycle > 0 && (
+                        {totalUsd > 0 && (
                           <div>
                             <div className="text-xs text-gray-500 uppercase font-bold mb-3">Cycle-by-cycle projection</div>
                             <div className="flex gap-2">
                               {cycles.map((amt, c) => (
                                 <div key={c} className="text-center">
                                   <div className="text-[9px] text-gray-500 mb-1">C{c+1}</div>
-                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>{totalUsd > 0 ? `$${amt.toFixed(2)}` : `${amt.toFixed(1)}`}</div>
-                                  <div className="text-[9px] text-gray-600">{totalUsd > 0 ? '' : 'CRO'}</div>
+                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>${amt.toFixed(2)}</div>
                                 </div>
                               ))}
                             </div>
@@ -339,45 +341,41 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
                 {/* Mobile expanded */}
                 {isExpanded && (() => {
-                  const { cro, hodl, clg, totalUsd } = getAirdropPerPerson(holder.tier);
-                  const usdPerCycle = totalUsd > 0 ? totalUsd : cro;
+                  const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
                   let total60d = 0;
-                  for (let c = 0; c < 6; c++) total60d += usdPerCycle * (1 + Math.min(c, 5) * 0.03);
-                  const croUsdVal = cro * croUsd;
-                  const hodlUsdVal = hodl * hodlUsd;
-                  const clgUsdVal = clg * clgUsd;
+                  for (let c = 0; c < 6; c++) total60d += totalUsd * (1 + Math.min(c, 5) * 0.03);
                   return (
                     <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
                       {/* Main airdrop numbers */}
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
                           <div className="text-[9px] text-gray-500 uppercase mb-1">Next Airdrop</div>
-                          <div className="text-base font-black text-gold-400">{holder.eligible && (cro > 0 || totalUsd > 0) ? (totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : `${cro.toFixed(2)} CRO`) : '-'}</div>
+                          <div className="text-base font-black text-gold-400">{holder.eligible && totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : '-'}</div>
                         </div>
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
                           <div className="text-[9px] text-gray-500 uppercase mb-1">60d Total (if you HODL)</div>
-                          <div className="text-base font-black text-green-400">{holder.eligible && total60d > 0 ? (totalUsd > 0 ? `$${total60d.toFixed(2)}` : `${total60d.toFixed(2)} CRO`) : '-'}</div>
+                          <div className="text-base font-black text-green-400">{holder.eligible && total60d > 0 ? `$${total60d.toFixed(2)}` : '-'}</div>
                         </div>
                       </div>
-                      {/* Per-token breakdown */}
-                      {holder.eligible && (cro > 0 || hodl > 0 || clg > 0) && (
+                      {/* Per-wallet breakdown */}
+                      {holder.eligible && totalUsd > 0 && (
                         <div className="flex gap-2 flex-wrap mb-3">
-                          {hodl > 0 && (
+                          {dhand > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">$HODL</span>
-                              <span className="text-[10px] font-bold text-gold-400">{hodlUsdVal > 0 ? `$${hodlUsdVal.toFixed(2)}` : `${hodl.toFixed(0)}`}</span>
+                              <span className="text-[9px] text-gray-400">$HODL wallet</span>
+                              <span className="text-[10px] font-bold text-gold-400">${dhand.toFixed(2)}</span>
                             </div>
                           )}
-                          {clg > 0 && (
+                          {clgAmt > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">$CLG</span>
-                              <span className="text-[10px] font-bold text-gold-400">{clgUsdVal > 0 ? `$${clgUsdVal.toFixed(2)}` : `${clg.toFixed(0)}`}</span>
+                              <span className="text-[9px] text-gray-400">$CLG wallet</span>
+                              <span className="text-[10px] font-bold text-gold-400">${clgAmt.toFixed(2)}</span>
                             </div>
                           )}
-                          {cro > 0 && (
+                          {rotating > 0 && (
                             <div className="flex items-center gap-1.5 bg-black/30 rounded-lg px-2 py-1">
-                              <span className="text-[9px] text-gray-400">Partner/CRO</span>
-                              <span className="text-[10px] font-bold text-gold-400">{croUsdVal > 0 ? `$${croUsdVal.toFixed(2)}` : `${cro.toFixed(2)} CRO`}</span>
+                              <span className="text-[9px] text-gray-400">Partner wallet</span>
+                              <span className="text-[10px] font-bold text-gold-400">${rotating.toFixed(2)}</span>
                             </div>
                           )}
                         </div>
