@@ -81,15 +81,15 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
   const [hodlUsd, setHodlUsd] = useState(0);
   const [clgUsd, setClgUsd] = useState(0);
 
-  // Calculate airdrop per person from live treasury data (not backend airdropAmount)
-  const totalTreasuryUsd = (treasuryCro * croUsd) + (treasuryHodl * hodlUsd) + (treasuryClg * clgUsd);
-  const airdropPoolUsd = totalTreasuryUsd * 0.2; // 20% distributed
-  const getAirdropPerPerson = (tier: string): number => {
+  // Calculate airdrop per person in CRO (no USD price dependency — shows immediately when treasury loads)
+  const airdropPoolCro = treasuryCro * 0.2; // 20% of CRO treasury distributed
+  const getAirdropPerPerson = (tier: string): { cro: number; usd: number } => {
     const tierPct = tier === 'diamond' ? 0.55 : tier === 'gold' ? 0.30 : tier === 'silver' ? 0.15 : 0;
-    if (tierPct === 0) return 0;
+    if (tierPct === 0) return { cro: 0, usd: 0 };
     const eligibleInTier = holders.filter(h => h.tier === tier && h.eligible).length;
-    if (eligibleInTier === 0) return 0;
-    return (airdropPoolUsd * tierPct) / eligibleInTier;
+    if (eligibleInTier === 0) return { cro: 0, usd: 0 };
+    const cro = (airdropPoolCro * tierPct) / eligibleInTier;
+    return { cro, usd: cro * croUsd };
   };
 
   useEffect(() => {
@@ -184,9 +184,14 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const usdPerCycle = getAirdropPerPerson(holder.tier);
-                      if (usdPerCycle > 0) {
-                        return <div className="text-sm font-bold text-gold-400">{usdPerCycle >= 1000 ? `$${(usdPerCycle/1000).toFixed(1)}K` : `$${usdPerCycle.toFixed(2)}`}</div>;
+                      const { cro, usd } = getAirdropPerPerson(holder.tier);
+                      if (cro > 0) {
+                        return (
+                          <div>
+                            <div className="text-sm font-bold text-gold-400">{cro >= 1000 ? `${(cro/1000).toFixed(1)}K` : cro.toFixed(1)} CRO</div>
+                            {usd > 0 && <div className="text-xs text-gray-500">${usd.toFixed(2)}</div>}
+                          </div>
+                        );
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
@@ -198,11 +203,17 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   </div>
                   <div className="text-right">
                     {holder.eligible ? (() => {
-                      const usdPerCycle = getAirdropPerPerson(holder.tier);
-                      if (usdPerCycle > 0) {
-                        let total = 0;
-                        for (let cycle = 0; cycle < 6; cycle++) total += usdPerCycle * (1 + Math.min(cycle, 5) * 0.03);
-                        return <div className="text-sm font-bold text-green-400">{total >= 1000 ? `$${(total/1000).toFixed(1)}K` : `$${total.toFixed(2)}`}</div>;
+                      const { cro: croPerCycle, usd: usdPerCycle } = getAirdropPerPerson(holder.tier);
+                      if (croPerCycle > 0) {
+                        let totalCro = 0;
+                        for (let cycle = 0; cycle < 6; cycle++) totalCro += croPerCycle * (1 + Math.min(cycle, 5) * 0.03);
+                        const totalUsd = totalCro * croUsd;
+                        return (
+                          <div>
+                            <div className="text-sm font-bold text-green-400">{totalCro >= 1000 ? `${(totalCro/1000).toFixed(1)}K` : totalCro.toFixed(1)} CRO</div>
+                            {totalUsd > 0 && <div className="text-xs text-gray-500">${totalUsd.toFixed(2)}</div>}
+                          </div>
+                        );
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
                     })() : <div className="text-sm font-bold text-gray-500">-</div>}
@@ -240,8 +251,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">Airdrop</div>
                         <div className="font-bold text-gold-400">{holder.eligible ? (() => {
-                          const usd = getAirdropPerPerson(holder.tier);
-                          return usd > 0 ? `$${usd.toFixed(2)}` : '-';
+                          const { cro } = getAirdropPerPerson(holder.tier);
+                          return cro > 0 ? `${cro.toFixed(1)} CRO` : '-';
                         })() : '-'}</div>
                       </div>
                       <div>
@@ -251,8 +262,8 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       <div>
                         <div className="text-gray-500 uppercase mb-0.5">60d Total</div>
                         <div className="font-bold text-green-400">{holder.eligible ? (() => {
-                          const pp = getAirdropPerPerson(holder.tier);
-                          if (pp > 0) { let t = 0; for (let c = 0; c < 6; c++) t += pp * (1 + Math.min(c, 5) * 0.03); return `$${t.toFixed(2)}`; }
+                          const { cro: pp } = getAirdropPerPerson(holder.tier);
+                          if (pp > 0) { let t = 0; for (let c = 0; c < 6; c++) t += pp * (1 + Math.min(c, 5) * 0.03); return `${t.toFixed(1)} CRO`; }
                           return '-';
                         })() : '-'}</div>
                       </div>
