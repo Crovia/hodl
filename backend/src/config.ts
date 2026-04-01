@@ -61,8 +61,8 @@ export const CONFIG = {
   // Pool share per tier
   TIER_POOL_SHARE: 33.33,
 
-  // Boost: +10% per 10-day period after first airdrop
-  BOOST_PER_PERIOD: 10,
+  // Boost: +3% per 10-day period, starting at day 10
+  BOOST_PER_PERIOD: 3,
   BOOST_PERIOD_DAYS: 10,
 
   // Server

@@ -149,7 +149,7 @@ export default function TierSystem() {
             <span className="diamond-text">Tier System</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-xl mx-auto">
-            The pool splits equally between tiers. Within each tier, rewards scale by your holdings.
+            The pool splits between tiers. Within each tier, every eligible holder receives an equal share.
           </p>
         </div>
 

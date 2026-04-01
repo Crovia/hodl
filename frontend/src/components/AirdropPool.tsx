@@ -78,9 +78,9 @@ export default function AirdropPool({
         .catch(() => {});
     };
     const loadPrices = () => {
-      fetch('https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=usd')
+      fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xe61db569e231b3f5530168aa2c9d50246525b6d6')
         .then(res => res.json())
-        .then(data => { if (data['crypto-com-chain']?.usd) setCroUsd(data['crypto-com-chain'].usd); })
+        .then(data => { if (data.pair?.priceUsd) setCroUsd(parseFloat(data.pair.priceUsd)); })
         .catch(() => {});
       fetch('https://api.dexscreener.com/latest/dex/pairs/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7')
         .then(res => res.json())
@@ -154,12 +154,11 @@ export default function AirdropPool({
           </p>
           <div className="mt-4 inline-block px-4 py-2 rounded-xl bg-gold-400/5 border border-gold-400/20">
             <p className="text-sm text-gray-400">
-              <span className="text-gold-400 font-bold">Next estimated airdrop:</span>{' '}
-              <span className="text-white font-bold">April 3, 2026</span>
-              <span className="text-gray-500 ml-1">(~10 days from launch)</span>
+              <span className="text-gold-400 font-bold">Airdrop cycle:</span>{' '}
+              <span className="text-white font-bold">every ~10 days</span>
             </p>
             <p className="text-xs text-gray-400 mt-1">
-              Exact timing may vary — airdrops are processed manually and there can be some delay.
+              Airdrops are processed manually. Exact timing announced in Discord.
             </p>
           </div>
           {walletData?.timestamp && (
@@ -189,9 +188,9 @@ export default function AirdropPool({
               )}
             </div>
             <div className="p-6 text-center">
-              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Next Airdrop (est.)</div>
-              <div className="text-2xl md:text-3xl font-black text-white">Apr 3</div>
-              <div className="text-xs text-gray-500 mt-1">May be delayed</div>
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Airdrop Cycle</div>
+              <div className="text-2xl md:text-3xl font-black text-white">~10d</div>
+              <div className="text-xs text-gray-500 mt-1">Announced in Discord</div>
             </div>
             <div className="p-6 text-center">
               <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Airdrops Completed</div>

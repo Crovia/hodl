@@ -11,13 +11,13 @@ function generateHolders(): Holder[] {
   const now = Date.now();
   // hasSold = true means they sold/transferred — permanently jeeter regardless of holdings
   const holders: { pct: number; days: number; hasSold?: boolean }[] = [
-    // Diamond tier (2%+)
+    // Diamond tier (1.8%+)
     { pct: 4.2, days: 10 },
     { pct: 3.1, days: 8 },
     { pct: 2.8, days: 7 },
     { pct: 2.5, days: 6 },
     { pct: 2.0, days: 5 },
-    // Gold tier (1.5%+)
+    // Gold tier (1%+)
     { pct: 1.8, days: 5 },
     { pct: 1.5, days: 4 },
     // Silver tier (0.5%+)
@@ -40,15 +40,15 @@ function generateHolders(): Holder[] {
 
   // No airdrops yet, so airdrop amounts are estimates based on future treasury
   const airdropPool = 48000;
-  const diamondPool = airdropPool * 0.50;
+  const diamondPool = airdropPool * 0.55;
   const goldPool = airdropPool * 0.30;
-  const silverPool = airdropPool * 0.20;
+  const silverPool = airdropPool * 0.15;
 
   // Filter only eligible holders for tier calculations
   const eligible = holders.filter(h => !h.hasSold);
   const diamondHolders = eligible.filter(h => h.pct >= 1.8);
   const goldHolders = eligible.filter(h => h.pct >= 1 && h.pct < 1.8);
-  const silverHolders = eligible.filter(h => h.pct >= 0.5 && h.pct < 1.5);
+  const silverHolders = eligible.filter(h => h.pct >= 0.5 && h.pct < 1);
 
   return holders.map(h => {
     const hasSold = h.hasSold || false;

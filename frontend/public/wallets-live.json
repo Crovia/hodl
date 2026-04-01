@@ -1,36 +1,36 @@
 {
-  "timestamp": "2026-03-26T19:04:38.372Z",
+  "timestamp": "2026-04-01T15:49:37.094Z",
   "wallets": [
     {
       "id": "DHAND",
       "token": "$HODL",
       "address": "0x36148b668edc1d380671467579ee851a72b9455c",
       "allocation": 35,
-      "croBalance": "99.976897765",
-      "tokenBalance": "48496939.61442267408489272"
+      "croBalance": "99.91116835375",
+      "tokenBalance": "54036880.823070027688761846"
     },
     {
       "id": "CLG",
       "token": "$CLG",
       "address": "0x04407f3cc344df8c271b56bd42f9a169659266fc",
       "allocation": 33,
-      "croBalance": "8161.620946698513729227",
-      "tokenBalance": "30631899.894771644904715872"
+      "croBalance": "21.475051552624264448",
+      "tokenBalance": "25789738.058781443185369318"
     },
     {
       "id": "ROTATING",
       "token": "Rotating",
       "address": "0xf8de57e772b1a29b704dae1f9174087ff568d2bc",
       "allocation": 32,
-      "croBalance": "8161.717454459194490398",
-      "tokenBalance": "29265021.473938974993675151"
+      "croBalance": "12251.279791586799048682",
+      "tokenBalance": "24330248.104886238956472913"
     }
   ],
   "totals": {
-    "totalCro": "16423.3153",
-    "totalToken": "108393860.9831",
-    "airdropCro": "3284.6631",
-    "airdropToken": "21678772.1966",
+    "totalCro": "12372.6660",
+    "totalToken": "104156866.9867",
+    "airdropCro": "2474.5332",
+    "airdropToken": "20831373.3973",
     "distributionPct": 20
   }
 }

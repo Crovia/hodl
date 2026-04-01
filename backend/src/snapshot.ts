@@ -82,8 +82,8 @@ function getTier(percentage: number): HolderRecord['tier'] {
 
 function getBoost(holdingDays: number): number {
   const periods = Math.floor(holdingDays / CONFIG.BOOST_PERIOD_DAYS);
-  if (periods < 2) return 0;
-  return (periods - 1) * CONFIG.BOOST_PER_PERIOD;
+  if (periods < 1) return 0;
+  return periods * CONFIG.BOOST_PER_PERIOD;
 }
 
 function getEpoch(): number {
