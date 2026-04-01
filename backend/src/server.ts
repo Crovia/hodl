@@ -42,57 +42,56 @@ app.get('/api/config', async () => {
   };
 });
 
+const CLG_ADDRESS = '0x08d9cb5100C306C2909B63415d7ff05268633b41';
+let _hodlDecimals: number | null = null;
+let _clgDecimals: number | null = null;
+
 // GET /api/wallets — live balances of the 3 buyback wallets
 app.get('/api/wallets', async () => {
   const provider = await getProviderWithFallback();
-  const wallets = [];
+  const hasToken = CONFIG.TOKEN_ADDRESS !== '0x0000000000000000000000000000000000000000';
+  const hodlContract = hasToken ? new ethers.Contract(CONFIG.TOKEN_ADDRESS, ERC20_ABI, provider) : null;
+  const clgContract = new ethers.Contract(CLG_ADDRESS, ERC20_ABI, provider);
 
-  for (const [key, wallet] of Object.entries(CONFIG.BUYBACK_WALLETS)) {
+  // Cache decimals — they never change
+  if (hasToken && _hodlDecimals === null) {
+    try { _hodlDecimals = Number(await hodlContract!.decimals()) } catch { _hodlDecimals = 18 }
+  }
+  if (_clgDecimals === null) {
+    try { _clgDecimals = Number(await clgContract.decimals()) } catch { _clgDecimals = 18 }
+  }
+
+  // Fetch all balances in parallel
+  const walletEntries = Object.entries(CONFIG.BUYBACK_WALLETS);
+  const wallets = await Promise.all(walletEntries.map(async ([key, wallet]) => {
     try {
-      // Get native CRO balance
-      const croBalance = await provider.getBalance(wallet.address);
-      const croFormatted = ethers.formatEther(croBalance);
+      const fetches: Promise<any>[] = [provider.getBalance(wallet.address)];
+      if (hasToken) fetches.push(hodlContract!.balanceOf(wallet.address));
+      fetches.push(clgContract.balanceOf(wallet.address).catch(() => 0n));
 
-      // Get $HODL token balance if token address is set
-      let tokenBalance = '0';
-      if (CONFIG.TOKEN_ADDRESS !== '0x0000000000000000000000000000000000000000') {
-        const token = new ethers.Contract(CONFIG.TOKEN_ADDRESS, ERC20_ABI, provider);
-        const decimals = await token.decimals();
-        const bal = await token.balanceOf(wallet.address);
-        tokenBalance = ethers.formatUnits(bal, decimals);
-      }
-
-      // Get $CLG balance for the CLG wallet
-      let clgBalance = '0';
-      const CLG_ADDRESS = '0x08d9cb5100C306C2909B63415d7ff05268633b41';
-      try {
-        const clgToken = new ethers.Contract(CLG_ADDRESS, ERC20_ABI, provider);
-        const clgDecimals = await clgToken.decimals();
-        const clgBal = await clgToken.balanceOf(wallet.address);
-        clgBalance = ethers.formatUnits(clgBal, clgDecimals);
-      } catch { /* CLG not available */ }
-
-      wallets.push({
+      const [croBalance, hodlBal, clgBal] = await Promise.all(fetches);
+      return {
         id: key,
         token: wallet.token,
         address: wallet.address,
         allocation: wallet.allocation,
-        croBalance: croFormatted,
-        tokenBalance,
-        clgBalance,
-      });
+        croBalance: ethers.formatEther(croBalance),
+        tokenBalance: hasToken ? ethers.formatUnits(hodlBal, _hodlDecimals!) : '0',
+        clgBalance: ethers.formatUnits(clgBal, _clgDecimals!),
+      };
     } catch (err) {
-      wallets.push({
+      return {
         id: key,
         token: wallet.token,
         address: wallet.address,
         allocation: wallet.allocation,
         croBalance: '0',
         tokenBalance: '0',
+        clgBalance: '0',
         error: 'Failed to fetch balance',
-      });
+      };
     }
-  }
+  }));
 
   // Calculate total across wallets and 20% airdrop amount
   const totalCro = wallets.reduce((s, w) => s + Number(w.croBalance), 0);
