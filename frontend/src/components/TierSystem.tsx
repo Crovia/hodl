@@ -18,6 +18,7 @@ const shameImages = [
 ];
 
 const NAME_MAP: Record<string, string> = {
+  '0x1189331089b6ca8bea989c1f2ffd0efadcd33a69': 'Obsidian Finance Router',
   '0xaf87e4df58d735ec2971d2d8db663b02ca60175d': 'Cronos Legends',
   '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3': 'Obsidian Finance',
   '0x7e3e91b6912042f8fc446385299785ac2f12c0d0': 'haten.cro',
