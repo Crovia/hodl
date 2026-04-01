@@ -26,6 +26,11 @@ const cryImages = [
 
 const TRADER_THRESHOLD = 0.2; // >0.2% = trader, <=0.2% = jeeter
 
+const CONTRACT_ADDRESSES = new Set([
+  '0x1189331089b6ca8bea989c1f2ffd0efadcd33a69',
+  '0xec68090566397dcc37e54b30cc264b2d68cf0489',
+]);
+
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
@@ -193,6 +198,7 @@ export default function TradersJeetersPage() {
               const hardcodedName = NAME_MAP[h.address.toLowerCase()];
               const cronosId = cronosIds[h.address.toLowerCase()];
               const isTrader = h.percentage > TRADER_THRESHOLD;
+              const isContract = CONTRACT_ADDRESSES.has(h.address.toLowerCase());
               const isOg = OG_ADDRESSES.has(h.address.toLowerCase());
               const balanceNum = parseFloat(h.balance);
               const holdingUsd = balanceNum * hodlUsd;
@@ -201,27 +207,39 @@ export default function TradersJeetersPage() {
                 <div
                   key={h.address}
                   className={`glass-card rounded-lg overflow-hidden border transition-all ${
-                    isTrader
+                    isContract
+                      ? 'border-gray-500/20 hover:border-gray-500/40'
+                      : isTrader
                       ? 'border-amber-400/20 hover:border-amber-400/40'
                       : 'border-red-500/20 hover:border-red-500/40'
                   }`}
                 >
                   <div className={`h-0.5 bg-gradient-to-r ${
-                    isTrader ? 'from-amber-400 to-amber-600' : 'from-red-500 to-red-700'
+                    isContract ? 'from-gray-500 to-gray-600' : isTrader ? 'from-amber-400 to-amber-600' : 'from-red-500 to-red-700'
                   }`} />
                   <div className="px-4 py-2.5 flex items-center gap-3">
-                    <img
-                      src={cryImages[i % cryImages.length]}
-                      alt={isTrader ? 'Trader' : 'Jeeter'}
-                      className="w-9 h-9 rounded-full object-cover bg-black/30 flex-shrink-0"
-                    />
+                    {!isContract && (
+                      <img
+                        src={cryImages[i % cryImages.length]}
+                        alt={isTrader ? 'Trader' : 'Jeeter'}
+                        className="w-9 h-9 rounded-full object-cover bg-black/30 flex-shrink-0"
+                      />
+                    )}
+                    {isContract && (
+                      <div className="w-9 h-9 rounded-full bg-gray-500/20 border border-gray-500/30 flex items-center justify-center flex-shrink-0 text-gray-400 text-xs font-bold">SC</div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase ${
-                          isTrader ? 'bg-amber-500/40' : 'tier-jeeter'
-                        }`}>
-                          {isTrader ? 'Trader' : 'Jeeter'}
-                        </span>
+                        {!isContract && (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase ${
+                            isTrader ? 'bg-amber-500/40' : 'tier-jeeter'
+                          }`}>
+                            {isTrader ? 'Trader' : 'Jeeter'}
+                          </span>
+                        )}
+                        {isContract && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-gray-300 uppercase bg-gray-500/30">Contract</span>
+                        )}
                         {isOg && (
                           <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gold-400/15 text-gold-400 border border-gold-400/30">OG</span>
                         )}
@@ -239,9 +257,11 @@ export default function TradersJeetersPage() {
                         >
                           {h.address.slice(0, 6)}…{h.address.slice(-4)}
                         </a>
-                        <span className="text-[10px] text-gray-500 ml-auto">
-                          {h.lastSellTime ? `sold ${timeAgo(h.lastSellTime)}` : `held ${h.holdingDays}d`}
-                        </span>
+                        {!isContract && (
+                          <span className="text-[10px] text-gray-500 ml-auto">
+                            {h.lastSellTime ? `sold ${timeAgo(h.lastSellTime)}` : `held ${h.holdingDays}d`}
+                          </span>
+                        )}
                       </div>
                       <div className="flex flex-wrap gap-3 mt-1 text-[11px] text-gray-500">
                         <span>Holding <span className="text-white font-medium">{h.percentage}%</span></span>
@@ -254,8 +274,8 @@ export default function TradersJeetersPage() {
                           </span></span>
                         )}
                       </div>
-                      {/* Dump progress bar */}
-                      {h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
+                      {/* Dump progress bar — hidden for contracts */}
+                      {!isContract && h.totalReceived && parseFloat(h.totalReceived) > 0 && (() => {
                         const received = parseFloat(h.totalReceived!);
                         const remaining = balanceNum;
                         const soldAmount = received - remaining;
@@ -288,12 +308,14 @@ export default function TradersJeetersPage() {
                     )}
                   </div>
                   <div className={`px-4 py-1 border-t text-center ${
-                    isTrader
+                    isContract
+                      ? 'bg-gray-500/5 border-gray-500/10'
+                      : isTrader
                       ? 'bg-amber-400/5 border-amber-400/10'
                       : 'bg-red-500/5 border-red-500/10'
                   }`}>
-                    <span className={`text-[10px] font-bold ${isTrader ? 'text-amber-400' : 'text-red-400'}`}>
-                      {isTrader ? 'Sold tokens — disqualified from airdrops' : 'Forfeited all future airdrops permanently'}
+                    <span className={`text-[10px] font-bold ${isContract ? 'text-gray-400' : isTrader ? 'text-amber-400' : 'text-red-400'}`}>
+                      {isContract ? 'Contract address — not a personal wallet' : isTrader ? 'Sold tokens — disqualified from airdrops' : 'Forfeited all future airdrops permanently'}
                     </span>
                   </div>
                 </div>
