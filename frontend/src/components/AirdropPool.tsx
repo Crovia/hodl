@@ -357,6 +357,15 @@ export default function AirdropPool({
 
           {/* Per-tier stats */}
           {(() => {
+            // Total airdrop USD = sum of 20% of each wallet's total USD value
+            const totalAirdropUsd = wallets.reduce((sum, w) => {
+              const wUsd = Number(w.croBalance) * croUsd
+                + Number(w.tokenBalance) * hodlUsd
+                + Number(w.clgBalance || 0) * clgUsd;
+              return sum + wUsd * (distributionPct / 100);
+            }, 0);
+            const hasData = pricesReady && totalAirdropUsd > 0;
+
             const tiers = [
               { key: 'diamond', label: 'Diamond', pct: 0.55, colorClass: 'tier-diamond', textClass: 'text-diamond-400', borderClass: 'border-diamond-400/30', bgClass: 'bg-diamond-400/5' },
               { key: 'gold',    label: 'Gold',    pct: 0.30, colorClass: 'tier-gold',    textClass: 'text-gold-400',    borderClass: 'border-gold-400/30',    bgClass: 'bg-gold-400/5'    },
@@ -366,9 +375,8 @@ export default function AirdropPool({
               <div className="grid md:grid-cols-3 gap-4">
                 {tiers.map(tier => {
                   const count = holderStats?.[tier.key] ?? null;
-                  const poolCro = airdropCro * tier.pct;
-                  const perPerson = count && count > 0 ? poolCro / count : null;
-                  const perPersonUsd = perPerson && croUsd > 0 ? perPerson * croUsd : null;
+                  const poolUsd = totalAirdropUsd * tier.pct;
+                  const perPersonUsd = count && count > 0 ? poolUsd / count : null;
                   return (
                     <div key={tier.key} className={`rounded-xl p-5 border ${tier.borderClass} ${tier.bgClass}`}>
                       <div className="flex items-center gap-2 mb-3">
@@ -383,17 +391,14 @@ export default function AirdropPool({
                         </div>
                         <div className="flex justify-between text-xs">
                           <span className="text-gray-500">Pool share</span>
-                          <span className="font-bold text-white">{airdropCro > 0 ? `${formatCro(poolCro)} CRO` : '...'}</span>
+                          <span className="font-bold text-white">{hasData ? `$${formatCro(poolUsd)}` : '...'}</span>
                         </div>
                         <div className={`flex justify-between text-xs pt-2 border-t ${tier.borderClass}`}>
                           <span className="text-gray-400 font-medium">Per person (next)</span>
                           <div className="text-right">
                             <span className={`font-black text-sm ${tier.textClass}`}>
-                              {perPerson !== null ? `${formatCro(perPerson)} CRO` : airdropCro === 0 ? '...' : '—'}
+                              {perPersonUsd !== null ? `$${perPersonUsd.toFixed(2)}` : hasData ? '—' : '...'}
                             </span>
-                            {perPersonUsd !== null && (
-                              <div className="text-[10px] text-gray-500">${perPersonUsd.toFixed(2)}</div>
-                            )}
                           </div>
                         </div>
                       </div>
