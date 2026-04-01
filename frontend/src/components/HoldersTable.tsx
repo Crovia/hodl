@@ -220,8 +220,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                     {holder.eligible ? (() => {
                       const { totalUsd } = getAirdropPerPerson(holder.tier);
                       if (totalUsd > 0) {
+                        const currentPeriods = Math.floor(holder.holdingDays / 10);
                         let total60d = 0;
-                        for (let cycle = 0; cycle < 6; cycle++) total60d += totalUsd * (1 + Math.min(cycle, 5) * 0.03);
+                        for (let cycle = 0; cycle < 6; cycle++) total60d += totalUsd * (1 + (currentPeriods + cycle) * 0.03);
                         return <div className="text-sm font-bold text-green-400">${total60d.toFixed(2)}</div>;
                       }
                       return <div className="text-sm font-bold text-gray-500">-</div>;
@@ -235,9 +236,10 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 {/* Desktop expanded panel */}
                 {isExpanded && (() => {
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
+                  const currentPeriods = Math.floor(holder.holdingDays / 10);
                   let total60d = 0;
                   const cycles = [0,1,2,3,4,5].map(c => {
-                    const amt = totalUsd * (1 + Math.min(c, 5) * 0.03);
+                    const amt = totalUsd * (1 + (currentPeriods + c) * 0.03);
                     total60d += amt;
                     return amt;
                   });
@@ -342,8 +344,9 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 {/* Mobile expanded */}
                 {isExpanded && (() => {
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
+                  const currentPeriodsMobile = Math.floor(holder.holdingDays / 10);
                   let total60d = 0;
-                  for (let c = 0; c < 6; c++) total60d += totalUsd * (1 + Math.min(c, 5) * 0.03);
+                  for (let c = 0; c < 6; c++) total60d += totalUsd * (1 + (currentPeriodsMobile + c) * 0.03);
                   return (
                     <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
                       {/* Main airdrop numbers */}

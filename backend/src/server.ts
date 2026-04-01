@@ -358,12 +358,12 @@ async function start() {
     await app.listen({ port: CONFIG.PORT, host: '0.0.0.0' });
     console.log(`DiamondHands API running on port ${CONFIG.PORT}`);
 
-    // Run first snapshot 30s after boot, then every 6 hours
+    // Run first snapshot 30s after boot, then every 10 minutes
     setTimeout(() => {
       runAutoSnapshot();
       setInterval(runAutoSnapshot, SNAPSHOT_INTERVAL_MS);
     }, 30_000);
-    console.log(`[auto-snapshot] Scheduled: first run in 30s, then every 6 hours`);
+    console.log(`[auto-snapshot] Scheduled: first run in 30s, then every 10 minutes`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);

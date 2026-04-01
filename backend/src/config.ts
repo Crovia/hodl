@@ -58,9 +58,6 @@ export const CONFIG = {
     SILVER: 0.5,  // 0.5%+ of supply
   },
 
-  // Pool share per tier
-  TIER_POOL_SHARE: 33.33,
-
   // Boost: +3% per 10-day period, starting at day 10
   BOOST_PER_PERIOD: 3,
   BOOST_PERIOD_DAYS: 10,
