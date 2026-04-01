@@ -150,7 +150,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
               If You HODL
               <div className="absolute right-0 top-5 z-20 hidden group-hover:block w-56 bg-gray-900 border border-gold-400/30 rounded-lg p-3 text-[10px] font-normal normal-case text-gray-300 shadow-xl">
                 <span className="text-gold-400 font-bold block mb-1">60-day projection</span>
-                Estimated total CRO you&apos;d earn over the next 6 airdrop cycles (~60 days) if you keep holding and the treasury stays at its current level. Each cycle your boost grows +3%.
+                Estimated total USD you&apos;d earn over the next 6 airdrop cycles (~60 days) if you keep holding and the treasury stays at its current level. Each cycle your boost grows +3%.
               </div>
             </div>
             <div className="text-center">Boost Progress</div>
