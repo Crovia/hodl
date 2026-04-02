@@ -138,7 +138,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
         <div className="glass-card rounded-2xl overflow-hidden">
           {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
+          <div className="hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_12rem] gap-4 p-4 bg-black/40 border-b border-gold-400/10 text-xs font-bold text-gray-500 uppercase tracking-wider">
             <div>#</div>
             <div>Wallet</div>
             <div>Tier</div>
@@ -146,13 +146,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             <div className="text-right">Days Held</div>
             <div className="text-right">Next Airdrop</div>
             <div className="text-right">Boost</div>
-            <div className="text-right group relative cursor-help">
-              If You HODL
-              <div className="absolute right-0 top-5 z-20 hidden group-hover:block w-56 bg-gray-900 border border-gold-400/30 rounded-lg p-3 text-[10px] font-normal normal-case text-gray-300 shadow-xl">
-                <span className="text-gold-400 font-bold block mb-1">60-day projection</span>
-                Estimated total USD you&apos;d earn over the next 6 airdrop cycles (~60 days) if you keep holding and the treasury stays at its current level. Each cycle your boost grows +3%.
-              </div>
-            </div>
             <div className="text-center">Boost Progress</div>
           </div>
           {/* Mobile header */}
@@ -172,7 +165,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
               <div key={holder.address}>
                 {/* Desktop row */}
                 <div
-                  className={`hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_5.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer ${
+                  className={`hidden md:grid grid-cols-[2rem_10rem_7.5rem_4rem_3rem_5rem_3.5rem_12rem] gap-4 p-4 items-center border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer ${
                     holder.hasSold ? 'opacity-40 line-through' : ''
                   } ${!holder.eligible && !holder.hasSold ? 'opacity-60' : ''} ${isExpanded ? 'bg-white/5 border-gold-400/20' : ''}`}
                   onClick={() => setExpandedRow(isExpanded ? null : i)}
@@ -216,18 +209,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                       {holder.boostPercentage > 0 ? `+${holder.boostPercentage}%` : '0%'}
                     </div>
                   </div>
-                  <div className="text-right">
-                    {holder.eligible ? (() => {
-                      const { totalUsd } = getAirdropPerPerson(holder.tier);
-                      if (totalUsd > 0) {
-                        const currentPeriods = Math.floor(holder.holdingDays / 10);
-                        let total60d = 0;
-                        for (let cycle = 0; cycle < 6; cycle++) total60d += totalUsd * (1 + (currentPeriods + cycle) * 0.03);
-                        return <div className="text-sm font-bold text-green-400">${total60d.toFixed(2)}</div>;
-                      }
-                      return <div className="text-sm font-bold text-gray-500">-</div>;
-                    })() : <div className="text-sm font-bold text-gray-500">-</div>}
-                  </div>
                   <div className="flex justify-center">
                     <BoostTimeline holdingDays={holder.holdingDays} />
                   </div>
@@ -236,13 +217,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 {/* Desktop expanded panel */}
                 {isExpanded && (() => {
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
-                  const currentPeriods = Math.floor(holder.holdingDays / 10);
-                  let total60d = 0;
-                  const cycles = [0,1,2,3,4,5].map(c => {
-                    const amt = totalUsd * (1 + (currentPeriods + c) * 0.03);
-                    total60d += amt;
-                    return amt;
-                  });
                   const tierPct = holder.tier === 'diamond' ? 55 : holder.tier === 'gold' ? 30 : holder.tier === 'silver' ? 15 : 0;
                   const eligibleInTier = holders.filter(h => h.tier === holder.tier && h.eligible).length;
                   return (
@@ -255,10 +229,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">Next airdrop (total)</div>
                               <div className="text-xl font-black text-gold-400">{totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : '-'}</div>
-                            </div>
-                            <div>
-                              <div className="text-[10px] text-gray-500 mb-0.5">60-day total (if you keep holding)</div>
-                              <div className="text-xl font-black text-green-400">{total60d > 0 ? `$${total60d.toFixed(2)}` : '-'}</div>
                             </div>
                             <div>
                               <div className="text-[10px] text-gray-500 mb-0.5">Current boost</div>
@@ -300,20 +270,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                             </div>
                           )}
                         </div>
-                        {/* Cycle projection */}
-                        {totalUsd > 0 && (
-                          <div>
-                            <div className="text-xs text-gray-500 uppercase font-bold mb-3">Cycle-by-cycle projection</div>
-                            <div className="flex gap-2">
-                              {cycles.map((amt, c) => (
-                                <div key={c} className="text-center">
-                                  <div className="text-[9px] text-gray-500 mb-1">C{c+1}</div>
-                                  <div className={`text-xs font-bold ${c === 0 ? 'text-gold-400' : 'text-green-400'}`}>${amt.toFixed(2)}</div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                       </div>
                       {!holder.eligible && (
                         <div className="mt-3 text-xs text-red-400 font-medium">
@@ -344,20 +300,13 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 {/* Mobile expanded */}
                 {isExpanded && (() => {
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
-                  const currentPeriodsMobile = Math.floor(holder.holdingDays / 10);
-                  let total60d = 0;
-                  for (let c = 0; c < 6; c++) total60d += totalUsd * (1 + (currentPeriodsMobile + c) * 0.03);
                   return (
                     <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
-                      {/* Main airdrop numbers */}
-                      <div className="grid grid-cols-2 gap-3 mb-3">
+                      {/* Main airdrop number */}
+                      <div className="mb-3">
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
                           <div className="text-[9px] text-gray-500 uppercase mb-1">Next Airdrop</div>
                           <div className="text-base font-black text-gold-400">{holder.eligible && totalUsd > 0 ? `$${totalUsd.toFixed(2)}` : '-'}</div>
-                        </div>
-                        <div className="bg-black/30 rounded-lg p-2.5 text-center">
-                          <div className="text-[9px] text-gray-500 uppercase mb-1">60d Total (if you HODL)</div>
-                          <div className="text-base font-black text-green-400">{holder.eligible && total60d > 0 ? `$${total60d.toFixed(2)}` : '-'}</div>
                         </div>
                       </div>
                       {/* Per-wallet breakdown */}
@@ -397,10 +346,6 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           <div className="text-gray-500 uppercase mb-0.5">Tier</div>
                           <div className="font-bold text-white">{holder.tier.charAt(0).toUpperCase() + holder.tier.slice(1)}</div>
                         </div>
-                      </div>
-                      {/* 60d explanation */}
-                      <div className="text-[9px] text-gray-500 text-center mb-2 px-2">
-                        60d total = 6 cycles with growing boost (+3% per cycle). Estimated if treasury stays at current level.
                       </div>
                       <div className="flex justify-center py-1">
                         <BoostTimeline holdingDays={holder.holdingDays} />
