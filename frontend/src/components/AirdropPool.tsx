@@ -125,24 +125,6 @@ export default function AirdropPool({
   return (
     <section id="airdrops" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Disclaimer */}
-        <div className="glass-card rounded-xl p-5 mb-6 border-2 border-red-500/30 bg-red-500/5">
-          <div className="flex items-start gap-4">
-            <svg className="w-8 h-8 text-red-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path d="M12 9v4M12 17h.01" strokeLinecap="round" />
-              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-            </svg>
-            <div>
-              <h4 className="text-red-400 font-bold text-lg mb-1">Page Under Development</h4>
-              <p className="text-gray-400 text-sm">
-                This page is being updated and currently may show incorrect values. Join{' '}
-                <a href="https://discord.com/invite/cronoslegends" target="_blank" rel="noopener noreferrer" className="text-gold-400 hover:text-gold-300 font-bold underline">Cronos Legends Discord</a>
-                {' '}to stay up-to-date and ask any questions.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black mb-4">
@@ -196,7 +178,7 @@ export default function AirdropPool({
               <div className="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-2">Airdrops Completed</div>
               <div className="text-2xl md:text-3xl font-black text-diamond-400">{snapshots.filter(s => s.distributed).length}</div>
               <div className="text-xs text-gray-500 mt-1">
-                {snapshots.length === 0 ? 'None yet — launching soon' : `${snapshots.length} total`}
+                {snapshots.filter(s => s.distributed).length === 0 ? 'None yet — launching soon' : `${snapshots.filter(s => s.distributed).length} sent`}
               </div>
             </div>
           </div>
@@ -417,46 +399,79 @@ export default function AirdropPool({
         <h3 className="text-2xl font-bold text-center mb-6">
           <span className="diamond-text">Past Airdrops</span>
         </h3>
-        {snapshots.length === 0 ? (
+        {snapshots.filter(s => s.distributed).length === 0 ? (
           <div className="glass-card rounded-2xl p-12 text-center">
             <div className="text-4xl mb-4">&#128142;</div>
             <div className="text-xl font-bold text-gray-400 mb-2">No airdrops yet</div>
             <div className="text-sm text-gray-500">The first airdrop will happen after launch. Stay tuned.</div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-6">
-            {snapshots.map((snap) => (
-              <div key={snap.id} className="glass-card rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-500">Epoch #{snap.id}</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                    snap.distributed
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-gold-400/20 text-gold-400'
-                  }`}>
-                    {snap.distributed ? 'Distributed' : 'Pending'}
-                  </span>
+          <div className="space-y-4">
+            {/* Airdrop #1 */}
+            <div className="glass-card rounded-2xl overflow-hidden border border-green-500/20">
+              <div className="h-1 bg-gradient-to-r from-green-400 to-diamond-400" />
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl font-black text-white">Airdrop #1</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400">Distributed</span>
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">April 2, 2026 &mdash; 40 recipients</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] text-gray-500 uppercase mb-1">Total sent</div>
+                    <div className="text-2xl font-black text-gold-400">3 tokens</div>
+                    <div className="text-xs text-gray-500">per wallet</div>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500 mb-1">Treasury at snapshot</div>
-                <div className="text-xl font-bold text-gray-300 mb-2">
-                  ${snap.treasuryTotal.toLocaleString()}
+
+                <div className="grid md:grid-cols-3 gap-4">
+                  {[
+                    { tier: 'Diamond', count: 20, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
+                      hodl: '306,350', clg: '0.0217305', obs: '211,971.8',
+                      hodlUsd: '$6.27', clgUsd: '$8.22', obsUsd: '$7.75' },
+                    { tier: 'Gold', count: 9, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
+                      hodl: '371,333', clg: '0.02634', obs: '256,390',
+                      hodlUsd: '$7.60', clgUsd: '$9.97', obsUsd: '$9.37' },
+                    { tier: 'Silver', count: 8, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
+                      hodl: '208,875', clg: '0.01317', obs: '128,195',
+                      hodlUsd: '$4.28', clgUsd: '$4.98', obsUsd: '$4.69' },
+                  ].map(t => (
+                    <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
+                      <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">$HODL</span>
+                          <div className="text-right">
+                            <span className="text-gold-400 font-bold">{t.hodl}</span>
+                            <span className="text-gray-500 ml-1">({t.hodlUsd})</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">$CLG</span>
+                          <div className="text-right">
+                            <span className="text-diamond-400 font-bold">{t.clg}</span>
+                            <span className="text-gray-500 ml-1">({t.clgUsd})</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">$OBS</span>
+                          <div className="text-right">
+                            <span className="text-green-400 font-bold">{t.obs}</span>
+                            <span className="text-gray-500 ml-1">({t.obsUsd})</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-sm text-gray-500 mb-1">Airdropped ({distributionPct}%)</div>
-                <div className="text-2xl font-black text-gold-400 mb-3">
-                  ${snap.airdropDistributed.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500 mb-1">
-                  {new Date(snap.snapshotDate).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </div>
-                <div className="text-sm text-gray-400">
-                  {snap.holders.length} eligible holders
+
+                <div className="mt-4 text-center text-xs text-gray-500">
+                  Prices at distribution: HODL $0.00002047 · CLG $378.37 · OBS $0.00003656
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>

@@ -8,6 +8,16 @@ export const CONFIG = {
   // DEX pair address — excluded from seller tracking (it's the liquidity pool, not a person)
   DEX_PAIR: '0xb4c50913f70b870f68e6143126163ba0e9186ad7',
 
+  // DEX aggregator/router addresses — selling via these routes tokens through routers first,
+  // so a transfer TO any of these is also considered a sell
+  SELL_ROUTERS: [
+    '0x1189331089b6ca8bea989c1f2ffd0efadcd33a69', // Obsidian Finance Router (aggregator)
+    '0xec68090566397dcc37e54b30cc264b2d68cf0489', // Obsidian Finance Router (aggregator)
+    '0x8EbC409998ef75661A4C464ff9bbb490586F954a', // Obsidian Finance DEX Router
+    '0x145863Eb42Cf62847A6Ca784e6416C1682b1b2Ae', // VVS Finance Router (also cro.trade)
+    '0x145677FC4d9b8F19B5D56d1820c48e0443049a30', // MM Finance (MMF) Router
+  ],
+
   // Creator wallet — excluded from seller tracking (distributes presale tokens)
   CREATOR_WALLET: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D',
 

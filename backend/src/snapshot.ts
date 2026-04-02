@@ -158,6 +158,13 @@ export async function takeSnapshot() {
     CONFIG.DEX_PAIR.toLowerCase(),
     CONFIG.TOKEN_ADDRESS.toLowerCase(),
     CONFIG.CREATOR_WALLET.toLowerCase(),
+    ...CONFIG.SELL_ROUTERS.map(r => r.toLowerCase()), // routers themselves are not sellers
+  ]);
+
+  // Addresses that count as a sell destination — DEX pair + known routers/aggregators
+  const sellDestinations = new Set([
+    CONFIG.DEX_PAIR.toLowerCase(),
+    ...CONFIG.SELL_ROUTERS.map(r => r.toLowerCase()),
   ]);
 
   // Scan in chunks of 2000 blocks (Cronos limit)
@@ -176,12 +183,12 @@ export async function takeSnapshot() {
         const fromLower = fromAddr.toLowerCase();
         const toLower = toAddr.toLowerCase();
 
-        // Track sellers — only count as sell if transferring TO the DEX pair (actual DEX sell).
-        // Tax deductions, p2p transfers, and contract-internal moves are NOT counted as sells.
+        // Track sellers — count as sell if transferring TO the DEX pair directly,
+        // OR to a known DEX aggregator/router (Obsidian Finance etc).
         if (
           fromAddr !== ethers.ZeroAddress &&
           !excludeFromSellers.has(fromLower) &&
-          toLower === CONFIG.DEX_PAIR.toLowerCase()
+          sellDestinations.has(toLower)
         ) {
           sellers.add(fromLower);
           // Track last sell block

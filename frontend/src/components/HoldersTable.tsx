@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Holder, getTierLabel } from '@/lib/types';
+import { PAST_AIRDROPS } from '@/lib/mockData';
 
 function truncateAddress(addr: string): string {
   return `${addr.slice(0, 4)}..${addr.slice(-4)}`;
@@ -104,6 +105,16 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
     // Fallback: if no wallet data, use sum of all wallet balances via token totals
     const totalUsd = dhand + clg + rotating;
     return { dhand, clg, rotating, totalUsd };
+  };
+
+  const getPastEarnings = (address: string) => {
+    const addr = address.toLowerCase();
+    const results: { date: string; hodl: number; clg: number; obs: number; usd: number }[] = [];
+    for (const drop of PAST_AIRDROPS) {
+      const r = drop.recipients[addr];
+      if (r) results.push({ date: drop.date, ...r });
+    }
+    return results;
   };
 
   useEffect(() => {
@@ -219,8 +230,35 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
                   const tierPct = holder.tier === 'diamond' ? 55 : holder.tier === 'gold' ? 30 : holder.tier === 'silver' ? 15 : 0;
                   const eligibleInTier = holders.filter(h => h.tier === holder.tier && h.eligible).length;
+                  const pastEarnings = getPastEarnings(holder.address);
+                  const totalEarned = pastEarnings.reduce((s, e) => s + e.usd, 0);
                   return (
                     <div className="hidden md:block border-b border-gold-400/20 bg-gold-400/5 px-6 py-4">
+                      {/* Past earnings bar */}
+                      {pastEarnings.length > 0 && (
+                        <div className="mb-4 pb-4 border-b border-white/10">
+                          <div className="text-xs text-gray-500 uppercase font-bold mb-2">Total Earned from Past Airdrops</div>
+                          <div className="flex items-center gap-6 flex-wrap">
+                            <div>
+                              <div className="text-2xl font-black text-green-400">${totalEarned.toFixed(2)}</div>
+                              <div className="text-[10px] text-gray-500">{pastEarnings.length} airdrop{pastEarnings.length > 1 ? 's' : ''} received</div>
+                            </div>
+                            {pastEarnings.map((e) => (
+                              <div key={e.date} className="flex gap-3 flex-wrap">
+                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                  <span className="text-[10px] text-gray-400">{e.hodl.toLocaleString()} $HODL</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                  <span className="text-[10px] text-gray-400">{e.clg.toFixed(5)} $CLG</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                  <span className="text-[10px] text-gray-400">{e.obs.toLocaleString()} $OBS</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       <div className="flex items-start gap-8">
                         {/* Airdrop summary */}
                         <div className="flex-1">
@@ -300,8 +338,18 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                 {/* Mobile expanded */}
                 {isExpanded && (() => {
                   const { dhand, clg: clgAmt, rotating, totalUsd } = getAirdropPerPerson(holder.tier);
+                  const pastEarningsMobile = getPastEarnings(holder.address);
+                  const totalEarnedMobile = pastEarningsMobile.reduce((s, e) => s + e.usd, 0);
                   return (
                     <div className="md:hidden px-3 py-3 bg-gold-400/5 border-b border-gold-400/20">
+                      {/* Past earnings */}
+                      {pastEarningsMobile.length > 0 && (
+                        <div className="mb-3 pb-3 border-b border-white/10 text-center">
+                          <div className="text-[9px] text-gray-500 uppercase mb-1">Total Earned from Airdrops</div>
+                          <div className="text-lg font-black text-green-400">${totalEarnedMobile.toFixed(2)}</div>
+                          <div className="text-[8px] text-gray-500 mt-0.5">{pastEarningsMobile.length} airdrop{pastEarningsMobile.length > 1 ? 's' : ''} received</div>
+                        </div>
+                      )}
                       {/* Main airdrop number */}
                       <div className="mb-3">
                         <div className="bg-black/30 rounded-lg p-2.5 text-center">
