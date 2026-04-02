@@ -34,6 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ))}
         </div>
         <div className="relative z-10 min-h-screen flex flex-col">
+          {/* Holiday notice banner */}
+          <div className="w-full bg-amber-500/10 border-b border-amber-500/30 text-center py-2 px-4 text-sm text-amber-300 font-medium z-50">
+            Dev is on holidays until April 14th — website may have inaccurate data, will be fixed on return. Just $HODL. 💎
+          </div>
           <Header />
           <main className="relative flex-1 bg-luxury-black">
             <FloatingCryImages count={5} />
