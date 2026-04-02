@@ -430,14 +430,17 @@ export default function AirdropPool({
                   {[
                     { tier: 'Diamond', count: 20, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
                       hodl: '306,350', clg: '0.0217305', obs: '211,971.8',
-                      hodlUsd: '$6.27', clgUsd: '$8.22', obsUsd: '$7.75' },
+                      hodlN: 6.27, clgN: 8.22, obsN: 7.75 },
                     { tier: 'Gold', count: 9, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
                       hodl: '371,333', clg: '0.02634', obs: '256,390',
-                      hodlUsd: '$7.60', clgUsd: '$9.97', obsUsd: '$9.37' },
+                      hodlN: 7.60, clgN: 9.97, obsN: 9.37 },
                     { tier: 'Silver', count: 8, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
                       hodl: '208,875', clg: '0.01317', obs: '128,195',
-                      hodlUsd: '$4.28', clgUsd: '$4.98', obsUsd: '$4.69' },
-                  ].map(t => (
+                      hodlN: 4.28, clgN: 4.98, obsN: 4.69 },
+                  ].map(t => {
+                    const perPersonUsd = t.hodlN + t.clgN + t.obsN;
+                    const tierTotalUsd = perPersonUsd * t.count;
+                    return (
                     <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
                       <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
                       <div className="space-y-2 text-xs">
@@ -445,26 +448,35 @@ export default function AirdropPool({
                           <span className="text-gray-500">$HODL</span>
                           <div className="text-right">
                             <span className="text-gold-400 font-bold">{t.hodl}</span>
-                            <span className="text-gray-500 ml-1">({t.hodlUsd})</span>
+                            <span className="text-gray-500 ml-1">(${t.hodlN.toFixed(2)})</span>
                           </div>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-500">$CLG</span>
                           <div className="text-right">
                             <span className="text-diamond-400 font-bold">{t.clg}</span>
-                            <span className="text-gray-500 ml-1">({t.clgUsd})</span>
+                            <span className="text-gray-500 ml-1">(${t.clgN.toFixed(2)})</span>
                           </div>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-500">$OBS</span>
                           <div className="text-right">
                             <span className="text-green-400 font-bold">{t.obs}</span>
-                            <span className="text-gray-500 ml-1">({t.obsUsd})</span>
+                            <span className="text-gray-500 ml-1">(${t.obsN.toFixed(2)})</span>
                           </div>
+                        </div>
+                        <div className={`flex justify-between pt-2 border-t ${t.border}`}>
+                          <span className="text-gray-400 font-medium">Per wallet</span>
+                          <span className={`font-black ${t.accent}`}>${perPersonUsd.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400 font-medium">Tier total</span>
+                          <span className="font-black text-white">${tierTotalUsd.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="mt-4 text-center text-xs text-gray-500">
