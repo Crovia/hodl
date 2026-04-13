@@ -58,10 +58,7 @@ function LaunchCountdown() {
           Sell $HODL
           <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
-        <a href="https://obsidian.finance/crommunities/DOAihlJE4hZzculY6ct6/contests/1" target="_blank" rel="noopener noreferrer" className="group px-8 py-4 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-black font-bold text-lg hover:from-green-400 hover:to-green-500 transition-all hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] hover:scale-105 animate-pulse">
-          TRADING CONTEST LIVE $$$
-          <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-        </a>
+
       </div>
     );
   }
