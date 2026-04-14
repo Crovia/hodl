@@ -103,7 +103,7 @@ const TOTAL_PRESALE_SUPPLY_PCT = 63;
 const TOTAL_SUPPLY = 1_000_000_000; // 1 billion
 const PRESALE_TOKENS = 637_037_037; // exact from bonding curve
 
-const TRANSFER_TAX = 0.10; // 10% tax on transfer
+const TRANSFER_TAX = 0.08; // 8% tax on transfer
 
 function getParticipantShare(allocation: number) {
   const preTaxPct = (allocation / TOTAL_CRO_RAISED) * TOTAL_PRESALE_SUPPLY_PCT;
@@ -316,7 +316,7 @@ export default function Presale() {
           <div className="flex items-center gap-3 text-sm">
             <div className="text-xl">&#9888;&#65039;</div>
             <p className="text-gray-400">
-              <span className="text-gold-400 font-bold">Estimates only.</span> Token amounts and % of supply shown after 10% transfer tax. Actual amounts may vary at launch depending on final liquidity pool parameters.
+              <span className="text-gold-400 font-bold">Estimates only.</span> Token amounts and % of supply shown after 8% transfer tax. Actual amounts may vary at launch depending on final liquidity pool parameters.
             </p>
           </div>
         </div>
@@ -336,9 +336,9 @@ export default function Presale() {
                   <div className="flex items-center justify-between p-3 rounded-lg bg-black/40 border border-gold-400/10">
                     <div className="flex items-center gap-3">
                       <div className="w-3 h-3 rounded-full bg-gold-400" />
-                      <span className="text-sm text-gray-300">Launch Tax</span>
+                      <span className="text-sm text-gray-300">Current Tax</span>
                     </div>
-                    <span className="text-sm font-bold text-gold-400">10%</span>
+                    <span className="text-sm font-bold text-gold-400">8%</span>
                   </div>
                   <div className="flex items-center justify-between p-3 rounded-lg bg-black/40 border border-gold-400/10">
                     <div className="flex items-center gap-3">

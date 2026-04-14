@@ -5,7 +5,7 @@ export default function Rules() {
     {
       icon: '1',
       title: 'Buy & Hold',
-      description: 'Buy $HODL tokens. 10% buy + 10% sell tax — all of it gets airdropped to holders.',
+      description: 'Buy $HODL tokens. 8% buy + 8% sell tax — all of it gets airdropped to holders.',
       color: 'from-gold-400 to-gold-600',
       image: '/rule-buy.png',
     },
@@ -269,7 +269,7 @@ export default function Rules() {
               <h4 className="text-lg font-bold text-white mb-4">Tax Distribution</h4>
               <div className="space-y-3">
                 {[
-                  { label: 'Launch Tax', value: '10%', dot: 'bg-gold-400' },
+                  { label: 'Current Tax', value: '8%', dot: 'bg-gold-400' },
                   { label: 'Tax Reduction', value: '-1% every 10 days', dot: 'bg-diamond-400' },
                   { label: 'Minimum Tax', value: '5%', dot: 'bg-green-400' },
                   { label: 'Burned', value: 'ZERO', dot: 'bg-gray-500' },

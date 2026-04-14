@@ -206,9 +206,9 @@ export default function Hero() {
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
           {[
-            { label: 'Buy Tax', value: '10%', sub: '100% airdropped to hodlers' },
-            { label: 'Sell Tax', value: '10%', sub: '100% airdropped to hodlers' },
-            { label: 'Transfer Tax', value: '10%', sub: '100% airdropped to hodlers' },
+            { label: 'Buy Tax', value: '8%', sub: '100% airdropped to hodlers' },
+            { label: 'Sell Tax', value: '8%', sub: '100% airdropped to hodlers' },
+            { label: 'Transfer Tax', value: '8%', sub: '100% airdropped to hodlers' },
             { label: 'Burned', value: 'ZERO', sub: 'Never. Ever.' },
           ].map((stat) => (
             <div key={stat.label} className="glass-card rounded-xl p-4 text-center">
