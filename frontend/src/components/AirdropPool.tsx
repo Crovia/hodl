@@ -397,95 +397,148 @@ export default function AirdropPool({
 
         {/* Past airdrops */}
         <h3 className="text-2xl font-bold text-center mb-6">
-          <span className="diamond-text">Past Airdrops</span>
+          <span className="diamond-text">Airdrops</span>
         </h3>
-        {snapshots.filter(s => s.distributed).length === 0 ? (
-          <div className="glass-card rounded-2xl p-12 text-center">
-            <div className="text-4xl mb-4">&#128142;</div>
-            <div className="text-xl font-bold text-gray-400 mb-2">No airdrops yet</div>
-            <div className="text-sm text-gray-500">The first airdrop will happen after launch. Stay tuned.</div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {/* Airdrop #1 */}
-            <div className="glass-card rounded-2xl overflow-hidden border border-green-500/20">
-              <div className="h-1 bg-gradient-to-r from-green-400 to-diamond-400" />
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl font-black text-white">Airdrop #1</span>
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400">Distributed</span>
-                    </div>
-                    <div className="text-sm text-gray-500 mt-1">April 2, 2026 &mdash; 40 recipients</div>
+        <div className="space-y-4">
+          {/* Airdrop #2 — Pending */}
+          <div className="glass-card rounded-2xl overflow-hidden border border-yellow-500/30">
+            <div className="h-1 bg-gradient-to-r from-yellow-400 to-gold-400" />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl font-black text-white">Airdrop #2</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 animate-pulse">Pending</span>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[10px] text-gray-500 uppercase mb-1">Total sent</div>
-                    <div className="text-2xl font-black text-gold-400">3 tokens</div>
-                    <div className="text-xs text-gray-500">per wallet</div>
-                  </div>
+                  <div className="text-sm text-gray-500 mt-1">April 2026 &mdash; 37 recipients &mdash; 3 tokens</div>
                 </div>
+                <div className="text-right">
+                  <div className="text-[10px] text-gray-500 uppercase mb-1">DUSD pool</div>
+                  <div className="text-2xl font-black text-yellow-400">$283.88</div>
+                  <div className="text-xs text-gray-500">+ $HODL + $CLG</div>
+                </div>
+              </div>
 
-                <div className="grid md:grid-cols-3 gap-4">
-                  {[
-                    { tier: 'Diamond', count: 20, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
-                      hodl: '306,350', clg: '0.0217305', obs: '211,971.8',
-                      hodlN: 6.27, clgN: 8.22, obsN: 7.75 },
-                    { tier: 'Gold', count: 9, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
-                      hodl: '371,333', clg: '0.02634', obs: '256,390',
-                      hodlN: 7.60, clgN: 9.97, obsN: 9.37 },
-                    { tier: 'Silver', count: 8, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
-                      hodl: '208,875', clg: '0.01317', obs: '128,195',
-                      hodlN: 4.28, clgN: 4.98, obsN: 4.69 },
-                  ].map(t => {
-                    const perPersonUsd = t.hodlN + t.clgN + t.obsN;
-                    const tierTotalUsd = perPersonUsd * t.count;
-                    return (
-                    <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
-                      <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">$HODL</span>
-                          <div className="text-right">
-                            <span className="text-gold-400 font-bold">{t.hodl}</span>
-                            <span className="text-gray-500 ml-1">(${t.hodlN.toFixed(2)})</span>
-                          </div>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">$CLG</span>
-                          <div className="text-right">
-                            <span className="text-diamond-400 font-bold">{t.clg}</span>
-                            <span className="text-gray-500 ml-1">(${t.clgN.toFixed(2)})</span>
-                          </div>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">$OBS</span>
-                          <div className="text-right">
-                            <span className="text-green-400 font-bold">{t.obs}</span>
-                            <span className="text-gray-500 ml-1">(${t.obsN.toFixed(2)})</span>
-                          </div>
-                        </div>
-                        <div className={`flex justify-between pt-2 border-t ${t.border}`}>
-                          <span className="text-gray-400 font-medium">Per wallet</span>
-                          <span className={`font-black ${t.accent}`}>${perPersonUsd.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400 font-medium">Tier total</span>
-                          <span className="font-black text-white">${tierTotalUsd.toFixed(2)}</span>
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  { tier: 'Diamond', count: 18, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
+                    hodl: '369,411', clg: '11.464', dusd: '274,807', dusdUsd: 8.67 },
+                  { tier: 'Gold', count: 10, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
+                    hodl: '348K–369K', clg: '10.80–11.45', dusd: '259K–275K', dusdUsd: 8.18 },
+                  { tier: 'Silver', count: 9, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
+                    hodl: '197K–203K', clg: '6.12–6.29', dusd: '147K–151K', dusdUsd: 4.63 },
+                ].map(t => (
+                  <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
+                    <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$HODL</span>
+                        <span className="text-gold-400 font-bold">{t.hodl}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$CLG</span>
+                        <span className="text-diamond-400 font-bold">{t.clg}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$DUSDCro</span>
+                        <div className="text-right">
+                          <span className="text-yellow-400 font-bold">{t.dusd}</span>
+                          <span className="text-gray-500 ml-1">(~${t.dusdUsd.toFixed(2)})</span>
                         </div>
                       </div>
+                      <div className={`flex justify-between pt-2 border-t ${t.border}`}>
+                        <span className="text-gray-400 font-medium">Boost</span>
+                        <span className="text-gray-400">varies (0–6%)</span>
+                      </div>
                     </div>
-                    );
-                  })}
-                </div>
+                  </div>
+                ))}
+              </div>
 
-                <div className="mt-4 text-center text-xs text-gray-500">
-                  Prices at distribution: HODL $0.00002047 · CLG $378.37 · OBS $0.00003656
-                </div>
+              <div className="mt-4 text-center text-xs text-gray-500">
+                $DUSDCro: 8,993,695 tokens ($283.88 total) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 375.2 tokens &nbsp;·&nbsp; Amounts shown per wallet (6% boost; Gold/Silver vary by holding time)
               </div>
             </div>
           </div>
-        )}
+
+          {/* Airdrop #1 */}
+          <div className="glass-card rounded-2xl overflow-hidden border border-green-500/20">
+            <div className="h-1 bg-gradient-to-r from-green-400 to-diamond-400" />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl font-black text-white">Airdrop #1</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400">Distributed</span>
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">April 2, 2026 &mdash; 40 recipients</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] text-gray-500 uppercase mb-1">Total sent</div>
+                  <div className="text-2xl font-black text-gold-400">3 tokens</div>
+                  <div className="text-xs text-gray-500">per wallet</div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  { tier: 'Diamond', count: 20, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
+                    hodl: '306,350', clg: '0.0217305', obs: '211,971.8',
+                    hodlN: 6.27, clgN: 8.22, obsN: 7.75 },
+                  { tier: 'Gold', count: 9, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
+                    hodl: '371,333', clg: '0.02634', obs: '256,390',
+                    hodlN: 7.60, clgN: 9.97, obsN: 9.37 },
+                  { tier: 'Silver', count: 8, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
+                    hodl: '208,875', clg: '0.01317', obs: '128,195',
+                    hodlN: 4.28, clgN: 4.98, obsN: 4.69 },
+                ].map(t => {
+                  const perPersonUsd = t.hodlN + t.clgN + t.obsN;
+                  const tierTotalUsd = perPersonUsd * t.count;
+                  return (
+                  <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
+                    <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$HODL</span>
+                        <div className="text-right">
+                          <span className="text-gold-400 font-bold">{t.hodl}</span>
+                          <span className="text-gray-500 ml-1">(${t.hodlN.toFixed(2)})</span>
+                        </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$CLG</span>
+                        <div className="text-right">
+                          <span className="text-diamond-400 font-bold">{t.clg}</span>
+                          <span className="text-gray-500 ml-1">(${t.clgN.toFixed(2)})</span>
+                        </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">$OBS</span>
+                        <div className="text-right">
+                          <span className="text-green-400 font-bold">{t.obs}</span>
+                          <span className="text-gray-500 ml-1">(${t.obsN.toFixed(2)})</span>
+                        </div>
+                      </div>
+                      <div className={`flex justify-between pt-2 border-t ${t.border}`}>
+                        <span className="text-gray-400 font-medium">Per wallet</span>
+                        <span className={`font-black ${t.accent}`}>${perPersonUsd.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400 font-medium">Tier total</span>
+                        <span className="font-black text-white">${tierTotalUsd.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 text-center text-xs text-gray-500">
+                Prices at distribution: HODL $0.00002047 · CLG $378.37 · OBS $0.00003656
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
