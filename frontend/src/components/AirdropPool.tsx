@@ -400,33 +400,33 @@ export default function AirdropPool({
           <span className="diamond-text">Airdrops</span>
         </h3>
         <div className="space-y-4">
-          {/* Airdrop #2 — Pending */}
-          <div className="glass-card rounded-2xl overflow-hidden border border-yellow-500/30">
-            <div className="h-1 bg-gradient-to-r from-yellow-400 to-gold-400" />
+          {/* Airdrop #2 — Distributed */}
+          <div className="glass-card rounded-2xl overflow-hidden border border-green-500/20">
+            <div className="h-1 bg-gradient-to-r from-green-400 to-diamond-400" />
             <div className="p-6">
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <div className="flex items-center gap-3">
                     <span className="text-xl font-black text-white">Airdrop #2</span>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 animate-pulse">Pending</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400">Distributed</span>
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">April 2026 &mdash; 37 recipients &mdash; 3 tokens</div>
+                  <div className="text-sm text-gray-500 mt-1">April 15, 2026 &mdash; 37 recipients &mdash; 3 tokens</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[10px] text-gray-500 uppercase mb-1">DUSD pool</div>
-                  <div className="text-2xl font-black text-yellow-400">$283.88</div>
-                  <div className="text-xs text-gray-500">+ $HODL + $CLG</div>
+                  <div className="text-[10px] text-gray-500 uppercase mb-1">$DUSDCro sent</div>
+                  <div className="text-2xl font-black text-green-400">12,089,812</div>
+                  <div className="text-xs text-gray-500">partner + extra by Awerghx</div>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
                 {[
                   { tier: 'Diamond', count: 18, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
-                    hodl: '369,411', clg: '11.464', dusd: '274,807', dusdUsd: 8.67 },
+                    hodl: '369,411', clg: '11.464', dusd: '369,411', dusdUsd: 11.66 },
                   { tier: 'Gold', count: 10, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
-                    hodl: '348K–369K', clg: '10.80–11.45', dusd: '259K–275K', dusdUsd: 8.18 },
+                    hodl: '348K–369K', clg: '10.80–11.45', dusd: '348K–369K', dusdUsd: 11.64 },
                   { tier: 'Silver', count: 9, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
-                    hodl: '197K–203K', clg: '6.12–6.29', dusd: '147K–151K', dusdUsd: 4.63 },
+                    hodl: '197K–203K', clg: '6.12–6.29', dusd: '197K–203K', dusdUsd: 6.40 },
                 ].map(t => (
                   <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
                     <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
@@ -442,7 +442,7 @@ export default function AirdropPool({
                       <div className="flex justify-between">
                         <span className="text-gray-500">$DUSDCro</span>
                         <div className="text-right">
-                          <span className="text-yellow-400 font-bold">{t.dusd}</span>
+                          <span className="text-green-400 font-bold">{t.dusd}</span>
                           <span className="text-gray-500 ml-1">(~${t.dusdUsd.toFixed(2)})</span>
                         </div>
                       </div>
@@ -456,7 +456,7 @@ export default function AirdropPool({
               </div>
 
               <div className="mt-4 text-center text-xs text-gray-500">
-                $DUSDCro: 8,993,695 tokens ($283.88 total) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 375.2 tokens &nbsp;·&nbsp; Amounts shown per wallet (6% boost; Gold/Silver vary by holding time)
+                $DUSDCro: 12,089,812 total (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 375.2 tokens &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
               </div>
             </div>
           </div>
