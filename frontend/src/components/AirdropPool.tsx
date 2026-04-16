@@ -456,7 +456,7 @@ export default function AirdropPool({
               </div>
 
               <div className="mt-4 text-center text-xs text-gray-500">
-                $DUSDCro: 12,089,812 total (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 0.62 tokens ($180.51) &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
+                $HODL: 12,089,812 tokens &nbsp;·&nbsp; $DUSDCro: 12,089,812 tokens (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $CLG: 0.62 tokens ($180.51) &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
               </div>
             </div>
           </div>
