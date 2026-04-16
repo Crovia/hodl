@@ -422,11 +422,11 @@ export default function AirdropPool({
               <div className="grid md:grid-cols-3 gap-4">
                 {[
                   { tier: 'Diamond', count: 18, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
-                    hodl: '369,411', clg: '11.464', dusd: '369,411', dusdUsd: 11.66 },
+                    hodl: '369,411', clg: '0.01972', dusd: '369,411', dusdUsd: 11.66 },
                   { tier: 'Gold', count: 10, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
-                    hodl: '348K–369K', clg: '10.80–11.45', dusd: '348K–369K', dusdUsd: 11.64 },
+                    hodl: '348K–369K', clg: '0.01858–0.01970', dusd: '348K–369K', dusdUsd: 11.64 },
                   { tier: 'Silver', count: 9, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
-                    hodl: '197K–203K', clg: '6.12–6.29', dusd: '197K–203K', dusdUsd: 6.40 },
+                    hodl: '197K–203K', clg: '0.01052–0.01083', dusd: '197K–203K', dusdUsd: 6.40 },
                 ].map(t => (
                   <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
                     <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
@@ -456,7 +456,7 @@ export default function AirdropPool({
               </div>
 
               <div className="mt-4 text-center text-xs text-gray-500">
-                $DUSDCro: 12,089,812 total (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 375.2 tokens &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
+                $DUSDCro: 12,089,812 total (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $HODL: 12,089,822 tokens &nbsp;·&nbsp; $CLG: 0.6454 tokens ($187.92) &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
               </div>
             </div>
           </div>
