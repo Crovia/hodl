@@ -109,7 +109,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
 
   const getPastEarnings = (address: string) => {
     const addr = address.toLowerCase();
-    const results: { date: string; hodl: number; clg: number; obs: number; usd: number }[] = [];
+    const results: { date: string; hodl: number; clg: number; obs: number; dusd?: number; usd: number }[] = [];
     for (const drop of PAST_AIRDROPS) {
       const r = drop.recipients[addr];
       if (r) results.push({ date: drop.date, ...r });
@@ -245,15 +245,26 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                             </div>
                             {pastEarnings.map((e) => (
                               <div key={e.date} className="flex gap-3 flex-wrap">
-                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                  <span className="text-[10px] text-gray-400">{e.hodl.toLocaleString()} $HODL</span>
-                                </div>
-                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                  <span className="text-[10px] text-gray-400">{e.clg.toFixed(5)} $CLG</span>
-                                </div>
-                                <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
-                                  <span className="text-[10px] text-gray-400">{e.obs.toLocaleString()} $OBS</span>
-                                </div>
+                                {e.hodl > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">{e.hodl.toLocaleString()} $HODL</span>
+                                  </div>
+                                )}
+                                {e.clg > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">{e.clg.toFixed(5)} $CLG</span>
+                                  </div>
+                                )}
+                                {e.obs > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">{e.obs.toLocaleString()} $OBS</span>
+                                  </div>
+                                )}
+                                {e.dusd !== undefined && e.dusd > 0 && (
+                                  <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
+                                    <span className="text-[10px] text-gray-400">{e.dusd.toLocaleString()} $DUSDCro</span>
+                                  </div>
+                                )}
                               </div>
                             ))}
                           </div>

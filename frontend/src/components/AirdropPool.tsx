@@ -413,50 +413,67 @@ export default function AirdropPool({
                   <div className="text-sm text-gray-500 mt-1">April 15, 2026 &mdash; 37 recipients &mdash; 3 tokens</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[10px] text-gray-500 uppercase mb-1">$DUSDCro sent</div>
-                  <div className="text-2xl font-black text-green-400">12,089,812</div>
-                  <div className="text-xs text-gray-500">partner + extra by Awerghx</div>
+                  <div className="text-[10px] text-gray-500 uppercase mb-1">Total sent</div>
+                  <div className="text-2xl font-black text-green-400">~$631</div>
+                  <div className="text-xs text-gray-500">$HODL + $CLG + $DUSDCro</div>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
                 {[
                   { tier: 'Diamond', count: 18, accent: 'text-diamond-400', border: 'border-diamond-400/20', bg: 'bg-diamond-400/5',
-                    hodl: '369,411', clg: '0.01894', dusd: '369,411', dusdUsd: 11.66 },
+                    hodl: '369,411', clg: '0.01894', dusd: '369,411',
+                    hodlN: 2.11, clgN: 5.51, dusdN: 11.66 },
                   { tier: 'Gold', count: 10, accent: 'text-gold-400', border: 'border-gold-400/20', bg: 'bg-gold-400/5',
-                    hodl: '348K–369K', clg: '0.01785–0.01892', dusd: '348K–369K', dusdUsd: 11.64 },
+                    hodl: '348K–369K', clg: '0.01785–0.01892', dusd: '348K–369K',
+                    hodlN: 2.07, clgN: 5.42, dusdN: 11.45 },
                   { tier: 'Silver', count: 9, accent: 'text-gray-300', border: 'border-gray-400/20', bg: 'bg-gray-400/5',
-                    hodl: '197K–203K', clg: '0.01010–0.01040', dusd: '197K–203K', dusdUsd: 6.40 },
-                ].map(t => (
+                    hodl: '197K–203K', clg: '0.01010–0.01040', dusd: '197K–203K',
+                    hodlN: 1.15, clgN: 3.01, dusdN: 6.36 },
+                ].map(t => {
+                  const perPersonUsd = t.hodlN + t.clgN + t.dusdN;
+                  const tierTotalUsd = perPersonUsd * t.count;
+                  return (
                   <div key={t.tier} className={`rounded-xl p-4 border ${t.border} ${t.bg}`}>
                     <div className={`font-bold text-sm ${t.accent} mb-3`}>{t.tier} Hands &mdash; {t.count} wallets</div>
                     <div className="space-y-2 text-xs">
                       <div className="flex justify-between">
                         <span className="text-gray-500">$HODL</span>
-                        <span className="text-gold-400 font-bold">{t.hodl}</span>
+                        <div className="text-right">
+                          <span className="text-gold-400 font-bold">{t.hodl}</span>
+                          <span className="text-gray-500 ml-1">(${t.hodlN.toFixed(2)})</span>
+                        </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">$CLG</span>
-                        <span className="text-diamond-400 font-bold">{t.clg}</span>
+                        <div className="text-right">
+                          <span className="text-diamond-400 font-bold">{t.clg}</span>
+                          <span className="text-gray-500 ml-1">(${t.clgN.toFixed(2)})</span>
+                        </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">$DUSDCro</span>
                         <div className="text-right">
                           <span className="text-green-400 font-bold">{t.dusd}</span>
-                          <span className="text-gray-500 ml-1">(~${t.dusdUsd.toFixed(2)})</span>
+                          <span className="text-gray-500 ml-1">(${t.dusdN.toFixed(2)})</span>
                         </div>
                       </div>
                       <div className={`flex justify-between pt-2 border-t ${t.border}`}>
-                        <span className="text-gray-400 font-medium">Boost</span>
-                        <span className="text-gray-400">varies (0–6%)</span>
+                        <span className="text-gray-400 font-medium">Per wallet</span>
+                        <span className={`font-black ${t.accent}`}>${perPersonUsd.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400 font-medium">Tier total</span>
+                        <span className="font-black text-white">${tierTotalUsd.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="mt-4 text-center text-xs text-gray-500">
-                $HODL: 12,089,812 tokens &nbsp;·&nbsp; $DUSDCro: 12,089,812 tokens (partner allocation + extra by Awerghx) &nbsp;·&nbsp; $CLG: 0.62 tokens ($180.51) &nbsp;·&nbsp; Amounts per wallet for 6% boost; Gold/Silver vary by holding time
+                $HODL: 12,089,812 tokens ($69.09) &nbsp;·&nbsp; $CLG: 0.62 tokens ($180.51) &nbsp;·&nbsp; $DUSDCro: 12,089,812 tokens ($381.55, partner + extra by Awerghx) &nbsp;·&nbsp; Gold/Silver per-wallet amounts are tier averages; individual wallets vary by boost (0–6%)
               </div>
             </div>
           </div>
