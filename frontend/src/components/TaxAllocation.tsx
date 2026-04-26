@@ -115,6 +115,9 @@ export default function TaxAllocation() {
   const totalHodl = Number(data?.totals?.totalToken || 0);
   const totalClg = wallets.reduce((s, w) => s + Number(w.clgBalance || 0), 0);
   const totalUsd = (totalCro * croUsd) + (totalHodl * hodlUsd) + (totalClg * clgUsd);
+  const distributionPct = data?.totals?.distributionPct ?? 8;
+  const distFraction = distributionPct / 100;
+  const remainingPct = 100 - distributionPct;
 
   return (
     <section className="py-24 px-6">
@@ -135,7 +138,7 @@ export default function TaxAllocation() {
         </div>
 
         {/* Total treasury summary */}
-        {croUsd > 0 && totalUsd > 0 && (() => {
+        {(() => {
           const totalSent = PAST_AIRDROPS.reduce((sum, drop) =>
             sum + Object.values(drop.recipients).reduce((s, r) => s + r.usd, 0), 0);
           return (
@@ -146,9 +149,9 @@ export default function TaxAllocation() {
                 <div className="text-sm text-gray-400 mt-1">{formatCro(totalCro)} CRO + {formatCro(totalHodl)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg)} $CLG`}</div>
               </div>
               <div className="glass-card rounded-2xl p-6 border border-green-500/20 bg-green-500/5 text-center">
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Next Airdrop (20%)</div>
-                <div className="text-3xl font-black text-green-400">{fmtUsd(totalUsd * 0.2)}</div>
-                <div className="text-sm text-green-300 mt-1">{formatCro(totalCro * 0.2)} CRO + {formatCro(totalHodl * 0.2)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg * 0.2)} $CLG`}</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Next Airdrop ({distributionPct}%)</div>
+                <div className="text-3xl font-black text-green-400">{fmtUsd(totalUsd * distFraction)}</div>
+                <div className="text-sm text-green-300 mt-1">{formatCro(totalCro * distFraction)} CRO + {formatCro(totalHodl * distFraction)} $HODL{totalClg > 0 && ` + ${formatCro(totalClg * distFraction)} $CLG`}</div>
               </div>
               <div className="glass-card rounded-2xl p-6 border border-purple-500/20 bg-purple-500/5 text-center">
                 <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Airdrops Already Sent</div>
@@ -240,12 +243,10 @@ export default function TaxAllocation() {
                 </div>
 
                 {/* USD total */}
-                {croUsd > 0 && walletUsd > 0 && (
-                  <div className="p-4 rounded-xl bg-green-500/5 border border-green-500/20 mb-3 text-center">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Total Value</div>
-                    <div className="text-2xl font-black text-green-400">{fmtUsd(walletUsd)}</div>
-                  </div>
-                )}
+                <div className="p-4 rounded-xl bg-green-500/5 border border-green-500/20 mb-3 text-center">
+                  <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-bold">Total Value</div>
+                  <div className="text-2xl font-black text-green-400">{fmtUsd(walletUsd)}</div>
+                </div>
 
                 {/* CRO Balance */}
                 <div className="p-4 rounded-xl bg-black/30 mb-3">
@@ -272,14 +273,14 @@ export default function TaxAllocation() {
                   </div>
                 )}
 
-                {/* Airdrop amount (20%) */}
+                {/* Airdrop amount */}
                 <div className="p-4 rounded-xl bg-black/30 border border-gold-400/10">
-                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Next Airdrop (20%)</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Next Airdrop ({distributionPct}%)</div>
                   <div className="text-xl font-bold text-gold-400">
-                    {fmtUsd(walletUsd * 0.2)}
+                    {fmtUsd(walletUsd * distFraction)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    Remaining 80% stays &amp; accumulates
+                    Remaining {remainingPct}% stays &amp; accumulates
                   </div>
                 </div>
               </div>

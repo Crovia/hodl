@@ -377,7 +377,7 @@ export async function takeSnapshot() {
   console.log(`  Holders: ${holderRecords.length}`);
   console.log(`  Tax pool: ${ethers.formatUnits(taxBalance, decimals)} $HODL`);
   console.log(`  Wallet totals: ${totalWalletsCro.toFixed(2)} CRO / ${totalWalletsToken.toFixed(2)} $HODL`);
-  console.log(`  Airdrop (20%): ${airdropCro.toFixed(2)} CRO / ${airdropToken.toFixed(2)} $HODL`);
+  console.log(`  Airdrop (${CONFIG.AIRDROP_DISTRIBUTION_PCT}%): ${airdropCro.toFixed(2)} CRO / ${airdropToken.toFixed(2)} $HODL`);
   console.log(`  Diamond: ${tiers.diamond.length}, Gold: ${tiers.gold.length}, Silver: ${tiers.silver.length}`);
   console.log(`  Disqualified (sold): ${holderRecords.filter(h => h.hasSold).length}`);
 

@@ -58,8 +58,8 @@ export const CONFIG = {
   AIRDROP_CYCLE_DAYS: 10,
 
   // Percentage of wallet balances to airdrop each cycle
-  // 20% is distributed, 80% stays and accumulates
-  AIRDROP_DISTRIBUTION_PCT: 20,
+  // 8% is distributed, 92% stays and accumulates
+  AIRDROP_DISTRIBUTION_PCT: 8,
 
   // Tier thresholds (percentage of total supply)
   TIERS: {

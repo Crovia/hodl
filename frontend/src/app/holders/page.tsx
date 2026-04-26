@@ -143,7 +143,7 @@ export default function HoldersPage() {
               <p className="text-gray-400">
                 <span className="text-gold-400 font-bold">Live Treasury: </span>
                 Airdrop amounts calculated from {totalCro.toFixed(2)} CRO across all wallets.
-                Next airdrop distributes {(totalCro * 0.20).toFixed(2)} CRO (20%) as token buybacks.
+                Next airdrop distributes {(totalCro * 0.08).toFixed(2)} CRO (8%) as token buybacks.
               </p>
             </div>
           </div>

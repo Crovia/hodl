@@ -102,7 +102,7 @@ export default function AirdropPool({
 
   const totalCro = Number(walletData?.totals?.totalCro || 0);
   const airdropCro = Number(walletData?.totals?.airdropCro || 0);
-  const distributionPct = walletData?.totals?.distributionPct || 20;
+  const distributionPct = walletData?.totals?.distributionPct || 8;
   const wallets = walletData?.wallets || [];
 
   // Total $HODL across all wallets
@@ -338,7 +338,7 @@ export default function AirdropPool({
 
           {/* Per-tier stats */}
           {(() => {
-            // Total airdrop USD = sum of 20% of each wallet's total USD value
+            // Total airdrop USD = sum of distributionPct of each wallet's total USD value
             const totalAirdropUsd = wallets.reduce((sum, w) => {
               const wUsd = Number(w.croBalance) * croUsd
                 + Number(w.tokenBalance) * hodlUsd

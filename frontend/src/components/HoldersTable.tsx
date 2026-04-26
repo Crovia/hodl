@@ -93,15 +93,15 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
       + parseFloat(w.clgBalance || '0') * clgUsd;
   };
 
-  // Per-person airdrop per wallet source: 20% of that wallet's total USD, split by tier
+  // Per-person airdrop per wallet source: 8% of that wallet's total USD, split by tier
   const getAirdropPerPerson = (tier: string): { dhand: number; clg: number; rotating: number; totalUsd: number } => {
     const tierPct = tier === 'diamond' ? 0.55 : tier === 'gold' ? 0.30 : tier === 'silver' ? 0.15 : 0;
     if (tierPct === 0) return { dhand: 0, clg: 0, rotating: 0, totalUsd: 0 };
     const eligible = holders.filter(h => h.tier === tier && h.eligible).length;
     if (eligible === 0) return { dhand: 0, clg: 0, rotating: 0, totalUsd: 0 };
-    const dhand = (walletUsd('DHAND') * 0.2 * tierPct) / eligible;
-    const clg = (walletUsd('CLG') * 0.2 * tierPct) / eligible;
-    const rotating = (walletUsd('ROTATING') * 0.2 * tierPct) / eligible;
+    const dhand = (walletUsd('DHAND') * 0.08 * tierPct) / eligible;
+    const clg = (walletUsd('CLG') * 0.08 * tierPct) / eligible;
+    const rotating = (walletUsd('ROTATING') * 0.08 * tierPct) / eligible;
     // Fallback: if no wallet data, use sum of all wallet balances via token totals
     const totalUsd = dhand + clg + rotating;
     return { dhand, clg, rotating, totalUsd };
@@ -295,7 +295,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
                           {/* Per-wallet source breakdown */}
                           {totalUsd > 0 && (
                             <div className="mt-4 border-t border-white/10 pt-3">
-                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Per-wallet sources (20% of each wallet&apos;s total value)</div>
+                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Per-wallet sources (8% of each wallet&apos;s total value)</div>
                               <div className="flex gap-4 flex-wrap">
                                 {dhand > 0 && (
                                   <div className="flex items-center gap-2 bg-black/30 rounded-lg px-3 py-1.5">
@@ -440,7 +440,7 @@ export default function HoldersTable({ holders, ogAddresses = [], nameMap = {}, 
             <div className="w-3 h-3 rounded-full tier-jeeter" /> Jeeter (Sold/Transferred)
           </div>
         </div>
-<div className="mt-4 glass-card rounded-xl p-4 border border-gold-400/10">          <p className="text-xs text-gray-500 text-center">            Airdrop amounts are <span className="text-gold-400 font-bold">estimates</span> based on current tax treasury balance (20% distributed per cycle). Actual amounts may vary. Pool split: Diamond 55% / Gold 30% / Silver 15%.          </p>        </div>
+<div className="mt-4 glass-card rounded-xl p-4 border border-gold-400/10">          <p className="text-xs text-gray-500 text-center">            Airdrop amounts are <span className="text-gold-400 font-bold">estimates</span> based on current tax treasury balance (8% distributed per cycle). Actual amounts may vary. Pool split: Diamond 55% / Gold 30% / Silver 15%.          </p>        </div>
       </div>
     </section>
   );
