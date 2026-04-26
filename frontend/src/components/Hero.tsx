@@ -184,13 +184,24 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="mb-6 inline-block px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)]">
-          <p className="text-sm md:text-base font-bold text-red-400 uppercase tracking-wider">
-            ⚠ Something is happening. Only buy at your own risk, if you are true diamond hand.
-          </p>
-          <p className="text-xs md:text-sm font-semibold text-red-300/90 uppercase tracking-wider mt-1">
-            This is an experimental token.
-          </p>
+        <div className="mb-6 inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-gradient-to-r from-orange-500/10 via-yellow-400/10 to-gold-400/10 border border-orange-400/40 shadow-[0_0_40px_rgba(251,146,60,0.25)] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/10 to-transparent animate-shimmer pointer-events-none" />
+          <div className="relative flex items-end" aria-hidden="true">
+            <span className="text-2xl md:text-3xl rocket-launch inline-block">&#128640;</span>
+            <span className="rocket-flame inline-block ml-[-6px] mb-[-2px]">
+              <span className="flame flame-1" />
+              <span className="flame flame-2" />
+              <span className="flame flame-3" />
+            </span>
+          </div>
+          <div className="relative text-left">
+            <p className="text-sm md:text-base font-black uppercase tracking-wider bg-gradient-to-r from-yellow-300 via-orange-300 to-gold-400 bg-clip-text text-transparent">
+              Something is happening — only true diamond hands aboard
+            </p>
+            <p className="text-[11px] md:text-xs font-semibold text-orange-300/90 uppercase tracking-wider mt-0.5">
+              Experimental token · buy at your own risk
+            </p>
+          </div>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">

@@ -204,3 +204,71 @@ body {
   0% { transform: scale(1); opacity: 0.6; border-width: 3px; }
   100% { transform: scale(10); opacity: 0; border-width: 1px; }
 }
+
+/* Rocket about-to-fly: tiny shake + lift bobbing */
+@keyframes rocketLaunch {
+  0%   { transform: translate(0, 0) rotate(-8deg); }
+  20%  { transform: translate(-1px, -2px) rotate(-9deg); }
+  40%  { transform: translate(1px, -3px) rotate(-7deg); }
+  60%  { transform: translate(-1px, -2px) rotate(-8deg); }
+  80%  { transform: translate(1px, -3px) rotate(-7deg); }
+  100% { transform: translate(0, 0) rotate(-8deg); }
+}
+.rocket-launch {
+  animation: rocketLaunch 0.45s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 180, 60, 0.55));
+  transform-origin: center;
+}
+
+/* Flame shooting downward out of the rocket */
+.rocket-flame {
+  position: relative;
+  width: 14px;
+  height: 26px;
+}
+.rocket-flame .flame {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+  filter: blur(0.6px);
+  transform-origin: 50% 0%;
+  opacity: 0.95;
+}
+.rocket-flame .flame-1 {
+  width: 12px;
+  height: 22px;
+  margin-left: -6px;
+  background: radial-gradient(circle at 50% 25%, #fff7c2 0%, #ffd24a 35%, #ff7a1a 70%, rgba(255,80,0,0) 100%);
+  animation: flameFlicker 0.18s ease-in-out infinite alternate;
+  box-shadow: 0 0 18px rgba(255, 160, 50, 0.7);
+}
+.rocket-flame .flame-2 {
+  width: 8px;
+  height: 16px;
+  margin-left: -4px;
+  background: radial-gradient(circle at 50% 25%, #ffffff 0%, #ffd24a 50%, #ff5a1a 100%);
+  animation: flameFlicker 0.13s ease-in-out infinite alternate-reverse;
+}
+.rocket-flame .flame-3 {
+  width: 4px;
+  height: 9px;
+  margin-left: -2px;
+  background: radial-gradient(circle at 50% 25%, #fff 0%, #ffe788 60%, #fff 100%);
+  animation: flameFlicker 0.09s ease-in-out infinite alternate;
+  opacity: 1;
+}
+@keyframes flameFlicker {
+  0%   { transform: scaleY(1) scaleX(1); opacity: 0.9; }
+  50%  { transform: scaleY(1.25) scaleX(0.85); opacity: 1; }
+  100% { transform: scaleY(0.85) scaleX(1.1); opacity: 0.85; }
+}
+
+/* Banner shimmer sweep */
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-shimmer {
+  animation: shimmerSweep 2.8s linear infinite;
+}
