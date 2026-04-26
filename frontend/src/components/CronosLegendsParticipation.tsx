@@ -1,6 +1,7 @@
 'use client';
 
 const TWEET_URL = 'https://x.com/CronosLegends/status/2048479237154201839';
+const AWERGHX_URL = 'https://x.com/Awerghx';
 const DISCORD_URL = 'https://discord.gg/cronoslegends';
 
 export default function CronosLegendsParticipation() {
@@ -13,17 +14,17 @@ export default function CronosLegendsParticipation() {
           <div className="p-8 md:p-10">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold-400 to-orange-500 flex items-center justify-center text-black font-black text-lg">
-                CL
+                A
               </div>
               <div>
-                <div className="font-bold text-white">Cronos Legends</div>
+                <div className="font-bold text-white">Announcement from Awerghx</div>
                 <a
-                  href={TWEET_URL}
+                  href={AWERGHX_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-gray-400 hover:text-gold-400 transition-colors"
                 >
-                  @CronosLegends · View on X
+                  @Awerghx · Project founder
                 </a>
               </div>
             </div>
@@ -36,6 +37,11 @@ export default function CronosLegendsParticipation() {
               Send <span className="text-gold-400 font-bold">0&ndash;2000 CRO</span> to participate.
               The wallet address is shared in Discord &mdash; create a support ticket and the team will
               hand it to you directly.
+            </p>
+
+            <p className="text-xs text-gray-500 mb-6 italic">
+              Note: the announcement post lives on the Cronos Legends X account, but $HODL is an
+              independent project by Awerghx and not part of Cronos Legends.
             </p>
 
             <div className="grid md:grid-cols-3 gap-3 mb-6">
@@ -68,7 +74,7 @@ export default function CronosLegendsParticipation() {
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/5 transition-all"
               >
-                Read the Announcement
+                Read the Announcement on X
               </a>
             </div>
 
