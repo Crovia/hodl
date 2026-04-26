@@ -184,6 +184,15 @@ export default function Hero() {
           </div>
         </div>
 
+        <div className="mb-6 inline-block px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)]">
+          <p className="text-sm md:text-base font-bold text-red-400 uppercase tracking-wider">
+            ⚠ Something is happening. Only buy at your own risk, if you are true diamond hand.
+          </p>
+          <p className="text-xs md:text-sm font-semibold text-red-300/90 uppercase tracking-wider mt-1">
+            This is an experimental token.
+          </p>
+        </div>
+
         <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
           <span className="diamond-text">Who&apos;s The Strongest?</span>
         </h1>
