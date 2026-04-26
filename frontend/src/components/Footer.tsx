@@ -19,7 +19,7 @@ export default function Footer() {
           <p className="text-gray-400 text-xs mb-8">Launched by Awerghx</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <a href="https://x.com/Awerghx" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">X</a>
-            <a href="https://discord.gg/cronoslegends" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">Discord</a>
+            <a href="https://discord.gg/huWn4Tz4g4" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">Discord</a>
             <a href="https://dexscreener.com/cronos/0xb4c50913f70b870f68e6143126163ba0e9186ad7" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">DexScreener</a>
             <a href="https://cro.trade/0xf12d9cbd36738344b5d2281b21c323c8f1a07b1a" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">Buy $HODL</a>
           </div>

@@ -2,7 +2,7 @@
 
 const TWEET_URL = 'https://x.com/CronosLegends/status/2048479237154201839';
 const AWERGHX_URL = 'https://x.com/Awerghx';
-const DISCORD_URL = 'https://discord.gg/cronoslegends';
+const DISCORD_URL = 'https://discord.gg/huWn4Tz4g4';
 
 export default function CronosLegendsParticipation() {
   return (
