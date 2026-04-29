@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FloatingCryImages from '@/components/FloatingCryImages';
+import SunsetBanner from '@/components/SunsetBanner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="relative z-10 min-h-screen flex flex-col">
           <Header />
+          <SunsetBanner />
           <main className="relative flex-1 bg-luxury-black">
             <FloatingCryImages count={5} />
             {children}
