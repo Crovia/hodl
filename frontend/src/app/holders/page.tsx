@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { NAME_MAP } from '@/lib/nameMap';
 import { useCronosIds } from '@/hooks/useCronosIds';
+import { PAST_AIRDROPS } from '@/lib/mockData';
 
 interface HolderRecord {
   address: string;
@@ -76,6 +77,14 @@ export default function HoldersPage() {
   const [holders, setHolders] = useState<HolderRecord[]>([]);
   const [snapshotDate, setSnapshotDate] = useState('');
   const [showJeeters, setShowJeeters] = useState(false);
+  const [expandedRow, setExpandedRow] = useState<string | null>(null);
+
+  const getPastEarnings = (address: string) => {
+    const lower = address.toLowerCase();
+    return PAST_AIRDROPS
+      .map(drop => ({ date: drop.date, ...drop.recipients[lower] }))
+      .filter(e => e.hodl !== undefined);
+  };
 
   useEffect(() => {
     fetch('/api/holders')
@@ -162,17 +171,22 @@ export default function HoldersPage() {
             const name = displayName(h.address);
             const isOg = PRESALE_ADDRESSES.has(h.address.toLowerCase());
             const balanceNum = parseFloat(h.balance);
+            const isExpanded = expandedRow === h.address;
+            const pastEarnings = getPastEarnings(h.address);
             return (
               <div
                 key={h.address}
-                className={`glass-card rounded-xl overflow-hidden border ${TIER_BORDER[h.tier]} transition-all hover:scale-[1.005]`}
+                className={`glass-card rounded-xl overflow-hidden border ${TIER_BORDER[h.tier]} transition-all`}
               >
                 <div className={`h-0.5 ${
                   h.tier === 'diamond' ? 'bg-gradient-to-r from-sky-300 via-blue-400 to-cyan-300' :
                   h.tier === 'gold'    ? 'bg-gradient-to-r from-gold-400 to-yellow-500' :
                                         'bg-gradient-to-r from-gray-400 to-gray-500'
                 }`} />
-                <div className="px-4 py-3 flex items-center gap-3">
+                <div
+                  className={`px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isExpanded ? 'bg-white/5' : ''}`}
+                  onClick={() => setExpandedRow(isExpanded ? null : h.address)}
+                >
                   {/* Rank */}
                   <div className="text-gray-500 font-mono text-sm w-6 flex-shrink-0 text-right">{i + 1}</div>
 
@@ -237,6 +251,52 @@ export default function HoldersPage() {
                     {h.percentage}%
                   </div>
                 </div>
+
+                {/* Past earnings panel */}
+                {isExpanded && pastEarnings.length > 0 && (
+                  <div className="px-4 pb-3 pt-1 border-t border-white/10 bg-black/20">
+                    <div className="text-[10px] text-gray-500 uppercase font-bold mb-2">Airdrops received</div>
+                    <div className="flex flex-col gap-1.5">
+                      {pastEarnings.map(e => (
+                        <div key={e.date} className="flex flex-wrap items-center gap-2 text-[11px]">
+                          <span className="text-gray-600 font-mono w-24 flex-shrink-0">
+                            {new Date(e.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                          {e.bone && e.bone > 0 && (
+                            <span className="bg-orange-500/10 border border-orange-500/30 text-orange-300 px-2 py-0.5 rounded-full font-bold">
+                              {e.bone.toFixed(4)} $BONE
+                            </span>
+                          )}
+                          {e.hodl > 0 && (
+                            <span className="bg-gold-400/10 border border-gold-400/30 text-gold-400 px-2 py-0.5 rounded-full font-bold">
+                              {e.hodl.toLocaleString()} $HODL
+                            </span>
+                          )}
+                          {e.clg > 0 && (
+                            <span className="bg-sky-400/10 border border-sky-400/30 text-sky-300 px-2 py-0.5 rounded-full font-bold">
+                              {e.clg.toFixed(5)} $CLG
+                            </span>
+                          )}
+                          {e.dusd && e.dusd > 0 && (
+                            <span className="bg-purple-400/10 border border-purple-400/30 text-purple-300 px-2 py-0.5 rounded-full font-bold">
+                              {e.dusd.toLocaleString()} $DUSDCro
+                            </span>
+                          )}
+                          {e.obs > 0 && (
+                            <span className="bg-white/5 border border-white/20 text-gray-400 px-2 py-0.5 rounded-full font-bold">
+                              {e.obs.toLocaleString()} $OBS
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {isExpanded && pastEarnings.length === 0 && (
+                  <div className="px-4 pb-3 pt-1 border-t border-white/10 bg-black/20">
+                    <div className="text-[11px] text-gray-600">No airdrop history recorded.</div>
+                  </div>
+                )}
               </div>
             );
           })}

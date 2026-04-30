@@ -123,8 +123,51 @@ function airdrop1Usd(tier: 'diamond' | 'gold' | 'silver'): number {
 
 export const PAST_AIRDROPS: {
   date: string;
-  recipients: Record<string, { hodl: number; clg: number; obs: number; dusd?: number; usd: number }>;
+  recipients: Record<string, { hodl: number; clg: number; obs: number; dusd?: number; bone?: number; usd: number }>;
 }[] = [
+  {
+    date: '2026-04-30',
+    // $BONE airdrop — epoch-188 snapshot (April 14). Boost-weighted. 4,042 $BONE total.
+    recipients: {
+      '0x1d9b981b7aba1a747883833fb8a1b5072eac5d8f': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x5034e11bd0e61f2811396324b685cd58d2f6c206': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x5a96370944c2869b07156e079baf947d8cebb986': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0xc3f1087176485ec5518cbc88169205ff26f75702': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x32df940edbf734971af4707fe35f3ade91660358': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x8ad01ed7fc839e9523447ae7d00fba695ef9875f': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x36d21fd7eafa01abc35578ea940c545dce8ac10c': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x2270cbad5072b7685357ec83ddc959ffde535b27': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x499e30aea1540fda665412c779f00c6dd8a6d27d': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x08c2ceeca0e01066b4e46081acc621a34e8e21f1': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x4e730ac6a1a9d53aef0239331d90e0da4642fbb5': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x5148e8932a8f9e7bedb04303a12187e56446956c': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x3b428943ef1c49bf81ddb00f9a11e55811fc7b3c': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0xd45b551473f1819ef9fc9efa2c654b98eab21850': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0xece1b63218a249708b521e22bbaa7bac35f6f20f': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x3868150e5ff9ec5b052a36f2d8a5d8bc348b4967': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0xf085359db5df9dfa01ef31a269d5cdf99685bd4a': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x7e3e91b6912042f8fc446385299785ac2f12c0d0': { hodl: 0, clg: 0, obs: 0, bone: 123.5056, usd: 0 },
+      '0x364711325767c86c78169519ca7eb4157edfda33': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0x89c132e654699c953c6ddb4e27e7cbcd19b13e8a': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0x3283b4937d1bbfda4b24d9f110c5731ce209244e': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0x45d7032650c6a87804dbc7d226bb6c208393657e': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0xcf9af9549e9428607f8b499692b71586c8795654': { hodl: 0, clg: 0, obs: 0, bone: 119.8635, usd: 0 },
+      '0x343ad5e2d2e252ab6fd2aa11bf912db3f68b69aa': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0x1577c2f0269eda2780e6bab008400780c0fe3dd2': { hodl: 0, clg: 0, obs: 0, bone: 119.8635, usd: 0 },
+      '0x38eb9a99ea4d612f7c516368242fb7dabffd1a75': { hodl: 0, clg: 0, obs: 0, bone: 123.3547, usd: 0 },
+      '0xa88f41c548c9fa1ae27c824166a0abedbe401a25': { hodl: 0, clg: 0, obs: 0, bone: 116.3724, usd: 0 },
+      '0x20d62dbb8112f242a348e724aface92440fb336c': { hodl: 0, clg: 0, obs: 0, bone: 116.3724, usd: 0 },
+      '0x4331a800cb0b8a6c8838458b692d263bf2c62271': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0xaf87e4df58d735ec2971d2d8db663b02ca60175d': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0x9a62ddf4d3860780182ec79e0c97eb62a98a94f1': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0x8871bbe99c1aace0d3fe1752b032e3b6057ac5a2': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0x5fbd4a9de7b99a69a1d331a9e6a35aadab897e23': { hodl: 0, clg: 0, obs: 0, bone: 65.8744,  usd: 0 },
+      '0x19610fd5779a1661d1f6d63d5095fb115aa4da20': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0x100e831b2d5fdcbea4b7b0851281931414c15c47': { hodl: 0, clg: 0, obs: 0, bone: 65.8744,  usd: 0 },
+      '0x385f3a38f4962327a1356600e61a1e1e7be3fdbe': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+      '0xf8ed3a12832b106b0edc947b007c64439ad74402': { hodl: 0, clg: 0, obs: 0, bone: 67.793,   usd: 0 },
+    },
+  },
   {
     date: '2026-04-15',
     // Airdrop #2: $HODL + $CLG + $DUSDCro (12,089,812 total — partner allocation + extra by Awerghx)
