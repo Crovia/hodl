@@ -1,18 +1,15 @@
 import { NextResponse } from 'next/server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
-export const dynamic = 'force-dynamic';
-
-const BACKEND_URL = process.env.BACKEND_URL || 'http://62.171.160.71:3025';
+export const dynamic = 'force-static';
 
 export async function GET() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/holders`, {
-      cache: 'no-store',
-    });
-    if (!res.ok) throw new Error('Backend error');
-    const data = await res.json();
+    const filePath = join(process.cwd(), 'public', 'snapshot-final.json');
+    const data = JSON.parse(readFileSync(filePath, 'utf-8'));
     return NextResponse.json(data);
   } catch {
-    return NextResponse.json({ error: 'Backend unavailable' }, { status: 502 });
+    return NextResponse.json({ error: 'Snapshot unavailable' }, { status: 500 });
   }
 }
