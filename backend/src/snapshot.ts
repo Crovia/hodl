@@ -220,6 +220,15 @@ export async function takeSnapshot() {
     }
   }
 
+  // Inject force-included holders that may be invisible to Transfer event scanning
+  // (e.g., wallets whose balance grew only via reflection, no direct transfers)
+  for (const { address, firstSeenBlock } of CONFIG.FORCE_INCLUDE_HOLDERS) {
+    const lower = address.toLowerCase();
+    if (!holders.has(lower)) {
+      holders.set(lower, { balance: 0n, firstSeen: firstSeenBlock, totalReceived: 0n, lastSellBlock: 0 });
+    }
+  }
+
   // Load previous snapshot for fallback data
   const prevDir = ensureDataDir().snapshotsDir;
   const prevFiles = fs.readdirSync(prevDir).filter(f => f.endsWith('.json')).sort((a, b) => {

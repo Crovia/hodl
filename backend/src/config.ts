@@ -21,6 +21,13 @@ export const CONFIG = {
   // Creator wallet — excluded from seller tracking (distributes presale tokens)
   CREATOR_WALLET: '0xAF87e4Df58D735ec2971d2D8Db663B02cA60175D',
 
+  // Addresses to force-include in holder list even if they have no Transfer events.
+  // Use for wallets whose balance grew via reflection (no direct transfers) or other
+  // off-scanner mechanisms. firstSeenBlock defaults to DEPLOY_BLOCK.
+  FORCE_INCLUDE_HOLDERS: [
+    { address: '0xEda4AA523d3754b5fb90399B32eCcd320128b279', firstSeenBlock: 61499500 }, // early buyer via WolfStreet pre-graduation
+  ],
+
   // Addresses excluded from airdrop rewards (still shown in holder list)
   EXCLUDE_FROM_REWARDS: [
     '0xb4c50913f70b870f68e6143126163ba0e9186ad7', // Liquidity Pool (DEX pair)
