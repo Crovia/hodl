@@ -260,12 +260,17 @@ export async function takeSnapshot() {
     if (excludeAddresses.has(address)) continue;
 
     try {
-      // Retry balance fetch up to 3 times
+      // Retry balance fetch up to 3 times with 10s timeout each
+      const balanceOf = (addr: string) =>
+        Promise.race([
+          token.balanceOf(addr) as Promise<bigint>,
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('balanceOf timeout')), 10000)),
+        ]);
       let balance = 0n;
       let fetchSuccess = false;
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          balance = await token.balanceOf(address);
+          balance = await balanceOf(address);
           fetchSuccess = true;
           break;
         } catch {
