@@ -25,6 +25,10 @@ export const CONFIG = {
   EXCLUDE_FROM_REWARDS: [
     '0xb4c50913f70b870f68e6143126163ba0e9186ad7', // Liquidity Pool (DEX pair)
     '0x185d93b0f57a22e6cab7d9f0d4eb657341ff90b3', // Obsidian Finance
+    // Buyback wallets — shown as holders but excluded from airdrop (pool comes FROM them, circular otherwise)
+    '0x36148b668edc1d380671467579ee851a72b9455c', // DHAND buyback wallet
+    '0x04407f3cc344df8c271b56bd42f9a169659266fc', // CLG buyback wallet
+    '0xf8de57e772b1a29b704dae1f9174087ff568d2bc', // ROTATING buyback wallet
   ],
 
   // 3 Buyback wallets — taxes are split into these for manual buybacks

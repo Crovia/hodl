@@ -241,11 +241,10 @@ export async function takeSnapshot() {
   console.log(`Fetching balances for ${holders.size} addresses...`);
   const holderRecords: HolderRecord[] = [];
 
-  // Addresses to exclude from holder list
+  // Addresses to exclude from holder list (buyback wallets are kept — they appear as holders but get no airdrop)
   const excludeAddresses = new Set([
     ethers.ZeroAddress,
     CONFIG.TAX_WALLET.toLowerCase(),
-    ...buybackAddresses,
   ]);
 
   for (const [address, info] of holders) {
